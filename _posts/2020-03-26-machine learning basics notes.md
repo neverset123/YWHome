@@ -14,7 +14,7 @@ tags:
 
 	xcode-select --install
 
-![](https://upload-images.jianshu.io/upload_images/545662-f9031dfcce085f8f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/459)
+![](img_post/ML_notes/self-driving-car-engineer.png)
 
 ## Xcode版本切换
 
