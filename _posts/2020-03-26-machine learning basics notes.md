@@ -14,7 +14,7 @@ tags:
 
 	xcode-select --install
 
-![](img_post/ML_notes/self-driving-car-engineer.PNG)
+![](https://cdn.jsdeliver.net/gh/neverset123/cloudimg@master/Imgself-driving car-engineer.PNG)
 
 
 ## Xcode版本切换
