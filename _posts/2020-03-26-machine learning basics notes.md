@@ -88,3 +88,88 @@ suggested ways to avoid overfitting:
 ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327003304.png)
 
 ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327003444.png)
+
+## regularization
+
+loosing and softing the constraints to deal with the nonlinear problem
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327125121.png)
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327125252.png)
+
+augemented error definition and regularizer definition
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327125624.png)
+
+regularization prefers smaller lambda and smaller w step during training
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327125913.png)
+
+more effective transformation using legendre polynomials than naive polynomials
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327130423.png)
+
+regularization confines to VC guarante with somehow enlarged error range
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327130904.png)
+
+the model complexity is reduced due to regularization
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327151644.png)
+
+if lambda increases, the effective vc dimension is reduced
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327151855.png)
+
+principles to design regularizer:
+* target dependent
+* plausible
+* friendly
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327152140.png)
+
+L1 regularizer: time-saving in caculation, solution is sparse but not optimal
+L2 regularizer: easy to optimize, precise in solution
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327152856.png)
+
+if noise is large then more regularizer is needed
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327153217.png)
+
+## validation
+
+there are lots of hyper-parameters to choose in model selection, all of them are still guaranteed by hoeffdings rule
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327155416.png)
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327155652.png)
+
+the data set should be divided into training data set and validation data set, validation data set should not be used for training purpose except for cross validation
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327160642.png)
+
+the traing data set is used to training all modells (g), the validation set is used to select the best modell according to error level
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327160947.png)
+
+rule of thumb to divide data set into train set and validation set
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327161149.png)
+
+the expected error using validation estimates Eout even better than purely Ein
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327161440.png)
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327161738.png)
+
+cross validation:
+
+v-fold validation is preferred over single validation if computation allows
+5 and 10 fold are good to use
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327161831.png)
+
+## some good suggestions in machine learning
+
+start with simple model to avoid overfit
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327162110.png)
+
+avoid biased data 
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327162216.png)
+
+avoid manual data snooping (danger of less generazation)
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327162419.png)
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327162549.png)
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327162637.png)
+
+### three learning principles
+
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327162806.png)
+
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327162830.png)
+
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200327162856.png)
+
+
