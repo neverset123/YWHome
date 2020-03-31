@@ -24,6 +24,9 @@ the logistic regression error is defined by maximizing the likelihood the h equa
 ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200326234337.png)
 ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200326233017.png)
 
+this is the mathmatical form of cross entropy error for calculation
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200331205714.png)
+
 ### Gradient decent and learning rate
 
 the optimal gradient descent direction is opposite direction of Delta-Ein
