@@ -1,8 +1,8 @@
 ---
 layout:     post
-title:      tensorflow basic notes
+title:      ML Softmax
 subtitle:   
-date:       2020-03-31
+date:       2020-04-01
 author:     neverset
 header-img: img/post-bg-kuaidi.jpg
 catalog: true
