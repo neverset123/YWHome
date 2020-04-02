@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      ML Softmax
+title:      machine-learning Softmax
 subtitle:   
 date:       2020-04-01
 author:     neverset
@@ -14,7 +14,7 @@ tags:
 
 ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200401191034.png)
 
-softmax is used to to project multi-output values in (0, 1) section, so that a proper selection according to max. probability can be made
+softmax is used to to transform multi-output values in (0, 1) zone, so that a proper selection according to max. probability can be made
 
 the mathmatical expression is shown:
 ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200401191542.png)
@@ -24,11 +24,12 @@ the mathmatical expression is shown:
 the loss is expressed with cross-entropy function:
 ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200401191805.png)
 
-y: true value
+y: true value   
 a: predicted value with softmax
 
 ### Partial derivative
-if j not equal i: aj
+if j not equal i: aj    
 if j equal i: ai-1
-[ i is the final selected one
-  j is the item to derivate partially]
+
+[i is the final selected one;   
+j is the item to derivate partially]
