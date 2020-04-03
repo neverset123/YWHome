@@ -14,6 +14,8 @@ dropout can decrease the overfit probability during training and increase the ac
 
 dropout should be used on in training and not in validation and testing
 
+dropout is used after activation function
+
 ## tf.layers.dropout
 
 rate is dropout rate    
