@@ -34,6 +34,7 @@ variable definition can be done with tf.Variable or tf.get_variable
 * variable_scope
 * name_scope
 
-tf.Variable can generate different name_scope automatically if with same name but tf.get_variable not
-format:
-Variable_scope/name_scope/var:0
+tf.Variable can generate different name_scope automatically if with same name but tf.get_variable not   
+
+format: 
+    Variable_scope/name_scope/var:0

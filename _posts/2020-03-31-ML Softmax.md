@@ -33,3 +33,18 @@ if j equal i: ai-1
 
 [i is the final selected one;   
 j is the item to derivate partially]
+
+## implementation
+
+logits: the non-normalized probability y=tf.matmul(x,w)+b
+* tf.nn.softmax(logits, name=None)
+
+    y_hat=... #predicted label, e.g. y=tf.matmul(x,w)+b
+    y_true=.. #label, one_hot encoded
+    y_hat_softmax=tf.nn.softmax(y_hat)
+    total_loss=tf.reduce_mean(-tf.reduce_sum(y_true*tf.log(y_hat_softmax), [1]))
+
+
+* tf.nn.softmax_cross_entropy_with_logits(logits, labels, name=None)
+
+    total_loss=tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(y_hat, y_true))
