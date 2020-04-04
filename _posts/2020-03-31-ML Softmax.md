@@ -8,6 +8,7 @@ header-img: img/post-bg-kuaidi.jpg
 catalog: true
 tags:
     - machine learning
+    - tensorflow
 ---
 
 ## softmax function
@@ -46,5 +47,15 @@ logits: the non-normalized probability y=tf.matmul(x,w)+b
 
 
 * tf.nn.softmax_cross_entropy_with_logits(logits, labels, name=None)
-
+    
+    this only backwards update the logits
     total_loss=tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(y_hat, y_true))
+
+* tf.nn.softmax_cross_entropy_with_logits_v2(logits, labels, name=None)
+
+    this will update logits and labels in backwards propagation, e.g. GAN. the propagation to labels can be deactivated by graph.stop_gradients(labels)
+
+* tf.nn.sparse_softmax_cross_entropy_with_logits(logits, labels, name=None)
+
+    labels is the label index, not the value 
+
