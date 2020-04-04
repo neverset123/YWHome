@@ -46,6 +46,8 @@ the update of moving_mean and moving_variance are by default placed in tf.GraphK
     with tf.control_dependencies(update_ops):
         train_op=optimizer.minimizer(loss)
 
+        
+
 ### tf.control_dependencies()
 it guarantees that the operations in the function parameter are done first before the following operations 
 

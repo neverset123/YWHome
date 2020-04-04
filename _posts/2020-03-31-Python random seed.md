@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      python random function
+title:      python random seed
 subtitle:   
 date:       2020-03-31
 author:     neverset
@@ -43,3 +43,4 @@ this will create a random seed on graph level, that means that all operations (t
 random seed can also applied in this generator function
 
     a=tf.random_uniform([1], seed=1)
+
