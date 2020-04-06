@@ -22,7 +22,8 @@ variables in tensorflow must be initialized with tf.global_variables_initializer
 
 variable definition can be done with tf.Variable or tf.get_variable
 
-    tf.Variable(3, name='v')
+    #initializer=tf.random_normal(), or tf.constant(), tf.ones()
+    tf.Variable(initializer, name='v')
     sess.run(v.initializer)
     # or
     ini=tf.constant_initializer([5])
@@ -38,3 +39,11 @@ tf.Variable can generate different name_scope automatically if with same name bu
 
 format: 
     Variable_scope/name_scope/var:0
+
+using  
+
+    with tf.variable_scope('layer1_conv1'):
+    or
+    with tf.name_scope('layer2_pool1'):
+
+can define different name or variable scope for different layers

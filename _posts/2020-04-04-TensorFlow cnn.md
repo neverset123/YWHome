@@ -20,12 +20,14 @@ tags:
 * use_cudnn_on_gpu: whether to accelerate calculation with cudnn
 * return: feature map
 
+normally we need a conv2d wrapper function, so that the input and kernel matrix can be formulated correctly and adding activation function after converlutional computation
+
 ## pooling
 
 ### tf.nn.max_pool(value, ksize, strides, padding, name=None)
 
-* feature map tensor with shape [batch, height, width, cnannels]
-* pooling tensor with shape [1, height, width, 1]
-* stride: step size tensor with shape [1, stride, stride, 1]
+* valuevalue: feature map tensor with shape [batch, height, width, cnannels]
+* ksize: pooling tensor with shape [1, height, width, 1]
+* strides: step size tensor with shape [1, stride, stride, 1]
 * padding: "VALID" or "SAME"
 * return: feature map [batch, height, width, channels]
