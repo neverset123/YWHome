@@ -22,6 +22,7 @@ it can be used for mist dataset iterator, mist.train.nextbatch(), since this nex
 
     np.random.uniform(min, max, size_of_array) #random float point number in range [min, max]
     np.random.rand(row, coloumn) # random float point number in range [0.0, 1,0)  
+    numpy.random.normal(mean, stddev, size) #random float number with mean and stddev with shape of size
 
   
 
