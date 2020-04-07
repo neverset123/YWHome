@@ -31,17 +31,18 @@ regularizer=tf.contrib.layers.sum_regularizer(regularizer_list, scope=None)
 weights_list=None means: GraphKeys.WEIGHTS will be automatically taken
 This regulazition_loss can be added onto the loss function
 
-        tf.add_to_collection(tf.GraphKeys.REGULARIZATION_LOSSES, regulazition_loss)
-        reg_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES) 
+        tf.add_to_collection('losses', regulazition_loss)
+        reg_losses = tf.get_collection('losses') 
         loss=tf.add_n(reg_losses)   
 
 * using with scope
 
-
-        with tf.variable_scope('var', initializer=tf.random_normal_initializer(), regularizer=regularizer):       
-            weight = tf.get_variable('weight', shape=[8], initializer=tf.ones_initializer())
-
-    regularization_loss = tf.reduce_sum(tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)) 
+        with tf.variable_scope('layer_1'):       
+                weight = tf.get_variable('weight', shape=[size_in, size_out], initializer=tf.onestruncated_normal_initializer(stddev=0.01))
+                if regularizer!=None:
+                tf.add_to_collection('losses', regularizer(weight))
+        regularization_loss = tf.add_n(tf.get_collection('losses')) 
+        total_loss=cross_entropy_mean+regularization_loss
 
 * using slim
 
