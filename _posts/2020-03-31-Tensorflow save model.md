@@ -43,7 +43,14 @@ tags:
     model_path="checkpoint"
     if not model_path.endswith('/'):
         model_path+='/'
-    chkpt_fname=tf.train.latest-checkpoint(model_path)
+    chkpt_fname=tf.train.latest_checkpoint(model_path)
+
+    # add check point state
+        with tf.Session() as sess:
+            ckpt=tf.train.get_checkpoint_state(model_path)
+            if ckpt and ckpt.model_checkpoint_path:
+                saver.restore(sess, ckpt.model_checkpoint_path)
+
 
 
 ## usage of imported model
