@@ -47,15 +47,20 @@ logits: the non-normalized probability y=tf.matmul(x,w)+b
 
 
 * tf.nn.softmax_cross_entropy_with_logits(logits, labels, name=None)
-    
+   
+    label is one-hot coded  
     this only backwards update the logits
     total_loss=tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(y_hat, y_true))
 
 * tf.nn.softmax_cross_entropy_with_logits_v2(logits, labels, name=None)
 
+    label is on-hot coded
     this will update logits and labels in backwards propagation, e.g. GAN. the propagation to labels can be deactivated by graph.stop_gradients(labels)
 
 * tf.nn.sparse_softmax_cross_entropy_with_logits(logits, labels, name=None)
 
-    labels is the label index, not the value 
+    labels is the label index, not one-hot coded array  
+    so  
+    labels_not_hot_coded=tf.argmax(labels_hot_coded, 1) =>
+    tf.nn.sparse_softmax_cross_entropy_with_logits(logits, labels_not_hot_coded)=tf.nn.sparse_softmax_cross_entropy_with_logits(logits, tf.argmax(labels_hot_coded, 1))
 

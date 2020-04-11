@@ -2,7 +2,7 @@
 layout:     post
 title:      tensorflow LRN
 subtitle:   
-date:       2020-04-07
+date:       2020-04-10
 author:     neverset
 header-img: img/post-bg-kuaidi.jpg
 catalog: true
