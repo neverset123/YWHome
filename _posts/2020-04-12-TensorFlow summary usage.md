@@ -11,6 +11,9 @@ tags:
 ---
 
 summary method can save the training process and relevant parameters, which can be later visualized in tensorboard
+besides the loss and accuracy data in also be saved in np format for visualization in python later
+
+# summary class
 
 ## tf.summary.scalar(tags, values, collections=None, name=None)
 used to save loss and accuracy datas
@@ -51,3 +54,12 @@ selectively get summary information
 use tf.get_collection to get the data in collection
 
     tf.summary.merge([tf.get_collection(tf.GraphKeys.SUMMARIES,'accuracy'),...])  
+
+# np save method
+
+    train_loss=[]
+    for step in range(max_steps)
+        loss_in_each_step=...
+        train_loss.append(loss_in_each_step)
+
+    np.save(os.path.join(save_dir, 'accuracy_loss', 'train_loss'), train_loss)
