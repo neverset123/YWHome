@@ -11,7 +11,7 @@ tags:
 ---
 
 
-the weight can be initialized in many ways
+the initialization of weight(or kernel) can have signifikant effect on the speed and accuracy of the model. there are several way to initialize the weight
 
 * random
 * xavier
