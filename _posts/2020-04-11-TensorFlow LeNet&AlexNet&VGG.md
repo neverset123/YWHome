@@ -56,6 +56,35 @@ max pooling: 3x3 filter, stride=2
 
 * modul6/modul7/modul8  
 structure: fc+ReLu+dropout
-fc: output_node=4096(fc6 and fc7) /class_num(fc8)    
+fc: output_node=4096(fc6 and fc7) /class_num(fc8)  
 
+## VGG16
 
+there are 16 hidden layers in VGG16:  13 conv layers, 5 pooling layers(not couted into 16), 2 fc layer, 1 output layer
+
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20180116225416971.png)
+
+* block1
+structure: [Conv64]x2(incl. ReLu)+Pooling
+conv: 64 kernels with size of 3x3, stride=1
+max pooling: 2x2 filter, stride=2
+* block2
+structure: [Conv128]x2(incl. ReLu)+Pooling
+conv: 128 kernels with size of 3x3, stride=1
+max pooling: 2x2 filter, stride=2
+* block3
+structure: [Conv256]x3(incl. ReLu)+Pooling
+conv: 256 kernels with size of 3x3, stride=1
+max pooling: 2x2 filter, stride=2
+* block4
+structure: [Conv512]x3(incl. ReLu)+Pooling
+conv: 512 kernels with size of 3x3, stride=1
+max pooling: 2x2 filter, stride=2
+* block5
+structure: [Conv512]x3(incl. ReLu)+Pooling
+conv: 512 kernels with size of 3x3, stride=1
+max pooling: 2x2 filter, stride=2
+* block6
+structure: [fc4096]x2(incl. ReLu)
+* block7
+structure: [fc] with class_name output nodes
