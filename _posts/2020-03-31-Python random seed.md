@@ -22,9 +22,8 @@ it can be used for mist dataset iterator, mist.train.nextbatch(), since this nex
 
     np.random.uniform(min, max, size_of_array) #random float point number in range [min, max]
     np.random.rand(row, coloumn) # random float point number in range [0.0, 1,0)  
+    np.random.random([dim1, dim2...]) #random float in range  [0.0, 1.0)
     numpy.random.normal(mean, stddev, size) #random float number with mean and stddev with shape of size
-
-  
 
 * np.random.RanddomState()
 this is only a locally declared instance of randomstate, the global numpy state and other randomstates will not change

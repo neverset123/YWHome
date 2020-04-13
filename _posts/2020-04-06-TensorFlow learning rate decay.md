@@ -11,6 +11,7 @@ tags:
 ---
 
 to use large learning rate at the beginning, and decays step by step, function tf.train.exponential_decay() can be used
+large learning rate for simply task can lead to result vibration!
 
 ## tf.train.exponential_decay(learning rate, global_step, decay_steps, decay_rate)
 
