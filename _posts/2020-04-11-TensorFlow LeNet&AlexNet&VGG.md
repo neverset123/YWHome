@@ -59,30 +59,36 @@ structure: fc+ReLu+dropout
 fc: output_node=4096(fc6 and fc7) /class_num(fc8)  
 
 ## VGG16
-
+it uses smaller conv kernels to construct deeper network, so that more complex model can be learned
 there are 16 hidden layers in VGG16:  13 conv layers, 5 pooling layers(not couted into 16), 2 fc layer, 1 output layer
+the conv layers are to extract feature and pooling layers are to compress the image to smaller size
+the VGG19 has almost same performance with VGG16 but with deeper networks
+since the training of VGG model takes lots of time, it is prefered to use open pretrained modells, which can be found in open libraries, to train other modell further (open library: https://github.com/machrisaa/tensorflow-vgg, https://www.cs.toronto.edu/~frossard/post/vgg16/)
 
 ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20180116225416971.png)
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200414003226.png)
+
+compared with AlexNet, the stack of three 3x3 conv layers has same effective receptive field as one 7x7 conv layer, but fewer parameters, much deeper and more non-linearities 
 
 * block1
 structure: [Conv64]x2(incl. ReLu)+Pooling
-conv: 64 kernels with size of 3x3, stride=1
+conv: 64 kernels with size of 3x3, stride=1, padding='SAME'
 max pooling: 2x2 filter, stride=2
 * block2
 structure: [Conv128]x2(incl. ReLu)+Pooling
-conv: 128 kernels with size of 3x3, stride=1
+conv: 128 kernels with size of 3x3, stride=1, padding='SAME'
 max pooling: 2x2 filter, stride=2
 * block3
 structure: [Conv256]x3(incl. ReLu)+Pooling
-conv: 256 kernels with size of 3x3, stride=1
+conv: 256 kernels with size of 3x3, stride=1, padding='SAME'
 max pooling: 2x2 filter, stride=2
 * block4
 structure: [Conv512]x3(incl. ReLu)+Pooling
-conv: 512 kernels with size of 3x3, stride=1
+conv: 512 kernels with size of 3x3, stride=1, padding='SAME'
 max pooling: 2x2 filter, stride=2
 * block5
 structure: [Conv512]x3(incl. ReLu)+Pooling
-conv: 512 kernels with size of 3x3, stride=1
+conv: 512 kernels with size of 3x3, stride=1, padding='SAME'
 max pooling: 2x2 filter, stride=2
 * block6
 structure: [fc4096]x2(incl. ReLu)
