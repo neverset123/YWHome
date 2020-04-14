@@ -46,6 +46,13 @@ conv2d(inputs, filters, kernel_size,
 * filters: out_channel
 * kernel_size: (filter_height, filter_width) or one integer(height equal width)
 
+### padding
+W: input size，F: filter size，S: stride，⌈⌉: ceiling
+* VALID: 
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200414224810.png)
+* SAME:
+ ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200414224901.png)
+
 ## pooling
 
 ### tf.nn.max_pool(value, ksize, strides, padding, name=None)
