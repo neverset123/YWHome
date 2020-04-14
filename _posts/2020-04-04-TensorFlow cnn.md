@@ -22,6 +22,30 @@ tags:
 
 normally we need a conv2d wrapper function, so that the input and kernel matrix can be formulated correctly and adding activation function after converlutional computation
 
+## tf.layers.conv2d()
+more advanced api of tensorflow
+
+conv2d(inputs, filters, kernel_size, 
+    strides=(1, 1), 
+    padding='valid', 
+    data_format='channels_last', 
+    dilation_rate=(1, 1),
+    activation=None, 
+    use_bias=True, 
+    kernel_initializer=None,
+    bias_initializer=<tensorflow.python.ops.init_ops.Zeros object at 0x000002596A1FD898>, 
+    kernel_regularizer=None,
+    bias_regularizer=None, 
+    activity_regularizer=None, 
+    kernel_constraint=None, 
+    bias_constraint=None, 
+    trainable=True, 
+    name=None,
+    reuse=None)
+* imputs: [batch, in_height, in_width, in_channels]
+* filters: out_channel
+* kernel_size: (filter_height, filter_width) or one integer(height equal width)
+
 ## pooling
 
 ### tf.nn.max_pool(value, ksize, strides, padding, name=None)
