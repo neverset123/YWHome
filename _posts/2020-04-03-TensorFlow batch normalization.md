@@ -37,6 +37,17 @@ during training the mean and variance will be noted to update moving_mean and mo
 batch normalization is usually put before activation if activation is sigmoid or tanh; if activation is ReLU before or after  could make little difference
 Even if you implement the ConvWithBias+BatchNorm, it will behave like ConvWithoutBias+BatchNorm.
 
+### tf.contrib.layers.batch_norm()
+this is a lower-level API.
+
+    def Batch_Normalization(x, scope, epsilon, decay, is_training):
+        return tf.cond(
+        is_training,
+        lambda: bn_layer(x=x, scope=scope, epsilon=epsilon, decay=decay, is_training=True, reuse=None),
+        lambda: bn_layer(x=x, scope=scope, epsilon=epsilon, decay=decay, is_training=False, reuse=True),
+        )
+
+
 ### tf.layers.batch_normalization()
 
 the update of moving_mean and moving_variance are by default placed in tf.GraphKeys.UPDATE_OPS, they need to be updated before training starts
@@ -46,11 +57,9 @@ the update of moving_mean and moving_variance are by default placed in tf.GraphK
     with tf.control_dependencies(update_ops):
         train_op=optimizer.minimizer(loss)
 
-        
-
-### tf.control_dependencies()
+#### tf.control_dependencies()
 it guarantees that the operations in the function parameter are done first before the following operations 
 
-### tf.GraphKeys.UPDATE_OPS
+#### tf.GraphKeys.UPDATE_OPS
 
 tf.GraphKeys contains all standard graph collection (tf.Variable...). During batch normalization it will update mean and variance
