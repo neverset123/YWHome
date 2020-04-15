@@ -37,4 +37,6 @@ xavier initialization can keep data in good distribution even in deeper layer, e
 if activation function is relu it is better to use He initialization
 
     initializer=tf.contrib.layers.variance_scaling_initializer()
+    #or
+    initializer=tf.initializers.he_normal()
     weights=tf.Variable(initializer(weights_shape))
