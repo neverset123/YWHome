@@ -29,3 +29,13 @@ large learning rate for simply task can lead to result vibration!(not larger tha
     learning_rate = tf.train.exponential_decay(0.1, global_step, 100, 0.96, staircase=True)# create learing rate instance
     
     learning_step = tf.train.GradientDescentOptimizer(learning_rate).minimize(....., global_step=global_step)  # use changing learning rate
+
+## a good learning rate
+
+to find a good learning rate we could use fastai library to make a plot of learning rate and loss
+
+    learner.lr_find()
+    learner.sched.plot()
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200416211156.png)
+
+go one order of magnitude before the minimum is the best learning rate
