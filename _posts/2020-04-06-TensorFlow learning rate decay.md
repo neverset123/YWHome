@@ -39,3 +39,29 @@ to find a good learning rate we could use fastai library to make a plot of learn
 ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200416211156.png)
 
 go one order of magnitude before the minimum is the best learning rate
+
+## using different learning rate on different layers
+
+### larger learning rate in the front layers and smaller in the rear
+
+    var1 = tf.trainable_variables()[0:40]
+    var2 = tf.trainable_variables()[40:]
+    train_op1 = GradientDescentOptimizer(0.00001).minimize(loss, var_list=var1) 
+    train_op2 = GradientDescentOptimizer(0.0001).minimize(loss, var_list=var2)
+    train_op = tf.group(train_op1, train_op2)
+
+### reload pretrained model
+
+    with tf.Graph().as_default():
+            variables_to_restore = []
+            variables_to_train = []
+            for var in slim.get_model_variables():
+                excluded = False
+                for exclusion in fine_tune_layers:
+                    if var.op.name.startswith(exclusion):
+                        excluded = True
+                        break
+                if not excluded:
+                    variables_to_restore.append(var)
+                else:
+                    variables_to_train.append(var)
