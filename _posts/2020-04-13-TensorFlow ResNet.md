@@ -24,11 +24,12 @@ H(x)=F(x)+x means that adding an identity mapping item x to the previous target 
 shortcut connection is done before activation.  
 To keep dimension matches we use H(x)=F(x,{Wi})+Ws*x
 
-in residual block there should be at least two weight layers, usually 2-3
+in one building block there should be at least two weight layers, usually 2-3
 
 ## structure
 input will be first processed by a [7x7] conv layer(stride=2), then max pooled with [3x3] filter (stride=2). Afterwards is stacking of Residual blocks(normal build blocks for layer < 50; bottleneck blocks for layer >50). At the end is global average pooling and softmax
 ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200415171432.png)
 
 * building block vs bottleneck block
+one residual block contains multi building blocks or bottleneck blocks
 ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200415171652.png)
