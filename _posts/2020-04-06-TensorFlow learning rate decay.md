@@ -50,7 +50,7 @@ go one order of magnitude before the minimum is the best learning rate
     train_op2 = GradientDescentOptimizer(0.0001).minimize(loss, var_list=var2)
     train_op = tf.group(train_op1, train_op2)
 
-### reload pretrained model
+### transfer learning
 
     with tf.Graph().as_default():
             variables_to_restore = []
