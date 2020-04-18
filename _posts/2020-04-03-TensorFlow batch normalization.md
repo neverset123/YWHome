@@ -16,7 +16,7 @@ batch normalization can in some sense reduce gradient vanishing problem and incr
 
 ## batch normalization
 
-batch normalization is done on mini-batch level
+batch normalization is done on batch level
 
 * normatlization is done on each feature on the same layer, to make the input for next layer keep mean on 0, variance on 1
 * afterwards two learnable parameters are introduced to recover the expressability of the datas
