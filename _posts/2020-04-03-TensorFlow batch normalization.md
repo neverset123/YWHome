@@ -50,7 +50,8 @@ this is a lower-level API.
 
 ### tf.layers.batch_normalization()
 
-the update of moving_mean and moving_variance are by default placed in tf.GraphKeys.UPDATE_OPS, they need to be updated before training starts
+the update of moving_mean and moving_variance are by default placed in tf.GraphKeys.UPDATE_OPS, they need to be updated before training starts  
+
     x_norm=tf.layers.batch_normalization(x, training=is_training)
     #...
     update_ops=tf.get_collection(tf.Graphkeys.UPDATE_OPS)

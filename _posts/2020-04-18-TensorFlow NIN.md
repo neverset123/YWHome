@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      tensorflow ResNet
+title:      tensorflow NIN
 subtitle:   
 date:       2020-04-18
 
