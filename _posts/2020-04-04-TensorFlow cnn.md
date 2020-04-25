@@ -53,6 +53,15 @@ W: input size，F: filter size，S: stride，⌈⌉: ceiling
 * SAME:
  ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200414224901.png)
 
+## deconvolution
+
+### tf.nn.conv2d_transpose(input, filters, output_shape, strides, padding='SAME', data_format='NHWC', dilations=None, name=None)
+* input: [batch, height, width, in_channels]
+* filter: [height, width, output_channels, input_channels] (ouput_channels is before input_channels)
+* output_shape: [batch, height, width, out_channels], the format should corresponde to the data_format sequence 
+
+
+
 ## pooling
 
 ### tf.nn.max_pool(value, ksize, strides, padding, name=None)
