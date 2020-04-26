@@ -2,13 +2,12 @@
 layout:     post
 title:      tensorflow Random Forest
 subtitle:   
-date:       2020-04-18
-
+date:       2020-04-26
 author:     neverset
 header-img: img/post-bg-kuaidi.jpg
 catalog: true
 tags:
-    - tensorflow
+    - machine learning
 ---
 
 Random forest consists of a large number of individual decision trees that operate as an ensemble (Ensemble Learning). Each individual tree in the random forest spits out a class prediction and the class with the most votes becomes our model’s prediction (see figure below).

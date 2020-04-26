@@ -3,7 +3,6 @@ layout:     post
 title:      tensorflow Filter Response Normalization
 subtitle:   
 date:       2020-04-18
-
 author:     neverset
 header-img: img/post-bg-kuaidi.jpg
 catalog: true
