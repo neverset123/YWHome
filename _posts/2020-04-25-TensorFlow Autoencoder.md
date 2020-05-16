@@ -28,3 +28,5 @@ the original input will be encoded into a new vector，this vector will be decod
 ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200425184415.png)
 in variational autoencoder the original input is not encoded to one vector rather two vectors-mean and standard variation, so that with these two parameter new hidden vector can be created to be decoded into augmented data
 
+### evaluation of compression quality
+the quality can be evaluated with random forest algorithm by comparing the prediction accuracy between original data and compressed data

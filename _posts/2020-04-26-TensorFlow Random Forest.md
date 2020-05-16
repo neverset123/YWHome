@@ -18,9 +18,30 @@ Random forest consists of a large number of individual decision trees that opera
 it is an supervised learning algorithm that based on if-else-then conditions.   
 it can be binary tree or non-binary tree
 ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200426194958.png)
+
 * on the non-leaf node is test of attribute, each branch is the output of this test.
 * on the leaf nodes are classes to be classified
-* the decision process starts from the root node, test on the attribute node, and outputs to the corresponding branch until leaf node. the leaf node is the result of the decision tree.
+* the decision process starts from the root node, test on the attribute node, and outputs to the corresponding branch until leaf node. the leaf node is the result of the decision tree. the growth of the tree stops when the max. depth or min. dataset size is reached. The final class is determined based on the predicted majority class in the dataset
+### CART (Classification and Regression Tree)
+dataset will be splitted based on an attribute and an attribute threshold value. Every attribute and its threshold will be evalued with cost function. Wenn the best split attribute is found, it will be used as the next node in decision tree
+
+#### cost function
+* regression: Sum Squared Error
+* classificatioin: Gini Cost Function(0: best -->1: worst)
+proportion=count(class_value)/count(rows)
+gini_index=sum(proportion*(1-proportion))
+
+        def gini_index(groups, class_values):
+            gini=0.0
+            for class_value in class_values:
+                for group in groups:
+                    size=len(groups)
+                    if size==0: 
+                        continue
+                    proportion=[row[-1] for row in group].count(class_value)/float(size)
+            gini+=(proportion*(1.0-proportion))                 
+            return gini
+
 
 ## process of random forest
 
