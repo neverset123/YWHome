@@ -52,7 +52,7 @@ logits: the non-normalized probability y=tf.matmul(x,w)+b
     this only backwards update the logits
     total_loss=tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(y_hat, y_true))
 
-    difference to sigmoid_cross_entropy_with_logits is that sigmoid_cross_entropy_with_logits can calculate cross entropy of independet but not mutually exclusive (multi-class) targets; one class target classification sis not feasable for sigmoid_cross_entropy_with_logits; the input logic is not processed with sigmoid
+    difference to sigmoid_cross_entropy_with_logits is that sigmoid_cross_entropy_with_logits can calculate cross entropy of independet but not mutually exclusive (multi-class) targets; one class target classification sis not feasable for sigmoid_cross_entropy_with_logits; the input logits is not processed with sigmoid
 
 * tf.nn.softmax_cross_entropy_with_logits_v2(logits, labels, name=None)
 
