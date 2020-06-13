@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      tensorflow Random Forest
+title:      python spark
 subtitle:   
 date:       2020-05-22
 author:     neverset
@@ -53,47 +53,55 @@ RDD is an abstract data type in spark, is similar to array. It is stored partiti
 
 * using local file or hdfs
 
-    lines=sc.textFile(path)
-    words=lines.flatMap(lambda line:line.split(" "))
-    keyvalue=words.map(lambda word:(word,1))
-    print(keyvalue.countByKey())
+
+        lines=sc.textFile(path)
+        words=lines.flatMap(lambda line:line.split(" "))
+        keyvalue=words.map(lambda word:(word,1))
+        print(keyvalue.countByKey())
+## DataFrame
+        #read csv as DataFrame
+        df = spark.read.load("filename.csv",format="csv", sep=",", inferSchema="true", header="true")
+
 
 ## transformation
 
 * map
 processing input with specific operation and return result object
 
-    rdd=sc.parallelize(range(9),1)
-    print(rdd.map(lambda x:x).collect())
-    print(rdd.map(lambda x:x+1).collect())
+    rdd=sc.parallelize(range(9),1)  
+    print(rdd.map(lambda x:x).collect())    
+    print(rdd.map(lambda x:x+1).collect())  
 
-* mapPartitions(func, preservesPartitioning=False)
+* mapPartitions(func, preservesPartitioning=False)  
 applying func on every slice rdd
 
-* flatMap
+* flatMap   
 map + flatten(concatenate all objects to one objects)
 
-    rdd=sc.parallelize([1,2,3])
-    print(rdd.map(lambda x: range(x)).collect())
-    print(rdd.flatMap(lambda x: range(x)).collect())
+    rdd=sc.parallelize([1,2,3])     
+    print(rdd.map(lambda x: range(x)).collect())    
+    print(rdd.flatMap(lambda x: range(x)).collect())    
 
-* flatMapValues(f)
+* flatMapValues(f)  
 flat the value map without changing the key
 
-    def func(x): return x
-    sc.parallelize([("a",["x","y","z"]), ("b",["p","r"])]).flatMapValues(func).collect()
+    def func(x): return x       
+    sc.parallelize([("a",["x","y","z"]), ("b",["p","r"])])   
+    flatMapValues(func).collect()    
 
 * mapValues
 processing value with an operation
 
-    rdd=sc.parallelize([("python", 1), ("c++", 2)])
-    print(rdd.map(lambda x:x).collect())
-    print(rdd.mapValues(lambda x:x*2).collect())
+    rdd=sc.parallelize([("python", 1), ("c++", 2)])  
+    print(rdd.map(lambda x:x).collect())    
+    print(rdd.mapValues(lambda x:x*2).collect() )
 
 * filter
 filter with condition
 
     rdd.filter(lambda x:x%2==0).collect()
+    #in spark dataframe
+    df.filter((rdd.confirmed>10) & (rdd.province=='Daegu'))
 
 * distinct
 remove duplicates
@@ -101,16 +109,19 @@ remove duplicates
     rdd.distinct().collect()
 
 * randomSplit
-slice data with portion
+slice data with portion 
 
-    rddsplitted=rdd.randomsplit([0.2, 0.6])
+    rddsplitted=rdd.randomsplit([0.2, 0.6])  
     print(rddsplitted[0].collect())
 
 * groupBy
 grouping by condition
 
-    rddgrouped=rdd.groupBy(lambda x: "less" if(x<10) else "more")
+    rddgrouped=rdd.groupBy(lambda x: "less" if(x<10) else "more")   
     print(rddgrouped.mapValues(list).collect())
+    # in dataframe  
+    df.groupBy(["province","city"]).agg(F.sum("confirmed")).show()
+    df.groupBy(["province","city"]).agg(F.sum("confirmed").alias("TotalConfirmed")).show()
 
 * groupbykey
 group by key
@@ -123,7 +134,7 @@ processing element with same key with one operation
 * sortBy(keyfunc, ascending=True, numPartitions=None)
 sorting rdd with defined element( key or value)
 
-    rdd.sortBy(lambda x: x[0]).collect() # sort by key
+    rdd.sortBy(lambda x: x[0]).collect() # sort by key  
     rdd.sortBy(lambda x: x[1]).collect() # sort by value
 
 * sortByKey
@@ -131,83 +142,102 @@ sorting rdd with defined element( key or value)
 * aggregate(zeroValue, seqOp, combOp)
 process zeroValue and element in rdd in first slice with seqOp, then operate results data from each slice with combOp
 
-    seqOp=(lambda x,y: (x[0]+y, x[1]+1))
-    combOp=(lambda x,y: (x[0]+y[0], x[1]+y[1]))
-    sc.parallelize([1,2,3,4]).aggregate((0,0), seqOp, comOp)
+    seqOp=(lambda x,y: (x[0]+y, x[1]+1))    
+    combOp=(lambda x,y: (x[0]+y[0], x[1]+y[1]))      
+    sc.parallelize([1,2,3,4]).aggregate((0,0), seqOp, comOp) 
+    #in dataframe
+    #joining dataframe with different size
+    from pyspark.sql.functions import broadcast
+    df1.join(broadcast(df2), coloumn_name_list,how='left')   
 
-* aggregateByKey(zeroValue, seqOp, combOp, numPartitions=None, partitionFunc=None)
+* aggregateByKey(zeroValue, seqOp, combOp, numPartitions=None, partitionFunc=None)  
 aggregate value when key is the same and additionally zeroValue is added to the value
 
-    seqOp=(lambda x,y: x+y)
-    combOp=(lambda x,y: x+y)
-    sc.parallelize([(1,2),(1,3),(1,4)]).aggregateByKey(3,seqOp, combOp).collect()
+    seqOp=(lambda x,y: x+y)     
+    combOp=(lambda x,y: x+y)        
+    sc.parallelize([(1,2),(1,3),(1,4)]).aggregateByKey(3,seqOp, combOp).collect()       
 
-* join(rdd, numPartitions=None)
+* join(rdd, numPartitions=None)     
 combining value in list with same key
 
-    rdd1=sc.parallelize([("a", 1), ("b",1)])
-    rdd2=sc.parallelize([("a", 3), ("b",4)])
-    rdd1.join(rdd2).collect()
+    rdd1=sc.parallelize([("a", 1), ("b",1)])    
+    rdd2=sc.parallelize([("a", 3), ("b",4)])    
+    rdd1.join(rdd2).collect()   
+    # in dataframe
+    rdd1.join(rdd2, coloumn_name_list,how='left')
 
 ## action
 it get elements in rdd, return to drive and triger the spark job and transformation
 
-* reduce
+* reduce    
 reduce dimension with an operation
 
     rdd.reduce(add)
 
-* collect
+* collect   
 get the list of all elements in rdd to local client
 
-* count
+* count 
 count number of elements in list
 
-* take(n)
+* take(n)   
 get first n elements from rdd
 
-* first()
+* first()   
 get first element from rdd
 
-* top(n)
+* top(n)    
 get n max elements from rdd
 
-* takeOrdered(n, [, key=None])
+* takeOrdered(n, [, key=None])  
 get first n elements from rdd after sorting
 
 * min, max, mean, stdev
-* fold
+* fold  
 initialize zeroValue in each slice and let zeroValue participat in op calculation, at the end the result in every slice will be combined into one slice(zeroValue also participate in calculation)
 
-    addOp=(lambda x,y:x+y)
-    rdd1=sc.parallelize(range(6), 1)
-    rdd2=sc.parallelize(range(6),2)
-    print(rdd1.fold(1,addOp))
-    print(rdd2.fold(1,addOp))
+    addOp=(lambda x,y:x+y)  
+    rdd1=sc.parallelize(range(6), 1)    
+    rdd2=sc.parallelize(range(6),2) 
+    print(rdd1.fold(1,addOp))   
+    print(rdd2.fold(1,addOp))   
 
-* countByKey()
+* countByKey()  
 count elements with same key
-* countByValue()
+* countByValue()    
 count elements with same value
-* takeSample(bool,n)
-bool:true->sampling with replacement; false->sampling without replacement
+* takeSample(bool,n)    
+bool:true->sampling with replacement; false->sampling without replacement   
 n: number of sample to be taken
 
     rdd.takeSample(true, 4)
-* foreach or items()
+* foreach or items()    
 loop through all element in rdd
 
-* glom()
+* glom()    
 combining elements in different slice into one rdd list
 
-* saveAsTextFile
+* saveAsTextFile    
 save elements in rdd to file
-* textFile
+* textFile  
 load text to memory
 
     sc.textFile(path)
 
-* write.csv(path, mode="overwrite")
+* write.csv(path, mode="overwrite") 
+
+
+* toPandas()    
+convert spark dataframe to pandas dataframe
+
+* withColumnRenamed(old_name, new_name) or toDF(all_new_coloumn_name_lists)
+
+* select(coloumn_name)  
+select specified coloumn with name
+
+* withColumn(coloumn_name, F.col(coloumn_name).cast(IntegerType()))
+cast data in specified coloumn to other type    
+F is imported: from pyspark.sql import functions as F
 
 ## shuffle
 the process to gather datas on different nodes to one node with specific rule is called shuffle
@@ -233,4 +263,63 @@ store transformation result in memory for second usage
 ## run spark python script 
 
     spark-submit script.py
+
+## pyspark jupyter-notebook
+
+    #add this function to .bashrcs
+    function pysparknb () 
+    {
+    #Spark path
+    SPARK_PATH=spark_path_folder
+    export PYSPARK_DRIVER_PYTHON="jupyter"
+    export PYSPARK_DRIVER_PYTHON_OPTS="notebook"
+    # For pyarrow 0.15 users, you have to add the line below  while using pandas_udf    
+    export ARROW_PRE_0_15_IPC_FORMAT=1# Change the local[10] to local[numCores in your machine]
+    $SPARK_PATH/bin/pyspark --master local[10]
+    }
+## DataFrame
+### using SQL 
+
+    #register df as sql table
+    df.registerTempTable('cases_table')
+    df_new = sqlContext.sql('select * from cases_table where confirmed>100')
+
+### create coloumn
+
+    import pyspark.sql.functions as F
+    rdd_new = rdd.withColumn("NewConfirmed", 100 + F.col("confirmed"))
+### convert dataframe between rdd
+
+    #convert df to rdd
+    df.rdd
+    #convert rdd to df
+    sqlContext.createDataFrame(rdd)
+
+### UDF
+define a normal function in python and use it in pyspark
+
+    import pyspark.sql.functions as F
+    from pyspark.sql.types import *
+    def casesHighLow(confirmed):
+        if confirmed < 50: 
+            return 'low'
+        else:
+            return 'high'
+        
+    #convert to a UDF Function by passing in the function and return type of function
+    casesHighLowUDF = F.udf(casesHighLow, StringType())CasesWithHighLow = cases.withColumn("HighLow", casesHighLowUDF("confirmed"))
+
+### using pandas in spark
+a decorator F.pandas_udf and an output shema need to be defined
+
+### spark windows functions
+
+    from pyspark.sql.window import Window   
+    windowSpec = Window().partitionBy(['province']).orderBy(F.desc('confirmed'))    
+    cases.withColumn("rank",F.rank().over(windowSpec)).show()
+
+### Pivot Dataframes
+
+    pivotedTimeprovince = timeprovince.groupBy('date').pivot('province').agg(F.sum('confirmed').alias('confirmed') , F.sum('released').alias('released'))   
+    pivotedTimeprovince.limit(10).toPandas()
 
