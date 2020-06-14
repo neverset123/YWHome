@@ -9,6 +9,7 @@ catalog: true
 tags:
     - Spark
     - high performance computations
+    - big data
 ---
 
 spark is a framework for big data calculation
@@ -30,6 +31,32 @@ relationship between rdd, partition and task
 * stage: one job contains many stages, stages are seperated by shuffle, which is dependency betwwen parent rdd and children rdd. stages are done sequentially
 ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20180706005229905.png)
 * task: task is the smallest calculation element in spark. the number of tasks is actually the parallelism of stages 
+### partition tuning
+The general recommendation for Spark is to have 4x of partitions to the number of cores in cluster available for application.
+the task should take 100ms+ time to execute
+* Repartition before multiple joins
+
+        users = spark.read.load('/path/to/users').repartition('userId')
+        joined1 = users.join(addresses, 'userId')
+        joined1.show() # <-- 1st shuffle for repartition
+        joined2 = users.join(salary, 'userId')
+        joined2.show() # <-- skips shuffle for users since it's already been repartitioned
+* Repartition after flatMap
+* Get rid of disk spills
+disk spills result in OutOfMemoryError when  one of the reduce tasks in groupByKey was too large    
+check if disk spilling is occured by searching in log: INFO ExternalSorter: Task 1 force spilling in-memory map to disk it will release 232.1 MB memory 
+solution:
+    + reduce data size
+    + repartition
+    + increase shuffle buffer by spark.executor.memory
+    + reduce number of I/O by spark.shuffle.file.buffer
+* data skewness(distribution of data on tasks is not balanced)
+* Coalesce after filtering
+* Repartition before writing to storage
+    df.write.partitionBy('key').json('/path/to/foo.json')
+
+
+
 
 ## sparkconf
 set configuration for sparks
