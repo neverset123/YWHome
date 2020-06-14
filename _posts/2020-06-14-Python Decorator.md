@@ -15,15 +15,15 @@ python decorator is used in Logging, type checking, exception handling without m
 ## logging
 
     def log_decorator(log_name):
-    def log_this(function):
-        logger = logging.getLogger(log_name)
-        def new_function(*args,**kwargs):
-            logger.debug(f"{function.__name__} - {args} - {kwargs}")
-            output = function(*args,**kwargs)
-            logger.debug(f"{function.__name__} returned: {output}")
-            return output
-        return new_function
-    return log_this
+        def log_this(function):
+            logger = logging.getLogger(log_name)
+            def new_function(*args,**kwargs):
+                logger.debug(f"{function.__name__} - {args} - {kwargs}")
+                output = function(*args,**kwargs)
+                logger.debug(f"{function.__name__} returned: {output}")
+                return output
+            return new_function
+        return log_this
 
 ## type checking
 
@@ -37,7 +37,7 @@ python decorator is used in Logging, type checking, exception handling without m
                         "arg %r does not match %s" % (a,t)
                 return function(*args, **kwargs)
             return new_function
-    return check_accepts
+        return check_accepts
 
 ## error handling
     def error_handling(api_function):
