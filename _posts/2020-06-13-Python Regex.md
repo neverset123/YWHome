@@ -7,7 +7,7 @@ author:     neverset
 header-img: img/post-bg-kuaidi.jpg
 catalog: true
 tags:
-    - regex
+    - regular expression
 ---
 
 regex represents regular expression, which is a character pattern in searching
