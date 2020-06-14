@@ -12,15 +12,18 @@ tags:
 
 regex represents regular expression, which is a character pattern in searching
 
-## character class
-search for one or another character within a group, the group is defined with squre bracket
+## Sets of matching characters
+match for one or another character within a group, the group is defined with squre bracket
 
     import re
-    #search a or A
+    #match a or A
     pattern = re.compile(r'[aA]', flags=re.IGNORECASE)
-    #search range
+    #or
+    pattern = re.compile(r'[a,A]', flags=re.IGNORECASE)
+    #match anything between a and z or A and Z, length is not limited
     pattern = re.compile(r'[a-z]', flags=re.IGNORECASE)
-    re.findall(pattern,text)
+    #match email consist of letters and numbers in .com domain
+    pattern = re.compiler(r'[a-zA-Z0-9]+@+[a-zA-Z]+\.com')
 
 ## negation
 NOT operation,search pattern except the ones that listed
@@ -28,23 +31,25 @@ NOT operation,search pattern except the ones that listed
     pattern = re.compile(r'[^a-z]', flags=re.IGNORECASE)
 
 ## special character and shortcuts
-\w — Matches word characters (includes digits and underscores)
+    \w — any single letter, digit or underscore
 
-\W — Matches what \w doesn’t — non-word characters
+    \W — matches anything not covered with \w
 
-\d — Matches all digit characters — Digits are [0–9]
+    \d — matches numerical digits 0–9
 
-\D — Matches all non-digit characters(letters)
+    \D — Matches all non-digit characters(letters)
 
-\s — Matches whitespace (including tabs)
+    \s — Matches whitespace (including tabs)
 
-\S — Matches non-whitespace
+    \S — Matches non-whitespace
 
-\n — Matches new lines
+    \n — Matches new lines
 
-\r — Matches carriage returns
+    \r — Matches carriage returns
 
-\t — Matches tabs
+    \t — Matches tabs
+    . -any single character except the newline character
+
 
 ## match quantities
     * — Zero or more
@@ -53,3 +58,42 @@ NOT operation,search pattern except the ones that listed
     {n} — Exactly ’n’ number
     {n,} — Matches ’n’ or more occurrences
     {n,m} — Between ’n’ and ‘m’
+    {m,n}? - m to n copies of RE to match in a non-greedy fashion
+
+## regex built-in methods
+
+* match
+    prog=re.compile(r'ing')
+    words=['Spring','cycling','Ringtone']
+    for w in words:
+        #if match then return an object, otherwise return None
+        if prog.match(w,pos=len(w)-3)!=None:
+            print('last three letters are ing')
+
+* search
+returns the matched object, apply group() method on the object to get teh matched string
+    match_obj=prog.search(w)
+    start=match_obj.span()[0]
+    end=match_obj.span()[1]
+    matched_string=match_obj.group()
+
+* findall
+returns a list with the matching pattern
+* finditer
+returns an iterator of the matched objects
+* split
+used to get rid of extrinsic characters which messing up a regular sent
+    #replace ';,space_' from text
+    " ".join(re.split('[;,\s_]+', text))
+
+### matching string
+* ^(cart) pattern at the beginning of a string not anywhere else
+
+    pattern=re.compile(r'^Com')
+* $ (dollar sign) matches a pattern at the end of the string
+    pattern=re.compile(r'ing$')
+
+## others
+### combining multi-pattern
+   #p0 and p1 are two patterns before compile
+    pattern=p0+'|'+p1
