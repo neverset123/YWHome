@@ -97,3 +97,34 @@ used to get rid of extrinsic characters which messing up a regular sent
 ### combining multi-pattern
    #p0 and p1 are two patterns before compile
     pattern=p0+'|'+p1
+
+### Look-ahead/behind Assertions - (?>= ) | (?= ) | (?>! ) | (?! )
+
+(?>= ): behind assertion
+ (?= ): before assertion
+(?>! ): not behind assertion
+(?! ): not before assertion
+
+#searching username in the following html
+<a href="/@jamescalam?source=post_page-----22e4e63463af----------------------" class="cg ch au av aw ax ay az #ba bb it be ck cl" rel="noopener">James Briggs</a>
+
+    if bool(re.search(r'(?=<\/)'@.*(?=\?source)', a)):
+        username = re.search(r'(?=>\/)'@.*(?=\?source)', a).group()
+
+### Modifiers - (?sm)
+
+Single line [s] - Allows the . metacharacter (which matches everything except newlines) to match newlines   tooMulti-line [m] - ^ and $ now match the beginning/end of lines, rather than default behavior of matching beggining/end of entire stringInsensitive [i] - Upper and lower-case characters are matched, e.g. A = a  
+Extended [x] - Ignores whitespace. To include spaces, they must be escaped using \. Also allows comments inside the regex with #    
+ASCII [a] - Match to ASCII-only characters, rather than the full Unicode character set
+
+    #Adding both the single line and insensitive modifiers using modifier flags
+    re.match('[a-z]+01.*', text, re.S|re.I)
+    #or adding inline modifier with  the (? ) syntax within the expression
+    #the modifier can be turn off by (?- ), but it is not supported in python
+    re.match('(?si)[a-z]+01.*', text)
+
+
+### Conditionals (If|Else) - (...)?(?(1)True|False)
+
+    for t in text:
+        print(re.search(r"hello)?(?(1) world| bye)!", t)
