@@ -2,7 +2,7 @@
 layout:     post
 title:      python data cleanings
 subtitle:   
-date:       2020-06-14
+date:       2020-07-12
 author:     neverset
 header-img: img/post-bg-kuaidi.jpg
 catalog: true
