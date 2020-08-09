@@ -86,8 +86,18 @@ RDD is an abstract data type in spark, is similar to array. It is stored partiti
         keyvalue=words.map(lambda word:(word,1))
         print(keyvalue.countByKey())
 ## DataFrame
+
+### read dataframes
         #read csv as DataFrame
         df = spark.read.load("filename.csv",format="csv", sep=",", inferSchema="true", header="true")
+        #or
+        df = spark.read.csv("filenames.csv", header="true", inferSchema="true")
+### preprocessing
+
+    #remove unnecessary column 
+    df = df.drop("instant")
+    #print schema of dataset
+    df.printSchema()
 
 
 ## transformation
@@ -136,7 +146,7 @@ remove duplicates
     rdd.distinct().collect()
 
 * randomSplit
-slice data with portion 
+slice data with portion for test and train purposes
 
     rddsplitted=rdd.randomsplit([0.2, 0.6])  
     print(rddsplitted[0].collect())
@@ -265,6 +275,7 @@ select specified coloumn with name
 * withColumn(coloumn_name, F.col(coloumn_name).cast(IntegerType()))
 cast data in specified coloumn to other type    
 F is imported: from pyspark.sql import functions as F
+to cast data type for all column: df = df.select([F.col(c).cast("double").alias(c) for c in df.columns])
 
 ## shuffle
 the process to gather datas on different nodes to one node with specific rule is called shuffle
@@ -350,3 +361,37 @@ a decorator F.pandas_udf and an output shema need to be defined
     pivotedTimeprovince = timeprovince.groupBy('date').pivot('province').agg(F.sum('confirmed').alias('confirmed') , F.sum('released').alias('released'))   
     pivotedTimeprovince.limit(10).toPandas()
 
+## machine learning pipeline
+
+    from pyspark.ml.feature import VectorAssembler, VectorIndexer
+    featuresCols = df.columns
+    featuresCols.remove('cnt')
+    # Concatenates all feature columns into a single feature vector in a new column "rawFeatures"
+    vectorAssembler = VectorAssembler(inputCols=featuresCols, outputCol="rawFeatures")
+    # Identifies categorical features and indexes them
+    vectorIndexer = VectorIndexer(inputCol="rawFeatures", outputCol="features", maxCategories=4)
+
+    from pyspark.ml.regression import GBTRegressor
+    # Takes the "features" column and learns to predict "cnt"
+    gbt = GBTRegressor(labelCol="cnt")
+
+    from pyspark.ml.tuning import CrossValidator, ParamGridBuilder
+    from pyspark.ml.evaluation import RegressionEvaluator# Define a grid of hyperparameters to test:
+    #  - maxDepth: max depth of each decision tree in the GBT ensemble
+    #  - maxIter: iterations, i.e., number of trees in each GBT ensemble
+    # In this example notebook, we keep these values small.  In practice, to get the highest accuracy, you would likely want to try deeper trees (10 or higher) and more trees in the ensemble (>100)paramGrid = ParamGridBuilder()\
+    .addGrid(gbt.maxDepth, [2, 5])\
+    .addGrid(gbt.maxIter, [10, 100])\
+    .build()
+    # We define an evaluation metric.  This tells CrossValidator how well we are doing by comparing the true labels with predictions.
+    evaluator = RegressionEvaluator(metricName="rmse", labelCol=gbt.getLabelCol(), predictionCol=gbt.getPredictionCol())
+    # Declare the CrossValidator, which runs model tuning for us.
+    cv = CrossValidator(estimator=gbt, evaluator=evaluator, estimatorParamMaps=paramGrid)
+    # tie feature and training model in the pipeline
+    from pyspark.ml import Pipeline
+    pipeline = Pipeline(stages=[vectorAssembler, vectorIndexer, cv])
+
+    # Train & Test
+    pipelineModel = pipeline.fit(train)
+    predictions = pipelineModel.transform(test)
+    rmse = evaluator.evaluate(predictions)
