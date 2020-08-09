@@ -155,3 +155,59 @@ In short, don’t use for loops when you’re deleting items from a list, rather
 
     def sayhello(day:str, name:str) -> str:
         return f"Happy {day}, {name}. Welcome to Python!"
+
+## Ternary Expression
+ define variables with particular values based on the conditions
+
+    reward = "1000 dollars" if score > 90 else "500 dollars"
+
+## Evaluate Multiple Conditions
+
+    # Do these instead
+    if all([a < 10, b > 5, c == 4]):
+        # do something
+    if any([a < 10, b > 5, c == 4]):
+        # do something
+
+## Use Counter for unique Element Counting
+
+    from collections import Counter
+    word_counter = Counter(x.lower() for x in words)
+    #find the most frequently occurring element
+    print("Most Frequent:", word_counter.most_common(1))
+
+## sorting
+
+    #sort list
+    sorted(numbers, reverse=True))
+    sorted(words, reverse=True)
+    #sort list of tuples
+    grades = [('John', 95), ('Aaron', 99), ('Zack', 97), ('Don', 92), ('Jennifer', 100), ('Abby', 94), ('Zoe', 99), ('Dee', 93)]
+    # Sort by the grades, descending
+    sorted(grades, key=lambda x: x[1], reverse=True)
+    # Sort by the name's initial letter, ascending
+    sorted(grades, key=lambda x: x[0][0])
+    # sort with two keys
+    sorted(grades, key=lambda x: (x[0][0], -x[1]))
+
+## defaultdict
+defaultdict can avoid key not exist error when putting list or tuple in dict
+
+    from collections import defaultdict
+    final_defaultdict = defaultdict(list)
+    for letter in letters:
+        final_defaultdict[letter].append(letter)
+
+## new features in python 3.8.5
+
+### Assignment operator ( := )
+A new syntax := that assigns values to variables as part of a larger expression
+
+    if (n := len(a)) > 10:
+        print(f"List is too long ({n} elements, expected <= 10)")
+
+### Positional-only parameters ( / )
+
+    #a and b are positional-only parameters,c and d can be positional or keyword, and e and f are required to be keywords
+    def (a,b,/,c,d,*,e,f)
+        print(a,b,c,d,e,f)

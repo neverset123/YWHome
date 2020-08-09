@@ -8,7 +8,9 @@ header-img: img/post-bg-kuaidi.jpg
 catalog: true
 tags:
     - python
+    - pandas
 ---
+
 
 ## missing value
 
@@ -54,3 +56,30 @@ tags:
     df['Salary'].fillna(method='bfill', inplace=True)
     # interpolation
     df['Salary'].interpolate(method='linear', direction = 'forward', inplace=True)
+
+## pandas tips
+### filter with query()
+
+    #filter can be done like this
+    df.loc[(df['tip']>6) & (df['total_bill']>=30)]
+    # filter is more elegant with query
+    df.query("tip>6 & total_bill>=30")
+
+    # reference global variable name with @
+    median_tip = df['tip'].median()
+    display(df.query("tip>@median_tip").head())
+
+### sorting multiple columns
+
+    df.sort_values(by=[‘total_bill’, ‘tip’], ascending=[True, False]).head()
+
+### Use nsmallest() or nlargest()
+check out data extract for records that have the smallest or largest values in a particular column
+
+    df.nsmallest(5, 'total_bill')
+
+### Customise describe()
+summary stats for selected columns
+
+    display(df.describe(include=['category'])) # categorical types
+    display(df.describe(include=['number'])) # numerical types
