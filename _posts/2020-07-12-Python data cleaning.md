@@ -83,3 +83,25 @@ summary stats for selected columns
 
     display(df.describe(include=['category'])) # categorical types
     display(df.describe(include=['number'])) # numerical types
+
+### preprocess data to change type
+after read data, the data type of all data is string. Before processing (such as logical comparison) it makes sense to assign type to them
+
+    df = df.astype({"Open":'float',
+                "High":'float',
+                "Low":'float',
+                "Close*":'float',
+                "Adj Close**":'float',
+                "Volume":'float'})
+
+### Logical Comparisons wrapper
+eq (equivalent to ==) — equals to
+ne (equivalent to !=) — not equals to
+le (equivalent to <=) — less than or equals to
+lt (equivalent to <) — less than
+ge (equivalent to >=) — greater than or equals to
+gt (equivalent to >) — greater than
+
+    df['Bool Price Increase'] = df['Close*'].gt(df['Open'])
+    df['Bool Over Time Increase'] = df['Close*'].gt(df['Close*'].shift(-1))
+    
