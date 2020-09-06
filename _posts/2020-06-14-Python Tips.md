@@ -198,6 +198,16 @@ defaultdict can avoid key not exist error when putting list or tuple in dict
     for letter in letters:
         final_defaultdict[letter].append(letter)
 
+## data class
+this feature is for python 3.7+
+
+    from dataclasses import dataclass
+
+    @dataclass
+    class DataClassCard:
+        rank: str
+        suit: str
+
 ## new features in python 3.8.5
 
 ### Assignment operator ( := )

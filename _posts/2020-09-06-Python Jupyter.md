@@ -2,7 +2,7 @@
 layout:     post
 title:      python jupyter
 subtitle:   
-date:       2020-06-14
+date:       2020-09-06
 author:     neverset
 header-img: img/post-bg-kuaidi.jpg
 catalog: true
