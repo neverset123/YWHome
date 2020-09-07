@@ -104,4 +104,30 @@ gt (equivalent to >) — greater than
 
     df['Bool Price Increase'] = df['Close*'].gt(df['Open'])
     df['Bool Over Time Increase'] = df['Close*'].gt(df['Close*'].shift(-1))
-    
+
+### persisting data without csv
+csv does nto persist data type of pandas
+alternative:
+* Pickle and to_pickle()
+    #Pandas's to_pickle method
+    df.to_pickle(path)  
+* Parquet and to_parquet()
+    #Pandas's to_parquet method
+    df.to_parquet(path, engine, compression, index, partition_cols)
+* Excel and to_excel()
+    #exporting a dataframe to excel
+    df.to_excel(excel_writer, sheet_name, many_other_parameters)
+* HDF5 and to_hdf()
+If the data are stored as table (PyTable) you can directly query the hdf store using store.select(key,where="A>0 or B<5")
+    #exporting a dataframe to hdf
+    df.to_hdf(path_or_buf, key, mode, complevel, complib, append ...)
+* SQL and to_sql()
+    #Set up sqlalchemy engine
+    engine = create_engine(
+        'mssql+pyodbc://user:pass@localhost/DB?driver=ODBC+Driver+13+for+SQL+server',
+        isolation_level="REPEATABLE READ"
+    )
+    #connect to the DB
+    connection = engine.connect()
+    #exporting dataframe to SQL
+    df.to_sql(name="test", con=connection)

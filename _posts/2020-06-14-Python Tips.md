@@ -208,6 +208,17 @@ this feature is for python 3.7+
         rank: str
         suit: str
 
+## parallel computing
+using concurrent.futures to process tasks with more processors
+
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+        executor.map(func, args_for_func)
+
+## Interning
+Interning is re-using the objects on-demand instead of creating the new objects.
+is — this is used to compare the memory location of two python objects.
+id — this returns memory location in base-10.
+
 ## new features in python 3.8.5
 
 ### Assignment operator ( := )
