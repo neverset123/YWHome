@@ -131,3 +131,14 @@ If the data are stored as table (PyTable) you can directly query the hdf store u
     connection = engine.connect()
     #exporting dataframe to SQL
     df.to_sql(name="test", con=connection)
+
+### Pandas Profile
+pandas profile provides EDA information about datas to be analysed
+
+    import pandas_profiling
+    import pandas as pd
+    import numpy as np
+    # create data 
+    df = pd.DataFrame(np.random.randint(0,200,size=(15, 6)), columns=list('ABCDEF'))
+    # run your report!
+    df.profile_report()
