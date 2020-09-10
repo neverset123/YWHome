@@ -35,7 +35,7 @@ python -m pip install -U wheel setuptools
 3. build manylinux  wheel   
 PyPA provides a set of Docker images for many linux environments
 4. Bundling Shared Libraries    
-auditwheel will bundle external libraries into an already-built wheel. auditwheel is present on the manylinux Docker images
+auditwheel will bundle external libraries into an already-built wheel. auditwheel is present on the manylinux Docker images;    
 delocate does the same on macOS.
 
         $ auditwheel repair <path-to-wheel.whl>  # For manylinux
