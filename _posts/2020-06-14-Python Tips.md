@@ -209,10 +209,25 @@ this feature is for python 3.7+
         suit: str
 
 ## parallel computing
+### processpoolexecutor
 using concurrent.futures to process tasks with more processors
 
     with concurrent.futures.ProcessPoolExecutor() as executor:
         executor.map(func, args_for_func)
+
+### Pool
+
+    from multiprocessing.dummy import Pool as ThreadPool
+    # Make the Pool of workers
+    pool = ThreadPool(4)
+    # Open the urls in their own threads
+    # and return the results
+    results = pool.map(urllib2.urlopen, urls)
+    #close the pool and wait for the work to finish
+    pool.close()
+    pool.join()
+
+
 
 ## Interning
 Interning is re-using the objects on-demand instead of creating the new objects.
