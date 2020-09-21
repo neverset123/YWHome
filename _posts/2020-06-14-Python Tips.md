@@ -209,15 +209,113 @@ this feature is for python 3.7+
         suit: str
 
 ## parallel computing
+### processpoolexecutor
 using concurrent.futures to process tasks with more processors
 
     with concurrent.futures.ProcessPoolExecutor() as executor:
         executor.map(func, args_for_func)
 
+### Pool
+
+    from multiprocessing.dummy import Pool as ThreadPool
+    # Make the Pool of workers
+    pool = ThreadPool(4)
+    # Open the urls in their own threads
+    # and return the results
+    results = pool.map(urllib2.urlopen, urls)
+    #close the pool and wait for the work to finish
+    pool.close()
+    pool.join()
+
+
+
 ## Interning
 Interning is re-using the objects on-demand instead of creating the new objects.
 is — this is used to compare the memory location of two python objects.
 id — this returns memory location in base-10.
+
+## joblib
+### caching results
+
+    from joblib import Memory
+
+    #Define a location to store cache
+    location = '~/Desktop/temp/cache_dir'
+    memory = Memory(location, verbose=0)
+    result = []
+
+    #Function to compute square of a range of a number:
+    def get_square_range_cached(start_no, end_no):
+        for i in np.arange(start_no, end_no):
+            time.sleep(1)
+            result.append(square_number(i))
+        return result
+
+    get_square_range_cached = memory.cache(get_square_range_cached)
+
+    start = time.time()
+    final_result = get_square_range_cached(1, 21)
+    end = time.time()
+
+    #Clean-up the cache folder
+    memory.clear(warn=False)
+
+### parallelization
+
+    from joblib import Parallel, delayed
+    from joblib import Memory
+
+    location = 'C:/Users/pg021/Desktop/temp/cache_dir'
+    memory = Memory(location, verbose=0)
+    costly_compute_cached = memory.cache(costly_compute)
+
+    def data_processing_mean_using_cache(data, column):
+        """Compute the mean of a column."""
+        return costly_compute_cached(data, column).mean()
+
+    start = time.time()
+    results = Parallel(n_jobs=2)(
+        delayed(data_processing_mean_using_cache)(data, col)
+        for col in range(data.shape[1]))
+    stop = time.time()
+
+    print('Elapsed time for the entire processing: {:.2f} s'
+        .format(stop - start))
+
+### dump results
+
+    from joblib import dump, load
+    start = time.time()
+    joblib_file = 'train_features.joblib'
+
+    with open(path + joblib_file, 'wb') as f:
+        dump(data, f)
+
+    # Calculating the total time
+    simple_joblib_duration = time.time() - start
+    print("Dump duration: %0.3fs" % simple_joblib_duration)
+
+    start = time.time()
+    with open(path + joblib_file, 'wb') as f:
+        load(data, f)
+
+    # Calculating the total time
+    simple_joblib_duration = time.time() - start
+    print("Dump duration: %0.3fs" % simple_joblib_duration)
+
+#### dump with compression
+
+    start = time.time()
+    joblib_file = '/train_features.joblib'
+
+    # Dumping the file in the zlib compression format
+    with open(path + joblib_file, 'wb') as f:
+        dump(data, f, compress='zlib')
+
+    simple_joblib_duration = time.time() - start
+
+    # Total time taken to dump
+    print("Zlib dump duration: %0.3fs" % simple_joblib_duration)
 
 ## new features in python 3.8.5
 
