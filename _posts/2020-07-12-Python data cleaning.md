@@ -142,3 +142,34 @@ pandas profile provides EDA information about datas to be analysed
     df = pd.DataFrame(np.random.randint(0,200,size=(15, 6)), columns=list('ABCDEF'))
     # run your report!
     df.profile_report()
+
+### binning data
+here are some methods to speed up the binning process
+#### iterrows()
+
+    %%timeit
+    cat_list = []
+    for index, row in mpg.iterrows():
+        wt = row['weight']    
+        cat = apply_weights(wt)
+        cat_list.append(cat)
+    #print(len(cat_list))
+    mpg['Wt_Categories_iter'] = cat_list
+
+#### apply()
+
+    %%timeit
+    mpg['wt_cat_apply'] = mpg.apply(lambda row: apply_weights(row['weight']), axis=1)
+
+#### cut()
+
+    %%timeit
+    mpg['wt_cat_cut'] = pd.cut(np.array(mpg['weight']), 4, labels=["Light", "Medium", "Heavy", "Very heavy"])
+
+### adding data to dataframe
+
+#### concat
+it takes much less time than append
+
+    %%timeit
+    df_concat = pd.concat([df_a, df_b, df_c], axis = 0)
