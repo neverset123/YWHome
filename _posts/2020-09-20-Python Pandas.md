@@ -66,6 +66,66 @@ insert column at defined location
         #concatenate in column
         pd.concat([df1, df2], axis=1)
 
+## string methods
+
+### StringDtype
+object type is default to store strings, which has some drawbacks. with specification of string or StringDtype we can use StringDtype
+
+        import pandas as pd
+        pd.Series(['aaa','bbb','ccc']).dtype
+        dtype('O')
+        pd.Series(['aaa','bbb','ccc'], dtype='string').dtype
+        StringDtype
+        pd.Series(['aaa','bbb','ccc'], dtype=pd.StringDtype()).dtype
+        StringDtype
+### convert text to word series
+
+        #explode function to use each separated word as a new item in the series
+        #A would have the index 0 due to the nature of the explode function, so here is droped
+        A = pd.Series(text).str.split().explode().reset_index(drop=True)
+
+### convert upper-/lowercase 
+
+        A.str.upper()
+        A.str.lower()
+
+### len
+
+        #return length of each string in A
+        A.str.len()
+
+### string series to text
+
+        A.str.cat(sep=" ")
+
+### replace
+it replace not only whole string, but also part of the string if any
+
+        A.str.replace('the', 'not-a-word')
+
+### regex
+
+        #extract part of the string
+        B = pd.Series(['a1','b4','c3','d4','e3'])
+        B.str.extract(r'([a-z])([0-9])')
+        #check whether string has same pattern
+        C = pd.Series(['a1','4b','c3','d4','e3'])
+        C.str.contains(r'[a-z][0-9]')
+
+### count character in stirng
+
+        B = pd.Series(['aa','ab','a','aaa','aaac'])
+        B.str.count('a')
+### filtering
+
+        B = pd.Series(['aa','ba','ad'])
+        B.str.startswith('a')
+        B.str.endswith('d')
+
+### string to categorial
+
+        cities = ['New York', 'Rome', 'Madrid', 'Istanbul', 'Rome']
+        pd.Series(cities).str.get_dummies()
 
 ## useful tips
 ### read from clipboard
