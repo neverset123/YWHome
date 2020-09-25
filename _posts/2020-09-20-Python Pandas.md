@@ -127,6 +127,95 @@ it replace not only whole string, but also part of the string if any
         cities = ['New York', 'Rome', 'Madrid', 'Istanbul', 'Rome']
         pd.Series(cities).str.get_dummies()
 
+## sql
+### create dummy data
+
+        df = pd.DataFrame({'name': ['Ann', 'Ann', 'Ann', 'Bob', 'Bob'], 
+                   'destination': ['Japan', 'Korea', 'Switzerland', 
+                                   'USA', 'Switzerland'], 
+                   'dep_date': ['2019-02-02', '2019-01-01', 
+                                '2020-01-11', '2019-05-05', 
+                                '2020-01-11'], 
+                   'duration': [7, 21, 14, 10, 14]})
+
+### shift()
+
+        SELECT name
+                , destination
+                , dep_date
+                , duration
+                , LEAD(dep_date) OVER(ORDER BY dep_date, name) AS lead1
+                , LEAD(dep_date, 2) OVER(ORDER BY dep_date, name) AS lead2
+                , LAG(dep_date) OVER(ORDER BY dep_date, name) AS lag1
+                , LAG(dep_date, 3) OVER(ORDER BY dep_date, name) AS lag3
+        FROM df
+        #in python pandas it equals to
+        df.sort_values(['dep_date', 'name'], inplace=True)
+        df=df.assign(lead1 = df['dep_date'].shift(-1),
+                lead2 = df['dep_date'].shift(-2),
+                lag1 = df['dep_date'].shift(),
+                lag3 = df['dep_date'].shift(3))
+
+### Date/datetime
+
+        SELECT name
+                , destination
+                , dep_date
+                , duration
+                , DATENAME(WEEKDAY, dep_date) AS day
+                , DATENAME(MONTH, dep_date) AS month
+                , DATEDIFF(DAY,  
+                                LAG(dep_date) OVER(ORDER BY dep_date, name), 
+                                dep_date) AS diff
+                , DATEADD(DAY, day, dep_date) AS arr_date
+        FROM df
+        #equals to 
+        df['dep_date'] = pd.to_datetime(df['dep_date'])
+        df['duration'] = pd.to_timedelta(df['duration'], 'D')
+        df.sort_values(['dep_date', 'name'], inplace=True)
+        df.assign(day = df['dep_date'].dt.day_name(),
+                month = df['dep_date'].dt.month_name(),
+                diff = df['dep_date'] - df['dep_date'].shift(),
+                arr_date = df['dep_date'] + df['duration'])
+### Ranking
+
+        SELECT name
+                , destination
+                , dep_date
+                , duration
+                , ROW_NUMBER() OVER(ORDER BY duration, name) AS row_number_d
+                , RANK() OVER(ORDER BY duration) AS rank_d
+                , DENSE_RANK() OVER(ORDER BY duration) AS dense_rank_d
+        FROM df
+        #equal to
+        df.sort_values(['duration', 'name']).assign(
+                row_number_d = df['duration'].rank(method='first').astype(int),
+                rank_d = df['duration'].rank(method='min').astype(int),
+                dense_rank_d = df['duration'].rank(method='dense').astype(int))
+
+### Aggregate & Partition
+
+        SELECT name
+                , destination
+                , dep_date 
+                , duration
+                , MAX(duration) OVER() AS max_dur
+                , SUM(duration) OVER() AS sum_dur
+                , AVG(duration) OVER(PARTITION BY name) AS avg_dur_name
+                , SUM(duration) OVER(PARTITION BY name ORDER BY dep_date
+                                        RANGE BETWEEN UNBOUNDED PRECEDING
+                                        AND CURRENT ROW) AS cum_sum_dur_name
+        FROM df
+        #equal to
+        df.sort_values(['name', 'dep_date'], inplace=True)
+        df.assign(max_dur=df['duration'].max(),
+                sum_dur=df['duration'].sum(),
+                avg_dur_name=df.groupby('name')['duration']
+                                .transform('mean'),
+                cum_sum_dur_name=df.sort_values('dep_date')
+                                .groupby('name')['duration']
+                                .transform('cumsum'))
+
 ## useful tips
 ### read from clipboard
 
