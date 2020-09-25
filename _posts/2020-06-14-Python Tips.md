@@ -317,6 +317,55 @@ id — this returns memory location in base-10.
     # Total time taken to dump
     print("Zlib dump duration: %0.3fs" % simple_joblib_duration)
 
+## plydata
+
+    #example data
+    import pandas as pd
+    from plydata import define, query, if_else, ply
+     
+     
+    df = pd.DataFrame({
+        'x': [0, 1, 2, 3],
+        'y': ['zero', 'one', 'two', 'three']})
+
+### define
+define(data, *args,**kwargs)
+
+    #df won't be changed(no insert)
+    define(df, z='x')
+    #it equals to 
+    df >> define(z='x')
+    #for multi operations
+    (df 
+     >> define(m='2*x') 
+     >> define(n='m*m') 
+     >> define(q='m+n')
+    )
+
+### if_else
+if_else(predicate, true_value, false_value)
+
+    define(df, z=if_else('x>1', 1, 0))
+    df >> define(z=if_else('x>1', 1, 0))
+
+### query
+query(data, expr)
+
+    df >> query('z==1')
+
+### ply
+ply is pipe operator, equal to >>
+
+    (df 
+     >> define(z=if_else('x>1', 1, 0)) 
+     >> query('z==1')
+    )
+    #is equal to 
+    ply(df,
+        define(z=if_else('x > 1', 1, 0)),
+        query('z == 1')
+    )
+
 ## new features in python 3.8.5
 
 ### Assignment operator ( := )
