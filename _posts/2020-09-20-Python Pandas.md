@@ -216,6 +216,19 @@ it replace not only whole string, but also part of the string if any
                                 .groupby('name')['duration']
                                 .transform('cumsum'))
 
+## indexing
+### loc
+dataframe.loc[specified rows in list: specified columns in list]
+#or
+dataframe.loc[start label row: stop label row, start lable column: start lable column]
+#or
+dataframe.loc[dataframe.<attribute> == <selected attribute tpye>, :]
+### iloc
+integer-location based indexing based on the position of the rows and columns.  
+the end index will not be included in the selected dataframe    
+dataframe.iloc[start index row:end index row, start index column:end index column]
+
+
 ## useful tips
 ### read from clipboard
 

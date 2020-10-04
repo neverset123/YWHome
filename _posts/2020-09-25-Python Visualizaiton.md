@@ -86,3 +86,39 @@ streamlit run streamlit_example.py
                     title=f'Cereal ratings vs. {x_axis}')
 
     st.plotly_chart(fig)
+
+## Datapane
+Datapane is an API allow people to view visualization result and share result easily in the cloud.Deploying Python scripts and notebooks is also possible.  
+It supports:
+* Pandas  
+* Plots from Python visualization libraries such as Plotly, Bokeh, Altair, and Folium
+* Markdown
+To install
+
+    pip3 install datapane
+    #generate report you need token
+    datapane login --server=https://datapane.com/ --token=yourtoken
+
+### generate report
+
+    import pandas as pd
+    import altair as alt
+    import datapane as dp
+    df = pd.read_csv('https://query1.finance.yahoo.com/v7/finance/download/GOOG?period2=1585222905&interval=1mo&events=history')
+    chart = alt.Chart(df).encode(
+        x='Date:T',
+        y='Open'
+    ).mark_line().interactive()
+    #generate report
+    r = dp.Report(
+    dp.Markdown('My simple report'), #add description to the report
+    dp.Table(df), #create a table
+    dp.Plot(chart) #create a chart
+    )
+
+    # Publish your report. Make sure to have visibility='PUBLIC' if you want to share your report
+    r.publish(name='stock_report', visibility='PUBLIC')
+        
+### add interactive parameter in report 
+
+    datapane script deploy --script=<your_python_script.py> --name=name_of_your_report
