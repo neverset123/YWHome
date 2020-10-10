@@ -66,6 +66,31 @@ insert column at defined location
         #concatenate in column
         pd.concat([df1, df2], axis=1)
 
+### apply
+allows you to apply a function across an axis of a DataFrame or to a Series.    
+xis allows you to define which axis the function is going to be applied to.      
+If raw=False is passed then the row or column is passed to the apply function as a Series, if raw=True is passed then ndarray objects are passed to the function instead
+
+        # pandas.DataFrame.apply
+        DataFrame.apply(func, axis=0, raw=False, result_type=None, args=(), **kwds)
+        # pandas.Series.apply
+        Series.apply(func, convert_dtype=True, args=(), **kwds)
+
+        #example
+        import pandas as pd
+        import numpy as np
+        df = pd.DataFrame([[np.random.randint(1, 100), np.random.randint(1, 100)]] * 4, columns=['A', 'B'])
+        print(df)
+        print(df.apply(lambda x: [5, 10], axis=1))
+        print(df.apply(lambda x: [5, 10, 15], axis=1, result_type='expand'))
+        print(df.apply(lambda x: [5, 10], axis=1, result_type='broadcast'))
+        print(df.apply(lambda x: [5, 10], axis=1, result_type='reduce'))
+        #example1
+        series = pd.Series(np.random.randint(0, 100, 5), name='result')
+        df = pd.DataFrame(series)
+        df['in_range'] = df['result'].apply(between_range, args=(25, 75))
+        print(df)
+
 ## string methods
 
 ### StringDtype
@@ -228,6 +253,22 @@ integer-location based indexing based on the position of the rows and columns.
 the end index will not be included in the selected dataframe    
 dataframe.iloc[start index row:end index row, start index column:end index column]
 
+## iterating
+
+### DataFrame.iterrows()
+
+        for index, row in df.iterrows():
+                print(f'Index: {index}, row: {row.values}')
+                #only print column_a
+                print(f'Index: {index}, column_a: {row.get("column_a", 0)}')
+
+### DataFrame.itertuples()
+returns an iterator containing name tuples representing the column names and values
+
+        # DataFrame.itertuples(index=True, name='Pandas')
+        for row in df.itertuples():
+                print(row)
+                print(row.column_name)
 
 ## useful tips
 ### read from clipboard

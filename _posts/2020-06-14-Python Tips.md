@@ -198,6 +198,53 @@ defaultdict can avoid key not exist error when putting list or tuple in dict
     for letter in letters:
         final_defaultdict[letter].append(letter)
 
+## any/all
+
+    # finds an element that evalutes to True it can return True immediately
+    found = any(thing == other_thing for thing in things)
+    # return True only when all the elements evaluate to True
+    found = all(thing == other_thing for thing in things)
+
+## replace list() with []/ replace dict() with {}
+time performance is better
+
+## Replace if statement with if expression
+
+    x = 1 if condition else 2
+
+## Use items() to directly unpack dictionary values
+
+    hats_by_colour = {'blue': ['panama', 'baseball_cap']}
+    for hat_colour, hats in hats_by_colour.items():
+        if hat_colour in self.favourite_colours:
+            think_about_wearing(hats)
+## Simplify sequence comparison
+check whether a list or sequence has elements before we try and do something with it
+
+    if len(list_of_hats) > 0:
+    #can be shortened as 
+    if list_of_hats:
+
+## Replace multiple comparisons of same variable with in operator
+
+    def process_payment(payment):
+        if payment.currency == 'USD' or payment.currency == 'EUR':
+            process_standard_payment(payment)
+    #can be shortened into
+    def process_payment(payment):
+        if payment.currency in ['USD', 'EUR']:
+            process_standard_payment(payment)
+
+## Replace manual loop counter with call to enumerate
+
+    i = 0
+    for currency in currencies:
+        print(i, currency)
+        i += 1
+    # can be shortened as
+    for i, currency in enumerate(currencies):
+        print(i, currency)
+
 ## data class
 this feature is for python 3.7+
 
