@@ -12,7 +12,7 @@ tags:
 
 the yield is able to execute an expression and return a value in time sequence rather than calculate them all and return in list; mostly used as generator
 
-## user cases
+## yield example
 ### return multivalue in sequence
 
     def func():
@@ -32,3 +32,12 @@ the yield is able to execute an expression and return a value in time sequence r
         if a<100:
             break
         print(a)
+
+### yield from
+
+    def get_content(entry):
+    for block in entry.get_blocks():
+        yield block
+    #can be refactored with yield from to accelerate 15%
+    def get_content(entry):
+        yield from entry.get_blocks()
