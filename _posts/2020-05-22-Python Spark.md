@@ -99,6 +99,50 @@ RDD is an abstract data type in spark, is similar to array. It is stored partiti
     #print schema of dataset
     df.printSchema()
 
+### using SQL 
+
+    #register df as sql table
+    df.registerTempTable('cases_table')
+    df_new = sqlContext.sql('select * from cases_table where confirmed>100')
+
+### create coloumn
+
+    import pyspark.sql.functions as F
+    rdd_new = rdd.withColumn("NewConfirmed", 100 + F.col("confirmed"))
+### convert dataframe between rdd
+
+    #convert df to rdd
+    df.rdd
+    #convert rdd to df
+    sqlContext.createDataFrame(rdd)
+
+### UDF
+define a normal function in python and use it in pyspark
+
+    import pyspark.sql.functions as F
+    from pyspark.sql.types import *
+    def casesHighLow(confirmed):
+        if confirmed < 50: 
+            return 'low'
+        else:
+            return 'high'
+        
+    #convert to a UDF Function by passing in the function and return type of function
+    casesHighLowUDF = F.udf(casesHighLow, StringType())CasesWithHighLow = cases.withColumn("HighLow", casesHighLowUDF("confirmed"))
+
+### using pandas in spark
+a decorator F.pandas_udf and an output shema need to be defined
+
+### spark windows functions
+
+    from pyspark.sql.window import Window   
+    windowSpec = Window().partitionBy(['province']).orderBy(F.desc('confirmed'))    
+    cases.withColumn("rank",F.rank().over(windowSpec)).show()
+
+### Pivot Dataframes
+
+    pivotedTimeprovince = timeprovince.groupBy('date').pivot('province').agg(F.sum('confirmed').alias('confirmed') , F.sum('released').alias('released'))   
+    pivotedTimeprovince.limit(10).toPandas()
 
 ## transformation
 
@@ -298,6 +342,17 @@ store transformation result in memory for second usage
     variable.unpersist()
 
 
+## Tips
+### Partitioning and resource management
+* activating dynamic allocation of executors via the spark.dynamicAllocation.maxExecutors and spark.dynamicAllocation.enabled parameters can considerably decrease idleness of Spark’s computational resources
+* Splitting a large processing job into multiple smaller jobs. For each of these smaller jobs, we can also set the parameters spark.default.parallelism and spark.sql.shuffle.partitions appropriately to prevent the need for constant re-partitioning.
+### Immutability, lazy evaluation and execution plan optimization
+Transformations produce a new Spark dataset as output (Spark has the immutability property so it can never modify existing datasets, only create new ones); Actions take Spark datasets as inputs but result in something else than a Spark dataset, such as writing into storage, creating a local (non-Spark) variable or displaying something in the user’s UI.
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/238245345465657453.PNG)
+Transformations are being done at partition level, not dataset level
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20201011140442.png)
+Spark optimizes execution plans, and the larger the execution plans, the better for optimization
+
 ## run spark python script 
 
     spark-submit script.py
@@ -315,51 +370,6 @@ store transformation result in memory for second usage
     export ARROW_PRE_0_15_IPC_FORMAT=1# Change the local[10] to local[numCores in your machine]
     $SPARK_PATH/bin/pyspark --master local[10]
     }
-## DataFrame
-### using SQL 
-
-    #register df as sql table
-    df.registerTempTable('cases_table')
-    df_new = sqlContext.sql('select * from cases_table where confirmed>100')
-
-### create coloumn
-
-    import pyspark.sql.functions as F
-    rdd_new = rdd.withColumn("NewConfirmed", 100 + F.col("confirmed"))
-### convert dataframe between rdd
-
-    #convert df to rdd
-    df.rdd
-    #convert rdd to df
-    sqlContext.createDataFrame(rdd)
-
-### UDF
-define a normal function in python and use it in pyspark
-
-    import pyspark.sql.functions as F
-    from pyspark.sql.types import *
-    def casesHighLow(confirmed):
-        if confirmed < 50: 
-            return 'low'
-        else:
-            return 'high'
-        
-    #convert to a UDF Function by passing in the function and return type of function
-    casesHighLowUDF = F.udf(casesHighLow, StringType())CasesWithHighLow = cases.withColumn("HighLow", casesHighLowUDF("confirmed"))
-
-### using pandas in spark
-a decorator F.pandas_udf and an output shema need to be defined
-
-### spark windows functions
-
-    from pyspark.sql.window import Window   
-    windowSpec = Window().partitionBy(['province']).orderBy(F.desc('confirmed'))    
-    cases.withColumn("rank",F.rank().over(windowSpec)).show()
-
-### Pivot Dataframes
-
-    pivotedTimeprovince = timeprovince.groupBy('date').pivot('province').agg(F.sum('confirmed').alias('confirmed') , F.sum('released').alias('released'))   
-    pivotedTimeprovince.limit(10).toPandas()
 
 ## machine learning pipeline
 
