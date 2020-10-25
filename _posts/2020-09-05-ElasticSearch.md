@@ -10,7 +10,11 @@ tags:
     - data engineering
 ---
 
-ElasticSearch is an open-source search engine, which is able to store, search and analyse text. It is based on Lucene library, and provide Restful API. Its searching performance is almost real time (<1s)
+ElasticSearch is an open-source search engine, which is not only for log analysis, but also support any other data search, search, and collection scenarios. It is based on Lucene library, and provide Restful API. Its searching performance is almost real time (<1s)
+it consists of three components:
+* ElasticSearch
+* Logstash
+* Kibana
 
 ## basics
 ### node and cluster

@@ -26,9 +26,9 @@ using the plot_importance() method gives an attractively simple bar-chart repres
 
     xgboot.plot_importance(model, importance_type="gain")
 
-## common importance evaluation methods
+## Common importance evaluation methods
 
-### SHAP.
+### SHAP (SHapley Additive exPlanations)
 A new individualized method that is both consistent and accurate. it shows no only importance of a feature but also show positiveness or negtiveness
 The shap Python package makes SHAP easier. We first call shap.TreeExplainer(model).shap_values(X) to explain every prediction, then call shap.summary_plot(shap_values, X) to plot these explanations
 
@@ -79,8 +79,10 @@ display contribution of each feature for one prediction
 2. multi predictions
 
     shap.force_plot(explainer.expected_value, shap_values, X)
+
 ##### Global Interper
 explanation of the overall structure of the model
+
 1. summary_plot
 ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20201024232517.png)
 
@@ -100,7 +102,7 @@ explanation of the overall structure of the model
 4. dependence_plot
 ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20201024235212.png)
 
-    #create a SHAP dependence plot to show the effect of a single feature across the whole dataset
+    #create a SHAP dependence plot to show the effect of a single feature across the whole dataset  
     shap.dependence_plot("RM", shap_values, X)
 
 ### Saabas. 
@@ -113,6 +115,7 @@ The same method used above in XGBoost, and also equivalent to the Gini importanc
 Represents both the closely related “weight” and “cover” methods in XGBoost, but is computed using the “weight” method.
 ### Permutation. 
 The resulting drop in accuracy of the model when a single feature is randomly permuted in the test data set.
+
     * train model on dataset A
     * test model on dataset B, get MSE and loglos
     * random permute one feature in dataset B, and test again. the difference of scores between 2 and 3 is permutation importance
