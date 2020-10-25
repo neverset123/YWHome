@@ -22,6 +22,7 @@ it can be binary tree or non-binary tree
 * on the non-leaf node is test of attribute, each branch is the output of this test.
 * on the leaf nodes are classes to be classified
 * the decision process starts from the root node, test on the attribute node, and outputs to the corresponding branch until leaf node. the leaf node is the result of the decision tree. the growth of the tree stops when the max. depth or min. dataset size is reached. The final class is determined based on the predicted majority class in the dataset
+
 ### CART (Classification and Regression Tree)
 dataset will be splitted based on an attribute and an attribute threshold value. Every attribute and its threshold will be evalued with cost function. Wenn the best split attribute is found, it will be used as the next node in decision tree
 
