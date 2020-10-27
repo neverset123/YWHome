@@ -64,10 +64,23 @@ tags:
     df.loc[(df['tip']>6) & (df['total_bill']>=30)]
     # filter is more elegant with query
     df.query("tip>6 & total_bill>=30")
+    # it support in and not in
+    df.query("release_year in [2018, 2019]")
 
     # reference global variable name with @
     median_tip = df['tip'].median()
     display(df.query("tip>@median_tip").head())
+
+    #parse python func
+    def country_count(s):
+        return s.split(',').__len__()
+    df.query("release_year.isin([2018, 2019]) and country.apply(@country_count) > 5")
+
+    # support Index and MultiIndex
+    df.set_index('title').query("index.str.contains('king', case=False)")
+    temp = df.set_index(['title', 'type'])
+    temp.query("title.str.contains('king', case=False) and type == 'Movie'")
+
 
 ### sorting multiple columns
 
