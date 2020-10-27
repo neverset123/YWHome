@@ -91,6 +91,19 @@ If raw=False is passed then the row or column is passed to the apply function as
         df['in_range'] = df['result'].apply(between_range, args=(25, 75))
         print(df)
 
+### eval
+
+        #create new data
+        result2 = df.eval('''
+                       years_to_now = 2020 - release_year
+                       new_date_added = @pd.to_datetime(date_added.str.strip(), format='%B %d, %Y', errors='coerce')''')
+        # use partial to fix expression
+        from functools import partial
+        func = partial(pd.to_datetime, format='%B %d, %Y', errors='coerce')
+        netflix.eval('''
+                years_to_now = 2020 - release_year
+                new_date_added = @func(date_added.str.strip())''')
+
 ## string methods
 
 ### StringDtype
