@@ -13,6 +13,8 @@ tags:
 ---
 
 spark is a framework for big data calculation
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20201101181603.png)
+the biggest value addition in Pyspark is the parallel processing of a huge dataset on more than one computer
 ## attributes
 * RDD: distributed data set for paralle computation
 * memory sharing between tasks
@@ -55,9 +57,6 @@ solution:
 * Repartition before writing to storage
     df.write.partitionBy('key').json('/path/to/foo.json')
 
-
-
-
 ## sparkconf
 set configuration for sparks
 
@@ -80,11 +79,11 @@ RDD is an abstract data type in spark, is similar to array. It is stored partiti
 
 * using local file or hdfs
 
-
         lines=sc.textFile(path)
         words=lines.flatMap(lambda line:line.split(" "))
         keyvalue=words.map(lambda word:(word,1))
         print(keyvalue.countByKey())
+
 ## DataFrame
 
 ### read dataframes
@@ -98,10 +97,30 @@ RDD is an abstract data type in spark, is similar to array. It is stored partiti
     df = df.drop("instant")
     #print schema of dataset
     df.printSchema()
+    #show column names
+    df.columns
+    #show counts of rows and columns
+    df.count()
+    len(df.columns)
+    #show describe information
+    df.describe('Glucose').show()
 
 ### using SQL 
+Spark SQL can be used to enquire structured data stored in Hadoop and Spark cluster, it is used to evaluates the values of a specific column and changes the value to something more meaningful.
 
-    #register df as sql table
+    #evaluation and categorize data
+    from pyspark.sql.functions import col,when
+    df_when = df.withColumn("BloodPressure", when(col("BloodPressure") >125,"High")
+                            .when(col("BloodPressure") <80,"Low")
+                        .otherwise("Normal"))
+    df_when.show()
+### run sql query
+run any SQL queries within pySpark and the result will be in form of a dataframe
+
+    df.createOrReplaceTempView("diabetesstudy")
+    sqldf = spark.sql("SELECT * FROM diabetesstudy")
+    sqldf.show(10)
+    #or register df as sql table
     df.registerTempTable('cases_table')
     df_new = sqlContext.sql('select * from cases_table where confirmed>100')
 
@@ -109,6 +128,7 @@ RDD is an abstract data type in spark, is similar to array. It is stored partiti
 
     import pyspark.sql.functions as F
     rdd_new = rdd.withColumn("NewConfirmed", 100 + F.col("confirmed"))
+
 ### convert dataframe between rdd
 
     #convert df to rdd
@@ -247,6 +267,11 @@ combining value in list with same key
     # in dataframe
     rdd1.join(rdd2, coloumn_name_list,how='left')
 
+* like
+similar to the like filter in SQL. ‘%’ can be used as a wildcard to filter the result
+
+    df.select("Pregnancies","Glucose",df.BMI.like('33%')).show(10)
+
 ## action
 it get elements in rdd, return to drive and triger the spark job and transformation
 
@@ -353,11 +378,13 @@ Transformations are being done at partition level, not dataset level
 ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20201011140442.png)
 Spark optimizes execution plans, and the larger the execution plans, the better for optimization
 
-## run spark python script 
+## pyspark programming 
+
+### run spark python script 
 
     spark-submit script.py
 
-## pyspark jupyter-notebook
+### pyspark jupyter-notebook
 
     #add this function to .bashrcs
     function pysparknb () 
@@ -371,8 +398,35 @@ Spark optimizes execution plans, and the larger the execution plans, the better 
     $SPARK_PATH/bin/pyspark --master local[10]
     }
 
-## machine learning pipeline
+### pySpak ML
+MLlib is Spark’s machine learning (ML) library
 
+### ML Algorithms
+
+    from pyspark.ml.feature import VectorAssembler
+
+    #Vector Assemble is an important method. It is used for assembling all the features in one vector
+    assembler = VectorAssembler(inputCols=['Glucose', 'BloodPressure', 'BMI', 'Age'], outputCol='DiabFeature')
+    df_ml=df.select("Glucose","BloodPressure","BMI","Age","Outcome")
+    df_transform = assembler.transform(df_ml) 
+    df_transform.show(10)
+
+    #Split the data in train and test
+    (dftrain, dftest) = df_transform.randomSplit([0.8,0.2], seed =2020) 
+    print("Train data count: ", dftrain.count()) 
+    print("Test data count: ", dftest.count())
+
+    from pyspark.ml.classification import GBTClassifier 
+    from pyspark.ml.evaluation import MulticlassClassificationEvaluator 
+    gb = GBTClassifier(labelCol = 'Outcome', featuresCol = 'DiabFeature') 
+    gbModel = gb.fit(dftrain) 
+    gb_predictions = gbModel.transform(dftest)
+
+    ##Evaluat the performance of model
+    multi_evaluator = MulticlassClassificationEvaluator(labelCol = 'Outcome', metricName = 'accuracy') 
+    print('Gradient-boosted Trees Accuracy:', multi_evaluator.evaluate(gb_predictions))
+
+#### Pipelines
     from pyspark.ml.feature import VectorAssembler, VectorIndexer
     featuresCols = df.columns
     featuresCols.remove('cnt')
