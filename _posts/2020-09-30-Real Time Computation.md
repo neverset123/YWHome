@@ -12,4 +12,12 @@ tags:
 
 
 ## Deployment Platform 
-Heroku
+### Heroku
+
+    heroku login
+    git init
+    heroku create your-app-name
+    git add .
+    git commit -m "Your customized message"
+    git push heroku master
+    

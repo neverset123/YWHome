@@ -123,6 +123,101 @@ To install
 
     datapane script deploy --script=<your_python_script.py> --name=name_of_your_report
 
+## voila
+voila can convert jupyter script into a standalone web application, it support ipywidgets library in jupyter
+
+    $ pip install voila
+    #convert command
+    voila <jupyter_script> <command-line options>
+    #for example
+    voila test.ipynb --theme=dark --template=material
+
+### Create interactiva widgets
+
+#### slider
+
+    import ipywidgets as widgets
+    import pandas as pd
+    style = {'description_width': 'initial'}
+    limit_case = widgets.IntSlider(
+        value=1000,
+        min=100,
+        max=5000,
+        step=1,
+        description='Max Number of Case:',
+        disabled=False,
+        style=style
+
+    def update_df_length(limit):   
+        df = pd.read_csv('SF_crimes.csv')
+        df = df.iloc[0:limit, :]
+        print("Number of rows in the dataset that have been successfully loaded:"+str(len(df)))
+
+    #connect widgets with callback function
+    widgets.interactive(update_df_length, limit=limit_case)
+
+#### multiple selection
+
+    import pandas as pd
+    import ipywidgets as widgets
+    from ipywidgets import Layout
+    df = pd.read_csv('SF_crimes.csv')
+    unique_district = df.PdDistrict.unique()
+    district = widgets.SelectMultiple(
+        options = unique_district.tolist(),
+        value = ['BAYVIEW', 'NORTHERN'],
+        description='District',
+        disabled=False,
+        layout = Layout(width='50%', height='80px', display='flex')
+    )
+    district
+#### intergrate widgets with map
+
+    import matplotlib.pyplot as plt
+    from folium import plugins
+
+    def update_map(district, category, limit):
+        
+        df = pd.read_csv('SF_crimes.csv')
+        df = df.iloc[0:limit, :]
+        
+        latitude = 37.77
+        longitude = -122.42
+        
+        df_dist = df.loc[df['PdDistrict'].isin(np.array(district))]
+        df_category = df_dist.loc[df_dist['Category'].isin(np.array(category))]
+        
+        cat_unique = df_category['Category'].value_counts()
+        cat_unique = cat_unique.reset_index()
+        
+        dist_unique = df_category['PdDistrict'].value_counts()
+        dist_unique = dist_unique.reset_index()
+        
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20,10))
+
+        # create map and display it
+        sanfran_map = folium.Map(location=[latitude, longitude], zoom_start=12)
+
+        
+        incidents = plugins.MarkerCluster().add_to(sanfran_map)
+
+    # loop through the dataframe and add each data point to the mark cluster
+        for lat, lng, label, in zip(df_category.Y, df_category.X, df_category.Category):
+            folium.Marker(
+            location=[lat, lng],
+            icon=None,
+            popup=label,
+            ).add_to(incidents)
+    # show map
+        display(sanfran_map)
+        
+        ax1.bar(cat_unique['index'], cat_unique['Category'])
+        ax1.set_title('Amount of Criminal Case Based on Category')
+        ax2.bar(dist_unique['index'], dist_unique['PdDistrict'])
+        ax2.set_title('Amount of Criminal Case in Selected District')
+        
+        plt.show()
+
 ## matplotlib
 
 ### Using LaTeX font
