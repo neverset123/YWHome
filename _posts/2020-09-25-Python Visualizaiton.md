@@ -147,6 +147,7 @@ voila can convert jupyter script into a standalone web application, it support i
         description='Max Number of Case:',
         disabled=False,
         style=style
+    )
 
     def update_df_length(limit):   
         df = pd.read_csv('SF_crimes.csv')
@@ -171,6 +172,7 @@ voila can convert jupyter script into a standalone web application, it support i
         layout = Layout(width='50%', height='80px', display='flex')
     )
     district
+
 #### intergrate widgets with map
 
     import matplotlib.pyplot as plt
