@@ -8,7 +8,6 @@ header-img: img/post-bg-kuaidi.jpg
 catalog: true
 tags:
     - python
-    - pandas
 ---
 
 ## manipulate dataframe
@@ -300,3 +299,23 @@ returns an iterator containing name tuples representing the column names and val
         df.to_csv('sample.csv.gz', compression='gzip')
         #read compressed file to pd
         f = pd.read_csv('sample.csv.gz', compression='gzip', index_col=0)
+
+### read excel
+
+        # callable function to read useful data
+        # Define a more complex function:
+        def column_check(x):
+        if 'unnamed' in x.lower():
+                return False
+        if 'priority' in x.lower():
+                return False
+        if 'order' in x.lower():
+                return True
+        return True
+
+        df = pd.read_excel(src_file, header=1, usecols=column_check)
+        #or directly with column name list
+        df = pd.read_excel(
+        src_file,
+        header=1,
+        usecols=['item_type', 'order id', 'order date', 'state', 'priority'])

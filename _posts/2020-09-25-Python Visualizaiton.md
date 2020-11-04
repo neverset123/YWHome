@@ -127,12 +127,13 @@ To install
 voila can convert jupyter script into a standalone web application, it support ipywidgets library in jupyter
 
     $ pip install voila
+    $ conda install voila -c conda-forge
     #convert command
     voila <jupyter_script> <command-line options>
     #for example
     voila test.ipynb --theme=dark --template=material
 
-### Create interactiva widgets
+### Create interactive widgets
 
 #### slider
 
