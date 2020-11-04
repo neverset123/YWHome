@@ -1,16 +1,53 @@
 ---
 layout:     post
-title:      kaggle
+title:      dataset source
 subtitle:   
 date:       2020-10-31
 author:     neverset
 header-img: img/post-bg-kuaidi.jpg
 catalog: true
 tags:
-    - machine learning
+    - data engineering
 ---
 
-## API
+## data source
+
+1. Awesome Data
+data stored in github
+
+https://github.com/awesomedata/awesome-public-datasets
+
+2. Data Is Plural
+data source in sheet file
+
+https://docs.google.com/spreadsheets/d/1wZhPLMCHKJvwOkP4juclhjFgqIY8fQFMemwKL2c64vk/edit#gid=0
+
+3. Kaggle
+
+4. Data.world
+https://data.world/
+
+5. Google Dataset Search
+https://datasetsearch.research.google.com/
+
+6. OpenDaL
+search engine for data
+
+https://opendatalibrary.com/
+
+7. Pandas Data Reader
+
+Pandas Data Reader fetch online data and put them in pandas dataframe
+
+https://pandas-datareader.readthedocs.io/en/latest/remote_data.html
+
+8. API
+
+https://towardsdatascience.com/how-to-get-data-from-apis-with-python-dfb83fdc5b5b
+
+https://towardsdatascience.com/the-top-10-best-places-to-find-datasets-8d3b4e31c442
+
+###  kaggle API
 The Kaggle API allows Kaggle datasets to be downloaded programmatically/through the command line interface.
 
     import os
