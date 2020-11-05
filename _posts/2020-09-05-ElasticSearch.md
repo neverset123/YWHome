@@ -24,7 +24,7 @@ ElasticSearch acts like a distributed database, there can be multi- elastic inst
 elastic indexes all fields and write back an Inverted Index. During searching it searches directly in the inverted index. Index here means a small database, its name must be lowercased
 
     #get all index on current node
-    curl -X GET 'http://localhost:9200/_cat/indices?v'
+    GET http://localhost:9200/_cat/indices?v
 
 ### Document
 one record in index is called Document, Index is consist of multi-Documents. Documents in the same index can have different scheme.
@@ -41,7 +41,7 @@ Documents can be grouped by types, which is used for filtering.
 different types should have similar scheme
 
     #get all types in one index
-    curl 'localhost:9200/_mapping?pretty=true'
+    GET http://localhost:9200/_mapping?pretty=true
 ### field
 attributes of documents
 
@@ -49,27 +49,47 @@ attributes of documents
 ### Create & Delete Index
 
     #create index
-    curl -X PUT 'localhost:9200/weather'
+    PUT http://localhost:9200/weather
     #delete index
-    curl -X DELETE 'localhost:9200/weather'
+    DELETE  http://localhost:9200/weather
 
 ### mapping
 mapping is scheme of index, which can be defined manually or automatically by ES
 
     #create mapping
-    PUT /index/_mapping
+    PUT http://localhost:9200/shakespeare?pretty 
+    content-type: application/json
+
     {
-        "properties": {
-            "field_name": {
-                "type": "text",
-                "index": true，
-                "store": true，
-                "analyzer": "ik_max_word"
+        "mappings": {
+            "properties": {
+            "speaker": {"type": "keyword"},
+            "play_name": {"type": "keyword"},
+            "line_id": {"type": "integer"},
+            "speech_number": {"type": "integer"}
             }
         }
     }
+    #using curl
+    curl -X PUT "localhost:9200/shakespeare?pretty" -H 'Content-Type: application/json' -d'
+    {
+        "mappings": {
+            "properties": {
+            "speaker": {"type": "keyword"},
+            "play_name": {"type": "keyword"},
+            "line_id": {"type": "integer"},
+            "speech_number": {"type": "integer"}
+            }
+        }
+    }
+    '
+
     #get all mapping
-    get http://192.168.116.129:9200/_mapping
+    GET http://localhost:9200/_mappingg
+
+### load data with bulk API
+
+    curl -H "Content-Type: application/json" -XPOST 'localhost:9200/shakespeare/_bulk?pretty&refresh' --data-binary @shakespeare.json
 
 ### Create record
 
@@ -310,6 +330,7 @@ this filter does not influence result ranking (main difference to source filteri
     }
 
 ## aggregations
+Elasticsearch aggregations enable you to get meta-information about your search results and answer questions like, "How many account holders are in Texas?" or "What’s the average balance of accounts in Tennessee?" You can search documents, filter hits, and use aggregations to analyze the results all in one request.
 ### basics
 #### bucket
 #### metrics
