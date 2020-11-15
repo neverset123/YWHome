@@ -40,7 +40,7 @@ there are three core components in master node: kubectl-scheduler，etcd and con
 * etcd: Responsible for persisting resource objects in the cluster
 * controller-manager: watch cluster status and decide for operation
 
-## volume storage
+### volume storage
 * emptyDir: it is created when pod is distributed to node, all containers on this pod have read/write access to this volume. volume will be removed if pod is deleted from node(non-persistent)
 
     apiVersion: v1
@@ -125,18 +125,18 @@ there are three core components in master node: kubectl-scheduler，etcd and con
         - name: site-data
             persistentVolumeClaim:
                 claimName: my-lamp-site-data
-### In-tree Volume Plugin
-### Out-of-tree Provisioner
-### CSI (Container Storage Interface)
+#### In-tree Volume Plugin
+#### Out-of-tree Provisioner
+#### CSI (Container Storage Interface)
 csi is an abstract interface with protobuf protocol
-#### RPC (remote procedure call protocol)
+##### RPC (remote procedure call protocol)
 * call ID mapping      
 every function has its own ID, this ID is unique in all processes. During remote call this ID will be sent from client to server, so that server can call this function according to this ID
 * serialization and deserialization 
 parameters will be converted to byte stream (serialization), send to server, and converted back to readable formate for server(deserialization)
 * network transmission
 using TCP, or UDP or HTTP2 for network transmission
-#### PV and PVC
+##### PV and PVC
 PV&PVC enable creating volume independent of pod, its lifecycle is also independent of pod
 * provisioning  
     + static: VolumeManager create PVs
@@ -148,7 +148,7 @@ pod use volume to mount pvc on the container. If volume type is persistentVoulum
 after deletion of PVC, PV will be released. After the data on PV is removed or deleted(reclaiming process) another binding is possible
 * reclaiming
 policy to deal with remaining data on PV after release 
-##### PV(Persisten Volume)
+###### PV(Persisten Volume)
 is an abstraction of network storage. It is created and configurated by VolumeManager , and connects to share storage with plugin mechanism.
 * it is network storage, does not belong to any node, but can be accessed  by every node
 * it is defined outside Pod
@@ -169,13 +169,13 @@ is an abstraction of network storage. It is created and configurated by VolumeMa
             path: "/data/disk1"
             server: 192.168.69.69 
             readOnly: false
-##### PVC(PersistentVolumeClaims)
+###### PVC(PersistentVolumeClaims)
 is a claim of resource consumption on PV. This claim is used by refering it unter volume in pod
 * both PV and PVC are restricted to namespace, only PV and PVC under same namespace can be combined, PVC can only be mounted to Pod in the same namespace
 * system will match PV and PVC which fulfill both storageclass and selector
 * if PV is not defined by VolumeManager, then a ReadWriteOnce PV will be created dynamically by system. matching PV using selector is not possible any more
 
-    # defining pvc statically
+    #defining pvc statically
     kind: PersistentVolumeClaim
     apiVersion: v1
     metadata:
@@ -222,10 +222,10 @@ is a claim of resource consumption on PV. This claim is used by refering it unte
             persistentVolumeClaim: ######
                 claimName: myclaim   ##########
 
-## Security Context
+### Security Context
 it defines the access rights of Pod and Container
 
-### Discretionary Access Control
+#### Discretionary Access Control
 define access rights according to UID(user ID) and GID(group ID)
     #security context for pod
     apiVersion: v1
@@ -262,14 +262,14 @@ define access rights according to UID(user ID) and GID(group ID)
             securityContext:
             runAsUser: 2000
             allowPrivilegeEscalation: false
-### Security Enhanced Linux (SELinux)
+#### Security Enhanced Linux (SELinux)
 define SELinux labels for specific container
 
     securityContext:
         seLinuxOptions:
             level: "s0:c123,c456"
 
-### Running as privileged or unprivileged
+#### Running as privileged or unprivileged
 define run as privileged or unprivileged
 
     apiVersion: v1
@@ -282,7 +282,7 @@ define run as privileged or unprivileged
             image: gcr.io/google-samples/node-hello:1.0
             securityContext:
             privileged: true
-### Linux Capabilities
+#### Linux Capabilities
 assign privileged rights to certain processes rather than root user
 
     apiVersion: v1
@@ -296,7 +296,7 @@ assign privileged rights to certain processes rather than root user
             securityContext:
             capabilities:
                 add: ["NET_ADMIN", "SYS_TIME"]
-### using sysctl
+#### using sysctl
 safe sysctl can be directly used in pod, but to use unsafe sysctl, experimental-allowed-unsafe-sysctls needs to be activated in kubelet
     # security context that belongs to safe sysctl:
     kernel.shm_rmid_forced
@@ -323,7 +323,7 @@ safe sysctl can be directly used in pod, but to use unsafe sysctl, experimental-
         securityContext:
             privileged: true
         ...
-## secret
+### secret
 * Opaque：using base64 to save secrets, which can be decoded with base64 --decode. its safety is relatively weak
 
         # for pod that has access to secret data through volume
@@ -353,7 +353,7 @@ safe sysctl can be directly used in pod, but to use unsafe sysctl, experimental-
         kubectl create secret docker-registry atpdocker-credentials --docker-server=serverName --docker-username=User --docker-password=PW --docker-email=Email
 
 * kubernetes.io/service-account-token：it is used in serviceaccount. this token is created automatically by kubernetes when serviceaccout is created. The token will also be mounted to /run/secrets/kubernetes.io/serviceaccount when Pod is using this serviceaccount.
-## service
+### service
 define accesss API for user, so that backend container is isolated from user
 
     apiVersion: v1
@@ -369,6 +369,26 @@ define accesss API for user, so that backend container is isolated from user
             targetPort: 8080
             name: myapp-http
 
-## service account
+### service account
 service account is used for process in pod to call kubernetes api and other external service. service account is only valid in its own namespace. Every namespace will create a default service account automatically, token controller will create secret for service account
 
+## other kubernetes
+### Rancher Labs (k3s)
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20201115234811.png)
+rancher labs is a highly optimized iniature version of Kubernetes for the edge. it doesn’t compromise the API conformance and functionality.    
+it is a self-sufficient, encapsulated entity that runs almost all the components of a Kubernetes cluster, including the API server, scheduler, and controller
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20201115235002.png)
+
+## tools for kubernetes 
+### Pinniped
+cluster identity plugin for kubernetes
+### Carvel
+a set of tools for app deployment on cluster
+* ytt
+using comments against YAML structures; customize imperatively using conditionals and loops in a python-like language called Starlark;  overlay features allows the copy of the third-party config file to remain pristine and unmodified
+* kbld
+kbld looks for images within your config file, builds the images via Docker and pushes it to the registry of your choice
+* kapp
+CLI tool that calculates changes between your configuration and the live cluster state; and only applies the changes you approve
+### kontena lens
+smart dashboard for kubernetes
