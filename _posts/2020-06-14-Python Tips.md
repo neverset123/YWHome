@@ -16,6 +16,7 @@ tags:
     print( add(5,4,6) )
 
 ## map function
+map(function you want to apply, sequence of elements we want to apply it to)
 
     def interest(amount):
         rate = 5
@@ -25,6 +26,7 @@ tags:
     print( interest_list )
 
 ## filter function
+filter(function that checks for a condition, sequence of elements we want to apply it to)
 
     def eligibility(age):
         if(age>=24):
@@ -38,6 +40,7 @@ tags:
     print(even)
 
 ## reduce function
+reduce(function, iterable[, initializer])
 
     from functools import reduce
     def add(a,b):
@@ -245,6 +248,7 @@ check whether a list or sequence has elements before we try and do something wit
     for i, currency in enumerate(currencies):
         print(i, currency)
 
+
 ## data class
 this feature is for python 3.7+
 
@@ -412,6 +416,24 @@ ply is pipe operator, equal to >>
         define(z=if_else('x > 1', 1, 0)),
         query('z == 1')
     )
+
+## async & Await
+feature for python >=3.5
+
+    async def ping_server(ip):
+        # ping code here...
+
+    async def ping_local():
+        return await ping_server('192.168.1.1')
+
+## divmod
+ performs a modulus division % on two numbers, then returns both the quotient and remainder
+## casefold
+casefold provides standardize, more aggressively, a wider range of characters to lower case.
+in most cases it is same as lower, but in some cases not
+
+    "ς".casefold() # returns "σ"
+    "ς".lower() # returns "ς"
 
 ## new features in python 3.8.5
 

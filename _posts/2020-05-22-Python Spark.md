@@ -15,6 +15,8 @@ tags:
 spark is a framework for big data calculation
 ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20201101181603.png)
 the biggest value addition in Pyspark is the parallel processing of a huge dataset on more than one computer
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20201115155911.png)
+All the functionalities being provided by Apache Spark are built on the top of Spark Core. It manages all essential I/O functionalities. It is used for task dispatching and fault recovery. Spark Core is embedded with a special collection called RDD (Resilient Distributed Dataset). RDD is among the abstractions of Spark. Spark RDD handles partitioning data across all the nodes in a cluster. It holds them in the memory pool of the cluster as a single unit.
 ## attributes
 * RDD: distributed data set for paralle computation
 * memory sharing between tasks
