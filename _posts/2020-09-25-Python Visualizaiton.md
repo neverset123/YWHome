@@ -45,6 +45,17 @@ By default, all of the Plotly visualizations are interactive
     fig.write_image('potassium_sodium_plots.png')
 
 ### Interactive options
+
+#### graph_obj
+create interactive map
+
+    # Manipulating the original dataframe 
+    df_countrydate = df_countries.groupby(['Date','Country']). sum().reset_index() 
+    #Creating the visualization 
+    fig = px.choropleth(df_countrydate, locations="Country", locationmode = "country names", color="AvTemp", hover_name="Country", animation_frame="Date" ) 
+    fig.update_layout( title_text = 'Average Temperature Change', title_x = 0.5, geo=dict( showframe = False, showcoastlines = False, )) 
+    fig.show()
+
 #### Dash
 
 #### Streamlit

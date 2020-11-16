@@ -8,9 +8,40 @@ header-img: img/post-bg-kuaidi.jpg
 catalog: true
 tags:
     - data engineering
+    - database
 ---
 
-## monitoring postgres
+## useful operation like in dataframe
+
+* Specify your own custom functions
+* Use recursion to create complex looping and data generation with the WITH keyword.
+* Sort string columns by a substring.
+* Perform complex joining between multiple tables.
+* Use SQL to generate SQL (automating tasks).
+* Generate forecasts using statistical models.
+* Create histograms.
+* Build tree structures (with leaf, branch, root nodes)
+
+### select
+
+    SELECT CustomerName || ' LIVES IN ' || Address || ', ' || City AS location
+    FROM Customers
+    WHERE Country='Mexico'
+
+### if/else
+
+    SELECT Price,
+        CASE WHEN Price < 12 THEN 'Cheap'
+            WHEN Price < 21 THEN 'Regular'
+                ELSE 'Expensive'
+        END AS Bucket
+    FROM Products
+
+### random select
+
+    SELECT * FROM Products ORDER BY random() LIMIT 5
+
+## monitoring postgres on kubernetes
 
     #deploy monitoring pod
     kubectl apply -f https://raw.githubusercontent.com/CrunchyData/postgres-operator/v4.5.0/installers/metrics/kubectl/postgres-operator-metrics.yml
