@@ -335,3 +335,85 @@ voila can convert jupyter script into a standalone web application, it support i
 
 ### Adjusting box pad margin
 using plt.savefig() followed by a complex argument: bbox_inches and pad_inches
+
+## Bokeh
+Bokeh is a python library for interactive data visualization and web app
+### Glyphs
+  
+    from bokeh.io import output_file, show
+    from bokeh.plotting import figure
+
+    plot = figure()
+    plot.line(x=[1,2,3,4], y=[4,7,2,16])
+    output_file('line_glyph.html')
+    plot.circle([1,2,3,4], [4,7,2,16], fill_color="white", size=10)
+    show(plot)
+### Data Sources format
+compatible with data formats of lists, NumPy arrays and pandas DataFrames
+
+#### ColumnDataSource
+inbuilt data format in bokeh is ColumnDataSource. access data is by specifying its column name, and passing our CDS as the source parameter of a plotting method
+
+    
+    from bokeh.models import ColumnDataSource
+    source_from_dict = ColumnDataSource(data={
+                                    'x' : [1,2,3,4,5],
+                                    'y' : [1,4,9,16,25]})
+    #or
+    source_from_df = ColumnDataSource(df)
+    plot = figure()
+    plot.line(x='Date', y='Open', source=source)
+    output_file('cds_glyph.html')
+    show(plot)
+
+### customization
+#### customize plot tool
+
+    from bokeh.plotting import figure, show
+    p = figure(toolbar_location="left",
+        tools="pan,wheel_zoom,lasso_select,tap,undo,reset")
+    show(p)
+
+#### HoverTools
+Field names are prepended with @, plot metadata are prepened with $
+
+    from bokeh.models import HoverTool
+    hover = HoverTool(tooltips=[
+            ("index", "$index"),
+            ("label", "@column_name"),
+            ("label2", "@{multi-word column name}"),
+            ("colour", "$color[hex, swatch]:fill_color")])
+
+#### color mapping
+
+    mapper = linear_cmap(field_name='y', palette=Spectral6, low=min(y), high=max(y))
+    plot = figure(plot_height=300, plot_width=600)
+    plot.circle(x,y, color=mapper, line_color='black', size=10)
+
+#### annotations
+
+    p = figure(
+        plot_width=500,
+        plot_height=500,
+        x_axis_label="X Label",
+        y_axis_label="Y Label",
+        title="My custom plot",
+        toolbar_location="left",
+        tools="pan,wheel_zoom,reset")
+    show(p)
+
+#### arrange plots
+
+    layout = row(p1, p2, p3)
+    #or 
+    layout = column(p1, p2, p3)
+    #or
+    layout = gridplot([None, p1], [p2, p3], toolbar_location=None)
+    # add tab
+    first = Panel(child=row(p1, p2), title='first')
+    second = Panel(child=row(p3), title='second')
+    tabs = Tabs(tabs=[first, second])
+    # link plot with same data source
+    p3.x_range = p2.x_range = p1.x_range
+    p3.y_range = p2.y_range = p1.y_range
+    show(layout)
