@@ -372,6 +372,15 @@ define accesss API for user, so that backend container is isolated from user
 ### service account
 service account is used for process in pod to call kubernetes api and other external service. service account is only valid in its own namespace. Every namespace will create a default service account automatically, token controller will create secret for service account
 
+### Site Reliability Layers
+
+#### Monitoring Layer / Metrics Server
+monitoring running state of k8s
+#### Scaling Layer / HPA
+scaling the instances of your application up or down
+#### Service Rules Layer
+automate when / how your application should restart
+
 ## other kubernetes
 ### Rancher Labs (k3s)
 ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20201115234811.png)
