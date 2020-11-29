@@ -19,6 +19,37 @@ kubernetes is a container automatic operation platform, which is used to manage 
 ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/202006242207.png)
 ## components
 
+### job
+Unlike deployments and services in Kubernetes, you can't change the same Job configuration file and reapply it at once. When you make changes in the Job configuration file, you must delete the previous Job from the cluster before you apply it.
+Jobs are used to create transient pods that perform specific tasks they are assigned to. CronJobs do the same thing, but they run tasks based on a defined schedule
+
+#### Jobs
+creat jobs with a defined yaml file
+#### CronJobs
+execute job on a predefined schedule
+
+    apiVersion: batch/v1beta1            ## The version of the Kubernetes API
+    kind: CronJob                        ## The type of object for Cron jobs
+    metadata:
+    name: cron-test
+    spec:
+    schedule: "*/1 * * * *"            ## Defined schedule using the *nix style cron syntax
+    jobTemplate:
+        spec:
+        template:
+            spec:
+            containers:
+            - name: cron-test
+                image: busybox            ## Image used
+                args:
+            - /bin/sh
+                - -c
+                - date; echo Hello this is Cron test
+            restartPolicy: OnFailure    ##  Restart Policy in case container failed
+
+#### Work queues
+
+
 ### pod
 consist of a group of containers and volumes. container in the same pod share one namespace, so localhost communication is possible
 pod is temporary and stateless rather than consistent. If exception happens, kubernetes will create new pod to replace old pod

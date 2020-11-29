@@ -103,6 +103,36 @@ If raw=False is passed then the row or column is passed to the apply function as
                 years_to_now = 2020 - release_year
                 new_date_added = @func(date_added.str.strip())''')
 
+## plot
+there are visualization features in pandas
+
+### usage
+
+        import pandas as pd
+        df= pd.DataFrame(np.random.rand(8, 4), columns=['A','B','C','D'])
+        #since the plot is based on matplotlib, we can change thema with seaborn
+        import seaborn as sns
+        sns.set_palette("pastel", 8)
+        #sns.set_palette("Blues_r", 8)
+        #sns.set_palette("magma", 8)
+        df.plot.bar()
+        df.plot.barh(stacked=True)
+        df.plot.area(stacked=True,alpha = 0.9)
+        df.plot.kde()
+
+        df = pd.DataFrame({'a': np.random.randn(1000) + 1,
+                   'b': np.random.randn(1000),
+                   'c': np.random.randn(1000) - 1},
+                  columns=['a', 'b', 'c'])
+        df.plot.hist(stacked=True, bins=20)
+        df.plot.hist(alpha=0.5)
+        df.plot.box()
+        df['value'].plot()
+        df.plot.scatter()
+        data.plot.hexbin(x='A',y='B')
+        #subplot
+        data.plot(subplots=True,layout=(3, 2), figsize=(15, 8))
+
 ## string methods
 
 ### StringDtype
