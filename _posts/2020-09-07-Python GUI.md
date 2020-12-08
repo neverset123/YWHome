@@ -10,8 +10,9 @@ tags:
     - python
 ---
 
+## DearPyGui
 DearPyGui is supported in python3.8+
-## example
+### example
 
     from dearpygui.dearpygui import *
     add_text("Hello world")
@@ -23,7 +24,7 @@ DearPyGui is supported in python3.8+
     
     start_dearpygui()
 
-## layout
+### layout
   
     from dearpygui.dearpygui import *
     add_button("Button1")
@@ -42,7 +43,7 @@ DearPyGui is supported in python3.8+
     
     start_dearpygui()
  
- ## combination with other GUI framework
+ ### combination with other GUI framework
 DearPyGui can be combined with tkinter
 
     from dearpygui.dearpygui import *
@@ -64,3 +65,41 @@ DearPyGui can be combined with tkinter
         root.update()
     
     cleanup_dearpygui()
+
+## PySimpleGUI
+create GUI with less codes
+
+### components
+
+Text、InputText、Button、Multiline、InputComb、Spin、Output
+
+### Installation and usage
+there are two PySimpleGUI version: one version for Tkinter interface, the other version is for QT interface
+    
+    #install Tkinter version
+    !pip install PySimpleGUI
+    #install Qt version
+    !pip install PysimpleGUIQt
+
+    import PySimpleGUI as sg
+    #check available themes
+    sg.preview_all_look_and_feel_themes()
+    #change themes
+    sg.change_look_and_feel("GreenMono")
+    #creat widget
+    text = sg.Text("Input")
+    textinput = sg.InputText()
+    bt = sg.Button('yes')
+    cbt = sg.Button('cancel')
+    layout = [[text, textinout],[bt, cbt]]
+    #creat window
+    window = sg.Window('this is a test window', layout)
+    #creat event loop
+    while True:
+        event, values = window.read()
+        if event in (None, 'cancel'):
+            break
+        print(f'Event: {event}')
+        print(str(values)) 
+    window.close()
+
