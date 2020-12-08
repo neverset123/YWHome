@@ -11,6 +11,7 @@ tags:
     - database
 ---
 
+traditional RDBMS (relational database management system). Mainly used for relational data, it is object-oriented in nature.
 ## useful operation like in dataframe
 
 * Specify your own custom functions
