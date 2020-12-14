@@ -12,6 +12,7 @@ tags:
 
 ## Dashboard
 ### Plotly
+Plotly allows you to make interactive figures in just a few lines of code using either Python or JavaScript. Plotly plots are all generated from JSONs being interpreted by d3
 
     import plotly.graph_objects as go
     from plotly.subplots import make_subplots
@@ -196,6 +197,44 @@ tags:
     )
 
     fig.write_html('first_figure.html', auto_open=True)
+
+#### creating html app
+
+    #jsonify python trace
+    data = json.dumps(plot_data, cls=plotly.utils.plotlyJSONEncoder)
+    layout = json.dumps(plot_layout, cls=plotly.utils.plotlyJSONEncoder)
+    #integrate json into htlm wtih jinja
+    <script>
+    Plotly.newPlot("myPlot", {{data | safe}}, {{layout | safe}})
+    </script>
+
+    #instead of create trace and layout we can simply generate fig object to be passed to html
+    def create_plot_express():
+        data = load_data()
+        fig = px.line(
+            x=[d["date"] for d in data],
+            y=[d["total_tests"] for d in data]
+        )
+        
+        return json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+    #integrate with html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    </head>
+    <body>
+        Index
+        <div id="myPlot"></div>
+    </body>
+    <script>
+        Plotly.newPlot("myPlot", {{ fig | safe }})
+    </script>
+    </html>
 
 ## Deployment Platform 
 ### Heroku

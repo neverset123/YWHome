@@ -312,6 +312,103 @@ returns an iterator containing name tuples representing the column names and val
                 print(row)
                 print(row.column_name)
 
+## Garbage Collector
+by processing big data using pandas dataframe, it is important to delete the unused reference and use gc.collect method, so that the memory will be returned to system
+
+        import pandas as pd
+        import sys  #system specific parameters and names
+        import gc   #garbage collector interface
+
+        def obj_size_fmt(num):
+                if num<10**3:
+                        return "{:.2f}{}".format(num,"B")
+                elif ((num>=10**3)&(num<10**6)):
+                        return "{:.2f}{}".format(num/(1.024*10**3),"KB")
+                elif ((num>=10**6)&(num<10**9)):
+                        return "{:.2f}{}".format(num/(1.024*10**6),"MB")
+                else:
+                        return "{:.2f}{}".format(num/(1.024*10**9),"GB")
+
+
+        def memory_usage():
+                memory_usage_by_variable=pd.DataFrame({k:sys.getsizeof(v)\
+                for (k,v) in globals().items()},index=['Size'])
+                memory_usage_by_variable=memory_usage_by_variable.T
+                memory_usage_by_variable=memory_usage_by_variable\
+                .sort_values(by='Size',ascending=False).head(10)
+                memory_usage_by_variable['Size']=memory_usage_by_variable['Size']
+                \.apply(lambda x: obj_size_fmt(x))
+                return memory_usage_by_variable
+
+        #deleting references
+        del df
+        del df2
+
+        #triggering collection
+        gc.collect()
+
+        #finally check memory usage
+        memory_usage()
+
+## feature engineering
+feature is to extract new feature from existing dataset
+
+### replace() for Label encoding
+dynamically replaces current values with the given values. The new values can be passed as a list, dictionary, series, str, float, and int
+
+        data['Outlet_Location_Type_Encoded']  = data['Outlet_Location_Type'] \
+                                            .replace({'Tier 1': 1, 'Tier 2': 2, 'Tier 3': 3})
+
+### get_dummies() for One Hot Encoding
+convert a categorical variable to one hot variable.
+
+        #the parameter drop_first, which drops the first binary column to avoid perfect multicollinearity
+        Outlet_Type_Dumm = pd.get_dummies(data=data['Outlet_Type'], columns=['Outlet_Type'], drop_first=True)
+        pd.concat([data['Outlet_Type'], Outlet_Type_Dumm], axis=1).head()
+
+### cut() and qcut() for Binning
+grouping together values of continuous variables into n number of bins. qcut divide the bins into the same frequency groups; cut divide the bins with explicitly defined bin edges
+
+        groups = ['Low', 'Med', 'High', 'Exp']
+        data['Item_MRP_Bin_qcut'] = pd.qcut(data['Item_MRP'], q=4, labels=groups)
+        data[['Item_MRP', 'Item_MRP_Bin_qcut']].head()
+
+        bins = [0, 70, 140, 210, 280]
+        groups = ['Low', 'Med', 'High', 'Exp']
+        data['Item_MRP_Bin_cut'] = pd.cut(data['Item_MRP'], bins=bins, labels=groups)
+        data[['Item_MRP', 'Item_MRP_Bin_cut']].head()
+
+### apply() for Text Extraction
+apply a function to every variable of dataframe
+
+        data['Item_Code'] = data['Item_Identifier'].apply(lambda x: x[0:2])
+        data[['Item_Identifier', 'Item_Code']].head()
+
+### value_counts() and apply() for Frequency Encoding
+Frequency Encoding is an encoding technique that encodes categorical feature values to their respected frequencies.
+
+        Item_Type_freq = data['Item_Type'].value_counts(normalize=True)
+        # Mapping the encoded values with original data 
+        data['Item_Type_freq'] = data['Item_Type'].apply(lambda x : Item_Type_freq[x])
+        print('The sum of Item_Type_freq variable:', sum(Item_Type_freq))
+        data[['Item_Type', 'Item_Type_freq']].head(6)
+
+### groupby() and transform() for Aggregation Features
+Groupby is a function that can split the data into various forms to get information that was not available on the surface.
+
+        data['Item_Outlet_Sales_Mean'] = data.groupby(['Item_Identifier', 'Item_Type'])['Item_Outlet_Sales']\
+                                        .transform(lambda x: x.mean())
+        data[['Item_Identifier','Item_Type','Item_Outlet_Sales','Item_Outlet_Sales_Mean']].tail()
+
+### Series.dt() for date and time based features
+
+        data['pickup_year'] = data['pickup_datetime'].dt.year
+        data['pickup_dayofyear']  = data['pickup_datetime'].dt.day
+        data['pickup_monthofyear'] = data['pickup_datetime'].dt.month
+        data['pickup_hourofday'] = data['pickup_datetime'].dt.hour
+        data['pickup_dayofweek'] = data['pickup_datetime'].dt.dayofweek
+        data['pickup_weekofyear'] = data['pickup_datetime'].dt.weekofyear
+
 ## useful tips
 ### read from clipboard
 
