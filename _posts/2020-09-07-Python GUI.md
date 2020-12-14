@@ -103,3 +103,16 @@ there are two PySimpleGUI version: one version for Tkinter interface, the other 
         print(str(values)) 
     window.close()
 
+## Geoey
+
+### Install
+
+    pip install Geoey
+
+### usage
+
+    from gooey import Gooey
+    @Gooey      <--- all it takes! :)
+    def main():
+    parser = ArgumentParser(...)
+    # rest of code
