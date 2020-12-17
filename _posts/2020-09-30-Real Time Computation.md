@@ -238,11 +238,84 @@ Plotly allows you to make interactive figures in just a few lines of code using 
 
 ## Deployment Platform 
 ### Heroku
+a platform-as-a-service (PaaS) for deploying and hosting web applications. Dynos provides virtualized linux resources (ram, cpu and linux etc.). The free version gets you one dyno with up to 500MB storage and 500MB ram. It sleeps after 30 minutes of inactivity, presumably so Heroku resources are not drained
+steps needed for deployment:
+
+1) Dash app running on localhost
+2) Install Git
+3) Setup GitHub account (+ recommend install GitHub Desktop)
+4) Setup Heroku account (+ install the command line interface)
+5) Add dependencies and special files (i.e. install and import Gunicorn, create Procfile and runtime.txt)
+6) Clone repo from GitHub to local machine (only once)
+7) Create Heroku app linked to your repo (only once, ref deployment guides, Heroku CLI)
+8) Commit and push your code changes to GitHub repo (repetitively)
+9) Deploy/Re-deploy Heroku app by pushing changes from Heroku CLI (“git push Heroku main”)
 
     heroku login
     git init
     heroku create your-app-name
     git add .
     git commit -m "Your customized message"
-    git push heroku master
+    git push heroku main
+
+#### extra tips for heroku
+##### Procfile
+let Heroku know how to handle web processes (in our case using Gunicorn HTTP server) and the name of your Python application. Typically it contains lines:
+
+    web: gunicorn app:server
+
+##### runtime.txt
+tells Heroku which Python runtime to use. Typically it constains lines:
+
+    python-3.7.8
+
+##### useful heroku command
+
+1) to view deployment logs
+
+    heroku logs --tail
+
+2) display current apps
+
+    heroku apps
+
+3) Display current dynos
+
+    heroku ps
+    heroku psheroku ps -a <yourapp>
+
+4) Run bash terminal
+
+    heroku run bash -a <yourapp>
+
+5) Restart dynos
+
+    heroku dyno:restart
+
+6) Add additional log metrics
+
+    heroku labs:enable log-runtime-metrics
+
+7) Add runtime metrics to log
+
+    heroku labs:enable log-runtime-metrics
+
+8) set web concurrency
+
+    heroku config:set WEB_CONCURRENCY=3
+    heroku config:set WEB_CONCURRENCY=3 -a <herokuappname>
+
+##### problem with heroku
+1) heroku does not serve static files(Any images, documents, video, audio). 
+solution could be to use WhiteNoise library
+
+    from whitenoise import WhiteNoise
+    server = app.server
+    #folder to be static files must be named as static
+    server.wsgi_app = WhiteNoise(server.wsgi_app, root=‘static/’)
+
+2) Heroku’s file system is ephemeral or transient, any new files created at runtime will disappear after a few days.
+
+3) Heroku is file extension case-sensitive
+
     
