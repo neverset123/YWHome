@@ -418,6 +418,15 @@ automate when / how your application should restart
 rancher labs is a highly optimized iniature version of Kubernetes for the edge. it doesn’t compromise the API conformance and functionality.    
 it is a self-sufficient, encapsulated entity that runs almost all the components of a Kubernetes cluster, including the API server, scheduler, and controller
 ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20201115235002.png)
+### k0s
+K0s packages a single binary for both amd64 and arm64 architectures. It does not require any host OS dependencies besides the kernel. the "zero" in k0s distribution as the company's aspiration to provide a Kubernetes distribution with zero friction, zero dependencies, zero overhead, zero cost, and zero downtime
+
+    $ #Download, install, and start a k0s server
+    $ curl -sSfL k0s.sh | sh
+    $ k0s server$ #Create and add a worker node
+    $ k0s token create --role=worker
+    $ k0s worker <TOKEN>$ #Or quickly try it out in a Docker container anywhere
+    $ docker run -d --hostname controller --privileged -v /var/lib/k0s -p 6443:6443 k0sproject/k0s
 
 ## tools for kubernetes 
 ### Pinniped
