@@ -42,7 +42,22 @@ traditional RDBMS (relational database management system). Mainly used for relat
 
     SELECT * FROM Products ORDER BY random() LIMIT 5
 
-## monitoring postgres on kubernetes
+## usage tips
+### postgresql cluster
+Create a unified management, flexible cloud-native production deployment to deploy a personalized database as a service (DBaaS).
+
+    #config postgresql operator
+    wget <https://raw.githubusercontent.com/CrunchyData/postgres-operator/master/examples/quickstart.sh>
+    chmod +x ./quickstart.sh
+    ./examples/quickstart.sh
+
+    #create postgresql cluster
+    pgo create cluster mynewcluster
+    pgo test mynewcluster
+
+
+
+### monitoring postgres on kubernetes
 
     #deploy monitoring pod
     kubectl apply -f https://raw.githubusercontent.com/CrunchyData/postgres-operator/v4.5.0/installers/metrics/kubectl/postgres-operator-metrics.yml
