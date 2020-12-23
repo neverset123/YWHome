@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      python sentiment analysis
+title:      sentiment analysis
 subtitle:   
 date:       2020-09-20
 author:     neverset
