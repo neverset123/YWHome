@@ -446,3 +446,20 @@ Groupby is a function that can split the data into various forms to get informat
         src_file,
         header=1,
         usecols=['item_type', 'order id', 'order date', 'state', 'priority'])
+
+### itertuples instead of the iterrows
+
+        [sum_square(row[0], row[1]) for _, row in df.iterrows()]
+        #can be optimized into 
+        [sum_square(a, b) for a, b in df[[0, 1]].itertuples(index=False)]
+
+### vectorization
+
+        [sum_square(row[0], row[1]) for _, row in df.iterrows()]
+        #can be optimized into
+        np.vectorize(sum_square)(df[0], df[1])
+        #or
+        np.power(df[0] + df[1], 2)
+
+### parallelisation
+If your function is I/O bound, meaning that it is spending a lot of time waiting for data (e.g. making api requests over the internet), then multithreading (or thread pool) will be the better and faster option
