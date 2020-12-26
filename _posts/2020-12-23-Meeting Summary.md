@@ -401,3 +401,11 @@ reference: https://github.com/aravindpai/How-to-build-own-text-summarizer-using-
     print("Original summary:",seq2summary(y_val[i]))
     print("Predicted summary:",decode_sequence(x_val[i].reshape(1,max_len_text)))
     print("\n")
+
+## Tips
+### KEP - Keyphrase Extraction Package
+a Python package that enables to extract keyphrases from documents
+
+    docker pull liaad/kep
+    docker run -p 9999:8888 --user root liaad/kep
+    http://<DOCKER-MACHINE-IP>:8888

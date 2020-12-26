@@ -441,3 +441,21 @@ kbld looks for images within your config file, builds the images via Docker and 
 CLI tool that calculates changes between your configuration and the live cluster state; and only applies the changes you approve
 ### kontena lens
 smart dashboard for kubernetes
+### logging tools
+scalable tools that can collect data from all the services and provide the engineers with a unified view of performance, errors, logs, and availability of components.
+#### EFK Stack
+
+    #installation
+    helm install efk-stack stable/elastic-stack --set logstash.enabled=false --set fluentd.enabled=true --set fluentd-elasticsearch.enabled=true
+
+#### PLG Stack (Promtail, Loki and Grafana)
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20201226214501.png)
+Loki is designed in a way that it can be used as a single monolith or can be used as microservice.  
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20201226214616.png)
+* Elasticsearch uses Query DSL and Lucene query language which provides full-text search capability.Loki uses LogQL which is inspired my PromQL (Prometheus query language). It uses log labels for filtering and selecting the log data
+* Both ELK and PLG are horizontally scalable but Loki has more advantages because of its decoupled read and write path and use of microservices-based architecture
+* compared with ELK Loki is an extremely cost-effective solution because of the design decision to avoid indexing the actual log data. Only metadata is indexed and thus it saves on the storage and memory (cache).
+    #installation
+    $ helm repo add loki https://grafana.github.io/loki/charts
+    $ helm repo update
+    $ helm upgrade --install loki loki/loki-stack --set grafana.enabled=true,prometheus.enabled=true,prometheus.alertmanager.persistentVolume.enabled=false,prometheus.server.persistentVolume.enabled=false
