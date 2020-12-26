@@ -409,6 +409,33 @@ Groupby is a function that can split the data into various forms to get informat
         data['pickup_dayofweek'] = data['pickup_datetime'].dt.dayofweek
         data['pickup_weekofyear'] = data['pickup_datetime'].dt.weekofyear
 
+## pipe function
+The pipe function takes functions as inputs. These functions need to take a dataframe as input and return a dataframe
+
+        def drop_missing(df):
+                thresh = len(df) * 0.6
+                df.dropna(axis=1, thresh=thresh, inplace=True)
+        return df
+        def remove_outliers(df, column_name):
+                low = np.quantile(df[column_name], 0.05)
+                high = np.quantile(df[column_name], 0.95)
+        return df[df[column_name].between(low, high, inclusive=True)]
+
+        def to_category(df):
+                cols = df.select_dtypes(include='object').columns
+                for col in cols:
+                        ratio = len(df[col].value_counts()) / len(df)
+                        if ratio < 0.05:
+                        df[col] = df[col].astype('category')
+        return df
+        def copy_df(df):
+                return df.copy()
+        marketing_cleaned = (marketing.
+                        pipe(copy_df).
+                        pipe(drop_missing).
+                        pipe(remove_outliers, 'Salary').
+                        pipe(to_category))
+
 ## useful tips
 ### read from clipboard
 
