@@ -10,7 +10,16 @@ tags:
     - optimization
 ---
 
-## non-gradient
+
+## Gradient Descent
+
+### Stochastic Gradient Descent 
+
+### Adaptive Learning Rate Method 
+
+
+
+## non-gradient Descent
 ### Particle Swarm Optimization
 a population-based method that defines a set of ‘particles’ that explore the search space, attempting to find a minimum.
 * does not require the optimization problem to be differentiable
