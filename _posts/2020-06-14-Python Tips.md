@@ -435,6 +435,25 @@ in most cases it is same as lower, but in some cases not
     "ς".casefold() # returns "σ"
     "ς".lower() # returns "ς"
 
+## For/Else Statements
+else will run if no break occurs
+
+    for x in range(3):
+    if x ==4 :
+        break
+    else:
+    print('We never broke out')
+
+## dataclass
+
+    @dataclass
+    class DataClassCard:
+        rank: str
+        suit: str
+    
+    queen_of_hearts = DataClassCard('Q', 'Hearts')
+    queen_of_hearts.rank
+
 ## new features in python 3.8.5
 
 ### Assignment operator ( := )

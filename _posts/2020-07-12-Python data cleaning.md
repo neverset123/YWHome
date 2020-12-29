@@ -11,14 +11,14 @@ tags:
     - pandas
 ---
 
-
-## missing value
+## data cleaning cases
+### missing value
 
     # a list with all missing value formats
     missing_value_formats = ["n.a.","?","NA","n/a", "na", "--"]
     df = pd.read_csv("employees.csv", na_values = missing_value_formats)   
 
-## invalid data type
+### invalid data type
 
     def make_int(i):
         try:
@@ -29,7 +29,7 @@ tags:
     # apply make_int function to the entire series using map
     df['Salary'] = df['Salary'].map(make_int)
 
-## marking&removing missing values
+### marking&removing missing values
 
     # check if there are missing values in dataframe
     print(df.isnull().values.any())
@@ -44,7 +44,7 @@ tags:
     # drop all rows with all NaN
     new_df = df.dropna(axis = 0, how ='all')
 
-## filling missing values
+### filling missing values
 
     # replace na with constants
     df['Salary'].fillna(0, inplace=True)
@@ -57,7 +57,54 @@ tags:
     # interpolation
     df['Salary'].interpolate(method='linear', direction = 'forward', inplace=True)
 
-## pandas tips
+## open source python libraries
+### pandas profiling
+pandas profiling provides EDA information about datas to be analysed
+
+    import pandas as pd
+    import numpy as np
+    # create data 
+    df = pd.DataFrame(np.random.randint(0,200,size=(15, 6)), columns=list('ABCDEF'))
+    # run your report!
+    df.profile_report()
+
+### Dabl
+data analysis library designed for data exploration and preprocessing of a machine learning project
+
+    #pip install dabl
+    data_clean = dabl.clean(data)
+    dabl.plot(data, 'class')
+
+### Dora
+includes useful utilities for cleaning, transforming and visually exploring a data set, besides it has data versioning capabilities
+
+    pip install Dora
+    from Dora import Dora
+    # Read the dataframe into the Dora format, specifying the target column in output
+    dora = Dora(output = 'class', data = data)
+    # Impute missing values
+    dora.impute_missing_values()
+    # Scale values
+    dora.scale_input_values()
+    # Save a specific version of the data
+    dora.snapshot('cleaned_data')
+    # Track changes to the data
+    dora.logs
+
+### Pretty pandas
+create “pretty” summary tables for your data
+
+    #pip install prettypandas
+    from prettypandas import PrettyPandas
+    # Convert the class to a numeric data type
+    data['class'] = data['class'].astype('float64')
+    # Summarise the data set using the Pandas groupby function
+    df_grp = data.groupby('class').mean()
+    # Add an overall average to the table
+    PrettyPandas(df_grp).average()
+
+
+## pandas data cleaning tips
 ### filter with query()
 
     #filter can be done like this
@@ -144,17 +191,6 @@ If the data are stored as table (PyTable) you can directly query the hdf store u
     connection = engine.connect()
     #exporting dataframe to SQL
     df.to_sql(name="test", con=connection)
-
-### Pandas Profile
-pandas profile provides EDA information about datas to be analysed
-
-    import pandas_profiling
-    import pandas as pd
-    import numpy as np
-    # create data 
-    df = pd.DataFrame(np.random.randint(0,200,size=(15, 6)), columns=list('ABCDEF'))
-    # run your report!
-    df.profile_report()
 
 ### binning data
 here are some methods to speed up the binning process
