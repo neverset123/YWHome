@@ -8,6 +8,7 @@ header-img: img/post-bg-kuaidi.jpg
 catalog: true
 tags:
     - python
+    - machine learning
 ---
 
 ## Faker
@@ -119,3 +120,9 @@ make sure a certain kind of data is not in our data
 ### convert data type
 
     Schema(Use(int)).validate('123')
+
+## others
+### sklearn.dataset
+
+    from sklearn.datasets import make_blobs
+    raw_data = make_blobs(n_samples = 200, n_features = 2, centers = 4, cluster_std = 1.8)

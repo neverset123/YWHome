@@ -391,16 +391,30 @@ Spark optimizes execution plans, and the larger the execution plans, the better 
     #add this function to .bashrcs
     function pysparknb () 
     {
-    #Spark path
-    SPARK_PATH=spark_path_folder
-    export PYSPARK_DRIVER_PYTHON="jupyter"
-    export PYSPARK_DRIVER_PYTHON_OPTS="notebook"
-    # For pyarrow 0.15 users, you have to add the line below  while using pandas_udf    
-    export ARROW_PRE_0_15_IPC_FORMAT=1# Change the local[10] to local[numCores in your machine]
-    $SPARK_PATH/bin/pyspark --master local[10]
+        #Spark path
+        SPARK_PATH=spark_path_folder
+        export PYSPARK_DRIVER_PYTHON="jupyter"
+        export PYSPARK_DRIVER_PYTHON_OPTS="notebook"
+        # For pyarrow 0.15 users, you have to add the line below  while using pandas_udf    
+        export ARROW_PRE_0_15_IPC_FORMAT=1# Change the local[10] to local[numCores in your machine]
+        $SPARK_PATH/bin/pyspark --master local[10]
     }
 
-### pySpak ML
+### pySpark query plan
+
+    query = (
+        questionsDF
+        .filter(col('year') == 2019)
+        .groupBy('user_id')
+        .agg(
+            count('*').alias('cnt')
+        )
+        .join(usersDF, 'user_id')
+    )
+    query.explain(mode='formatted')
+    
+
+### pySpark ML
 MLlib is Spark’s machine learning (ML) library
 
 ### ML Algorithms

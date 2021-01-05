@@ -25,7 +25,9 @@ tags:
 
 ## map Geopoint to map
 ### folium
+folium is a python library to visualize data on an interactive leaflet map
 
+    #pip install folium
     # import the library and its Marker clusterization service
     import folium
     from folium.plugins import MarkerCluster
@@ -45,6 +47,20 @@ tags:
     m
     #save to html
     m.save("folium_map.html")
+
+#### Stamen Toner Maps
+high contrast Black & White maps
+
+    #add attribute tiles='Stamen Toner' to folium.map() to create stamen toner map
+    india_map = folium.Map(location=[20.5937, 78.9629 ], zoom_start=4,              tiles='Stamen Toner')
+
+#### Stamen Terrain Maps
+show hill shading and natural vegetation colors
+
+    #add attribute tiles='Stamen Terrain' to folium.map() to create stamen terrain map
+    india_map = folium.Map(location=[20.5937, 78.9629 ], zoom_start=4, tiles='Stamen Terrain')
+
+
 
 ### plotly
 
