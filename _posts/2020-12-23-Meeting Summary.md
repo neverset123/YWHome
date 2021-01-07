@@ -110,6 +110,7 @@ single-domain-multiple-documents summarization task example
 ### Sequence-to-Sequence (Seq2Seq) Modeling
 text summarization can be seen as a Many-to-Many Seq2Seq problem
 ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20201223225456.png)
+besides keras library there is one seq2seq open source model pegasus availab: https://github.com/google-research/pegasus
 
 ### example
 reference: https://github.com/aravindpai/How-to-build-own-text-summarizer-using-deep-learning/blob/master/How_to_build_own_text_summarizer_using_deep_learning.ipynb

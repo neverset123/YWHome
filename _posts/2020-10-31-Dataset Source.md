@@ -54,6 +54,12 @@ this is a data search tool containing different kinds of datas
 10. nhanes
 National Health and Nutrition Examination Survey
 
+11. Waymo Open Dataset
+https://waymo.com/open
+
+12. MS COCO dataset
+https://cocodataset.org/#home
+
 ###  kaggle API
 The Kaggle API allows Kaggle datasets to be downloaded programmatically/through the command line interface.
 

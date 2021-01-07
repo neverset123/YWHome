@@ -11,12 +11,16 @@ tags:
 ---
 
 ## manipulate dataframe
+dataframe consists of series.
+Series is a one-dimensional data structure, which consists of indexes and values.
+Dataframe is a two-dimensional structure that has columns in addition to indexes and values.
 ### add row and colume name
 
         import numpy as np
         import pandas as pdvalues = np.random.randint(10, size=(3,7))
         df = pd.DataFrame(values, columns=list('ABCDEFG'))
         df.insert(0, 'category', ['cat1','cat2','cat3'])
+
 ### melt
 convert dataframe with high number of columns to narrow ones
 The column specified with the id_vars parameter remains the same and the other columns are represented under the variable and value columns
@@ -67,7 +71,7 @@ insert column at defined location
 
 ### apply
 allows you to apply a function across an axis of a DataFrame or to a Series.    
-xis allows you to define which axis the function is going to be applied to.      
+axis allows you to define which axis the function is going to be applied to.      
 If raw=False is passed then the row or column is passed to the apply function as a Series, if raw=True is passed then ndarray objects are passed to the function instead
 
         # pandas.DataFrame.apply
@@ -87,8 +91,23 @@ If raw=False is passed then the row or column is passed to the apply function as
         #example1
         series = pd.Series(np.random.randint(0, 100, 5), name='result')
         df = pd.DataFrame(series)
+        #between range is a function
         df['in_range'] = df['result'].apply(between_range, args=(25, 75))
         print(df)
+
+### applymap
+apply operation of the specified function on each cell in the DataFrame
+
+        df = pd.DataFrame(
+                {
+                        "A":np.random.randn(5),
+                        "B":np.random.randn(5),
+                        "C":np.random.randn(5),
+                        "D":np.random.randn(5),
+                        "E":np.random.randn(5),
+                }
+        )   
+        df.applymap(lambda x:"%.2f" % x)     
 
 ### eval
 
@@ -102,6 +121,19 @@ If raw=False is passed then the row or column is passed to the apply function as
         netflix.eval('''
                 years_to_now = 2020 - release_year
                 new_date_added = @func(date_added.str.strip())''')
+
+### map
+using Series.map() can do easy replacement
+
+        #map with dictionary
+        data["gender"] = data["gender"].map({"man":1, "women":0})
+        ​
+        #map with function
+        def gender_map(x):
+                gender = 1 if x == "man" else 0
+                return gender
+        #function as argument
+        data["gender"] = data["gender"].map(gender_map)       
 
 ## plot
 there are visualization features in pandas
