@@ -475,3 +475,21 @@ MLlib is Spark’s machine learning (ML) library
     pipelineModel = pipeline.fit(train)
     predictions = pipelineModel.transform(test)
     rmse = evaluator.evaluate(predictions)
+
+## Spark Delight
+the Spark Delight aims to solve the weakness of spark UI and Spark History Server:
+* The Spark UI lacks essential node metrics (CPU, Memory and I/O usage)
+* The Spark History Server (rendering the Spark UI after an application is finished) is hard to setup.
+### Summary statistics
+shows statistical performance of spark app
+### Recommendations
+pinpoints stability and performance issues at a high-level to help developers address them
+### Executors CPU Usage
+let you see quickly if your app is I/O bound or CPU bound, and make smarter infrastructure changes accordingly
+### Executors Peak Memory Usage
+shows the memory usage breakdown for each executor when the total memory consumption was at its peak
+### Stage and Executor Pages
+show information at a finer granularity on a Spark stage page or an executor page
+
+
+

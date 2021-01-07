@@ -454,6 +454,159 @@ else will run if no break occurs
     queen_of_hearts = DataClassCard('Q', 'Hearts')
     queen_of_hearts.rank
 
+## Queue Module
+there are three types of Queue: FIFO, LIFO, and Priority Queue.
+1) FIFO
+
+    import queue
+
+    # queue.Queue()
+    q = queue.Queue()
+    for i in range(5):
+        q.put(i)
+    while not q.empty():
+        print(q.get())
+    # result: 0,1,2,3,4
+
+    # queue.SimpleQueue()
+    simple_q = queue.SimpleQueue()
+    for i in range(5):
+        simple_q.put(i)
+    while not simple_q.empty():
+        print(simple_q.get())
+    # result: 0,1,2,3,4
+
+    q = queue.Queue(maxsize=3)
+    try:
+        for i in range(5):
+            q.put(i, block=False)
+    except queue.Full:
+        print("Queue is Full with 3 items.")
+    try:
+        for i in range(5):
+            print(f"element {q.get(block=False)}")
+    except queue.Empty:
+        print("Queue is already empty")
+
+2) LIFO
+LIFO is also named as stack.
+
+    import queue
+
+    q = queue.LifoQueue()
+    for i in range(5):
+        q.put(i)
+
+    while not q.empty():
+        print(q.get())
+    # result: 4,3,2,1,0
+
+    q = queue.LifoQueue(maxsize=3)
+    try:
+        for i in range(5):
+            q.put(i, block=False)
+    except queue.Full:
+        print("Queue is Full with 3 items")
+    try:
+        for i in range(5):
+            print(f"element {q.get(block=False)}")
+    except queue.Empty:
+        print("Queue is already empty")
+
+3) Priority Queue
+priority queue uses min heap queue algorithm. priority queue not only work with numbers but also complex data types like tuple or customized classes as long as the objects are comparable. dataclass with config order=True can make complex data struct comparable
+
+
+    import queue
+    q = queue.PriorityQueue()
+
+    for i in [4,1,3,2,0]:
+        q.put(i)
+    while not q.empty():
+        print(q.get())
+
+    #complex struct
+    from dataclasses import dataclass
+    from typing import Any
+
+    @dataclass(order=True)
+    class Item:
+        key: int
+        value: Any
+
+    q = queue.PriorityQueue()
+
+    for i in [Item(3,"leiden"),Item(1,"amsterdam"),Item(2,"rotterdam"),Item(1,"utrecht")]:
+        q.put(i)
+    while not q.empty():
+        print(q.get())
+
+### user case
+Queue is designed for multi-threading with following characteristics:
+* thread-safe characteristic
+* avoid potential memory explosion
+* reduce busy waiting
+
+
+    import queue
+    import threading
+    import random
+    import requests
+
+    def download(queue):
+        id = queue.get()
+        result = requests.get(f"https://jsonplaceholder.typicode.com/photos/{id}")
+        url = result.json()["thumbnailUrl"]
+        save_image(id, url)
+        print(f"Save image {id}")
+        queue.task_done() # this is new 
+        
+    NUM_THREADS = 10
+    q = queue.Queue()
+
+    for i in range(NUM_THREADS):
+        worker = threading.Thread(target=download,args=(q,))
+        worker.start()
+
+    for i in range(NUM_THREADS):
+        id = random.randint(1,100)
+        q.put(id)
+
+    q.join()
+
+## numpy
+### broadcasting
+if numpy operate on two array of different size, teh smaller array becomes broadcast across teh larger array if the dimension of smaller array is 1. otherwise exception is thrown
+### slicing
+array slicing is one shallow copy of original array
+
+    originalArray= np.arange(0,10)
+    #subArray is only a reference to original array
+    subArray=originalArray[5:]
+### linspace
+
+    #endpoint is boolean whether to include the stop num or not
+    np.linspace(start, stop, num, endpoint)
+### size and type
+
+    array= np.arrange(0,10)
+    array.size
+    array.dtype
+    array.shape
+    array.ndim
+
+### cache value
+
+    from functools import lru_cache
+    @lru_cache(maxsize=1000)
+    def fibonacci(input_value):
+        if input_value ==1:
+            return 1
+        elif input_value == 2:
+            return 1
+        elif input_value > 2:
+            return fibonacci(input_value-1)+fibonacci(input_value-2)
+
 ## new features in python 3.8.5
 
 ### Assignment operator ( := )

@@ -233,6 +233,28 @@ voila can convert jupyter script into a standalone web application, it support i
         plt.show()
 
 ## matplotlib
+### FuncAnimation
+create dynamic plot with animator = ani.FuncAnimation(fig, chartfunc, interval = 100)
+
+    import matplotlib.animation as ani
+    import numpy as np
+    import matplotlib.pyplot as pltcolor = ['red', 'green', 'blue', 'orange']
+    fig = plt.figure()
+    plt.xticks(rotation=45, ha="right", rotation_mode="anchor") #rotate the x-axis values
+    plt.subplots_adjust(bottom = 0.2, top = 0.9) #ensuring the dates (on the x-axis) fit in the screen
+    plt.ylabel('No of Deaths')
+    plt.xlabel('Dates')
+
+    #define chartfunc
+    def buildmebarchart(i=int):
+        plt.legend(df1.columns)
+        p = plt.plot(df1[:i].index, df1[:i].values) #note it only returns the dataset, up to the point i
+        for i in range(,4):
+            p[i].set_color(color[i]) #set the colour of each curveimport matplotlib.animation as ani
+
+    #call funcanimation to make plot dynamic
+    animator = ani.FuncAnimation(fig, buildmebarchart, interval = 100)
+    plt.show()
 
 ### Using LaTeX font
 
@@ -428,3 +450,23 @@ Field names are prepended with @, plot metadata are prepened with $
     p3.x_range = p2.x_range = p1.x_range
     p3.y_range = p2.y_range = p1.y_range
     show(layout)
+
+## Pygal
+
+    #pip install pygal
+    import pygal
+    bar_chart = pygal.Bar() 
+    bar_chart.title = 'NBA data'
+
+    #add data
+    bar_chart.add('qw', 38387) 
+    bar_chart.add('wq', 36928) 
+    bar_chart.add('eq', 34384) 
+    bar_chart.add('eqw', 33643) 
+    bar_chart.add('fsdf', 32292) 
+    bar_chart.render_in_browser()
+    bar_chart.render_to_file('NBA.svg')
+
+
+
+
