@@ -57,6 +57,329 @@ create interactive map
     fig.show()
 
 #### Dash
+built based on Flask (as backend), React(as frontend), and Plotly, ideal for building visualization apps.
+Features:
+* easy to build complicated UIs with multiple inputs, multiple outputs, and inputs that depend on other inputs
+* support multi-user with independent sessions
+drawbacks: 
+* no intermediate values in the reactive graph
+* concurrency in callback is not possible
+* Cannot have callbacks with no Inputs or with no Output
+
+##### structure
+
+|-Assets
+|-Components
+|-Layout
+|-Pages
+|-Utils
+|-Environments 
+|-Cache-Directory
+
+1) Assets
+Dash will automatically serve files (mages, Stylesheets, or Javascript files) in this folder
+2) Components
+reusable components
+
+    import dash_html_components as html
+    from utils.functions import formatter_2_decimals
+
+    def make_dash_table(df):
+        body = []
+        header = []
+        for column in df.columns:
+            header.append(html.Th(column))
+
+        for index, row in df.iterrows():
+            html_row = []
+            for i in range(len(row)):
+                html_row.append(html.Td(formatter_2_decimals(row[i])))
+            body.append(html.Tr(html_row))
+        
+        tHead = html.Thead(html.Tr(header))
+        tBody = html.Tbody(body)
+        table = html.Table([tHead, tBody])
+
+        return table
+
+3) Layout
+common layout including UI view and callback functions
+
+    #layout.py
+    import dash_html_components as html
+    import dash_core_components as dcc
+    from layout.sidebar.sidebar import sidebar
+    content = html.Div(id="page-content")
+    layout = html.Div([dcc.Location(id="url"), sidebar, content])
+
+    #view.py
+    import dash_bootstrap_components as dbc
+    import dash_html_components as html
+    from utils.constants import home_page_location, gdp_page_location, iris_page_location
+ 
+    # sidebar header consists of a title, and a toggle, the latter is hidden on large screens  
+    sidebar_header = dbc.Row(
+        [
+            dbc.Col(html.H2("Sidebar", className="display-4")),
+            dbc.Col(
+                [
+                    html.Button(
+                        # use the Bootstrap navbar-toggler classes to style
+                        html.Span(className="navbar-toggler-icon"),
+                        className="navbar-toggler",
+                        # the navbar-toggler classes don't set color
+                        style={
+                            "color": "rgba(0,0,0,.5)",
+                            "border-color": "rgba(0,0,0,.1)",
+                        },
+                        id="navbar-toggle",
+                    ),
+                    html.Button(
+                        # use the Bootstrap navbar-toggler classes to style
+                        html.Span(className="navbar-toggler-icon"),
+                        className="navbar-toggler",
+                        # the navbar-toggler classes don't set color
+                        style={
+                            "color": "rgba(0,0,0,.5)",
+                            "border-color": "rgba(0,0,0,.1)",
+                        },
+                        id="sidebar-toggle",
+                    ),
+                ],
+                # the column containing the toggle will be only as wide as the
+                # toggle, resulting in the toggle being right aligned
+                width="auto",
+                # vertically align the toggle in the center
+                align="center",
+            ),
+        ]
+    )
+
+    sidebar = html.Div(
+        [
+            sidebar_header,
+            # we wrap the horizontal rule and short blurb in a div that can be
+            # hidden on a small screen
+            html.Div(
+                [
+                    html.Hr(),
+                    html.P(
+                        "A responsive sidebar layout with collapsible navigation "
+                        "links.",
+                        className="lead",
+                    ),
+                ],
+                id="blurb",
+            ),
+            # use the Collapse component to animate hiding / revealing links
+            dbc.Collapse(
+                dbc.Nav(
+                    [
+                        dbc.NavLink("Home", href=home_page_location, active="exact"),
+                        dbc.NavLink("GDP", href=gdp_page_location, active="exact"),
+                        dbc.NavLink("Iris", href=iris_page_location, active="exact"),
+                    ],
+                    vertical=True,
+                    pills=True,
+                ),
+                id="collapse",
+            ),
+        ],
+        id="sidebar",
+    )
+
+    #callback.py
+    from dash.dependencies import Input, Output, State
+    from app import app
+
+    @app.callback(
+        Output("sidebar", "className"),
+        [Input("sidebar-toggle", "n_clicks")],
+        [State("sidebar", "className")],
+    )
+    def toggle_classname(n, classname):
+        if n and classname == "":
+            return "collapsed"
+        return ""
+
+    @app.callback(
+        Output("collapse", "is_open"),
+        [Input("navbar-toggle", "n_clicks")],
+        [State("collapse", "is_open")],
+    )
+    def toggle_collapse(n, is_open):
+        if n:
+            return not is_open
+        return is_open    
+
+4) Pages
+MVC architectural pattern for each page
+
+    #model.py
+    import pandas as pd
+    from app import cache
+    from utils.constants import TIMEOUT
+
+    @cache.memoize(timeout=TIMEOUT)
+    def query_data():
+        # This could be an expensive data querying step
+        gdp_data = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/gapminderDataFiveYear.csv')
+        return gdp_data.to_json(date_format='iso', orient='split')
+
+    def dataframe():
+        return pd.read_json(query_data(), orient='split')
+
+    #view.py
+    import dash_core_components as dcc
+    import dash_html_components as html
+    from pages.gdp.gdp_data import dataframe
+
+    layout = html.Div([
+        html.H1("GDP viewer"),
+        html.Hr(),
+        dcc.Graph(id='graph-with-slider'),
+        dcc.Slider(
+            id='year-slider',
+            min=dataframe()['year'].min(),
+            max=dataframe()['year'].max(),
+            value=dataframe()['year'].min(),
+            marks={str(year): str(year) for year in dataframe()['year'].unique()},
+            step=None
+        )
+    ])
+
+    #controller.py
+    from dash.dependencies import Input, Output
+    import plotly.express as px
+    from app import app
+    from pages.gdp.gdp_data import dataframe
+
+    @app.callback(
+        Output('graph-with-slider', 'figure'),
+        Input('year-slider', 'value'))
+    def update_figure(selected_year):
+        gdp_data = dataframe()
+        filtered_df = gdp_data[gdp_data.year == selected_year]
+
+        fig = px.scatter(filtered_df, x="gdpPercap", y="lifeExp",
+                        size="pop", color="continent", hover_name="country",
+                        log_x=True, size_max=55)
+
+        fig.update_layout(transition_duration=500)
+
+        return fig
+
+
+5) Utils
+functions can be used for general purposes
+
+6) Environments
+
+    #setting dev and prod environments
+    import os
+    from os.path import join, dirname
+    from dotenv import load_dotenv
+
+    dotenv_path = join(dirname(__file__), os.getenv("ENVIRONMENT_FILE"))
+    load_dotenv(dotenv_path=dotenv_path, override=True)
+
+    APP_HOST = os.environ.get("HOST")
+    APP_PORT = int(os.environ.get("PORT"))
+    APP_DEBUG = bool(os.environ.get("DEBUG"))
+    DEV_TOOLS_PROPS_CHECK = bool(os.environ.get("DEV_TOOLS_PROPS_CHECK"))
+
+7) Cache-Directory
+use caches to store intermiediate results
+
+    from flask_caching import Cache
+    cache = Cache(app.server, config={
+        'CACHE_TYPE': 'filesystem',
+        'CACHE_DIR': 'cache-directory'
+    })
+
+8) Routing
+
+    #route.py
+    import dash_bootstrap_components as dbc
+    import dash_html_components as html
+    from dash.dependencies import Input, Output
+
+    from app import app
+
+    from utils.constants import home_page_location, gdp_page_location, iris_page_location
+
+    from pages.home import home
+    from pages.gdp import gdp
+    from pages.iris import iris
+
+    @app.callback(
+    Output("page-content", "children"), 
+    Input("url", "pathname")
+    )
+    def render_page_content(pathname):
+        if pathname == home_page_location:
+            return home.layout
+        elif pathname == gdp_page_location:
+            return gdp.layout
+        elif pathname == iris_page_location:
+            return iris.layout
+        # If the user tries to reach a different page, return a 404 message
+        return dbc.Jumbotron(
+            [
+                html.H1("404: Not found", className="text-danger"),
+                html.Hr(),
+                html.P(f"The pathname {pathname} was not recognised..."),
+            ]
+        )
+
+9) index.py and app.py
+
+    #app
+    import dash
+    import dash_bootstrap_components as dbc
+    from flask_caching import Cache
+    from utils.external_assets import FONT_AWSOME, CUSTOM_STYLE
+    from layout.layout import layout
+    import flask
+
+    server = flask.Flask(__name__) # define flask app.server
+    app = dash.Dash(
+        __name__,
+        server=server,
+        suppress_callback_exceptions=True, 
+        external_stylesheets=[
+            dbc.themes.BOOTSTRAP,
+            FONT_AWSOME,
+            CUSTOM_STYLE
+        ],
+        meta_tags=[
+            {"name": "viewport", "content": "width=device-width, initial-scale=1"}
+        ]
+    )
+    cache = Cache(app.server, config={
+        'CACHE_TYPE': 'filesystem',
+        'CACHE_DIR': 'cache-directory'
+    })
+
+    app.layout = layout
+
+    #index.py
+    from app import app, server
+    from routes import render_page_content
+    from layout.sidebar.sidebar_callbacks import toggle_collapse, toggle_classname
+    from pages.gdp.gdp_callbacks import update_figure
+    from pages.iris.iris_callbacks import make_graph
+    from environment.settings import APP_HOST, APP_PORT, APP_DEBUG, DEV_TOOLS_PROPS_CHECK
+
+    if __name__ == "__main__":
+        app.run_server(
+            host=APP_HOST,
+            port=APP_PORT,
+            debug=APP_DEBUG,
+            dev_tools_props_check=DEV_TOOLS_PROPS_CHECK
+        )
+
+
 
 #### Streamlit
 streamlit run streamlit_example.py
