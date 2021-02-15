@@ -12,7 +12,352 @@ tags:
 
 ## Dashboard
 ### Plotly
-Plotly allows you to make interactive figures in just a few lines of code using either Python or JavaScript. Plotly plots are all generated from JSONs being interpreted by d3
+Plotly allows you to make interactive figures in just a few lines of code using either Python or JavaScript. figure in plotly is a JSON-like data structure with three main attributes: data, layout and frames. The frames attribute contains optional frames that are used in animations. You can either first write the entire figure structure using JSON or Python dictionaries and then instantiate the figure object, or create the figure object first and update figure attributes incrementally.  
+Plotly supports “magic underscore notation” which means that there is no need to stepwise deepen into the object to access inner attributes but rather are able to access inner attributes directly
+#### Index plot
+##### get data
+
+    # Imports
+    import pandas as pd
+    from ipywidgets import widgets as wg
+    import yfinance as yf
+    import plotly.graph_objects as go
+    from plotly.offline import init_notebook_mode, iplot
+
+    init_notebook_mode()
+
+    tickers = ["FB", "AMZN", "DD", "BRK-A"]
+
+    df = yf.download(
+            tickers=tickers,
+            period="3y",
+            interval="1wk",
+            group_by="column")
+            
+    df.head(5)
+
+##### index chart with fixed reference dates
+
+    #generalized function for indexed column
+    def create_indexed_columns(date, df, top_level_name=""):
+        """Returns indexed columns for given dataframe"""
+
+        # find index of the date that is closest to our reference date
+        closest_date_index = df.index.get_loc(date, method="nearest")
+
+        # get the values in the initial columns for the reference date 
+        reference_values = df.iloc[closest_date_index]['Adj Close']
+
+        # divide initial columns by values at ref. date and store in intermediate df
+        inter_df = df['Adj Close'].div(reference_values)*100 - 100
+
+        # create a multindex for the intermediate df using the date as top-level index
+        closest_date = df.index[closest_date_index]
+        inter_df.columns = pd.MultiIndex.from_product(
+                        [[top_level_name if top_level_name else str(closest_date)], inter_df.columns])
+        
+        return inter_df, closest_date
+
+    #reference date
+    ref_dict = {
+        "Cambridge Analytica scandal": "2018-03-28",
+        "DowDuPont separation":        "2019-04-15",
+        "Corona stock market drop":    "2020-02-14"
+    }
+
+    #update reference date with closest date
+    tmp_dict = {}
+    fixed_df = df.copy()
+    for ref_name, ref_date in ref_dict.items():
+        # create intermediate df for reference date
+        inter_df, closest_date = create_indexed_columns(ref_date, fixed_df, top_level_name=ref_name)
+        
+        fixed_df = fixed_df.join(inter_df)
+        tmp_dict.update(
+            {ref_name: dict(
+                initial_date=ref_name,
+                closest_date=closest_date)}
+        )
+    ref_dict.update(tmp_dict)
+    
+    #create plotly object
+    ref_date_fig = go.Figure()
+    # loop over reference dates
+    for ref_name in ref_dict.keys():
+        # loop over tickers for reference date
+        for ticker in fixed_df[ref_name].columns:
+            ref_date_fig.add_scatter(
+                x=fixed_df.index,
+                y=fixed_df[ref_name, ticker],
+                name=ticker, 
+                meta=dict(reference_date=ref_name)
+            )
+    ref_date_fig.show()
+
+    #create visibility array
+    def create_visibility_array(ref_date):
+        """
+        Returns array of boolean values representing the
+        visibility array of figure traces. Traces with the 
+        same meta value as 'ref_date' are set to 'True'.
+        """
+
+        return [True if trace['meta']['reference_date'] == ref_date 
+                else False for trace in ref_date_fig['data']]
+    
+    #button for reference date selection
+    def create_buttons():
+        """Returns list of button objects."""
+        
+        button_list = []
+        for ref_date in ref_dict.keys():
+            ref_button = dict(
+                label=ref_date, 
+                method="restyle",
+                args=[dict(
+                    visible=create_visibility_array(ref_date))]
+            )
+            button_list.append(ref_button)
+        return button_list
+
+    #add button to figure
+    ref_date_fig.update_layout(
+        updatemenus=[dict(buttons=create_buttons())])
+    # hide traces on initialization, by default all traces are shown
+    ref_date_fig.update_traces(visible=False)
+    ref_date_fig.update_traces(
+        visible=True,
+        selector=dict(meta={'reference_date': list(ref_dict.keys())[0]})
+        )
+    ref_date_fig.show()
+
+    # add customized layout to a figure
+    def style_plot(figure):
+        """Provides basic layout attributes for given figure."""
+        figure.update_layout(
+            title=f"Relative growth of stock prices for {df.index[0].strftime('%B %Y')} - " \
+                +                f"{df.index[-1].strftime('%B %Y')}",
+            hovermode="x",
+            # D3 formatting. Adds a percentage sign and rounds numbers
+            # to 1 decimal after decimal point.
+            yaxis1=dict(ticksuffix=" %", tickformat="+.1f", title="Relative growth"),
+            #Setting the overlaying attribute to 'y' will force the traces that are defined with respect to the secondary y-axis to behave as if they were defined on the first y-axis. the combination of this attribute and fixedrange allows us to see the reference lines yet makes their scale independent of the y-axis.
+            yaxis2=dict(
+                fixedrange=True,
+                overlaying="y",
+                range=[0, 1],
+                visible=False,
+            ),
+            xaxis=dict(title="Date")
+        )
+
+    style_plot(ref_date_fig)
+
+    #create reference line
+    def create_reference_line(x, name, meta=""):
+        """Returns a dictionary that defines a 
+        black line bound to the secondary yaxis.
+        """
+
+        ref_line = dict(
+            x=[x, x],
+            y=[0, 1],
+            name=name,
+            yaxis="y2",
+            mode="lines",
+            type="scatter",
+            line=dict(
+                color="black",
+                width=0.5
+            ),
+            meta=meta
+        )
+        return ref_line
+
+    #add reference line to figure
+    for ref_key, ref_value in ref_dict.items():
+        ref_date_fig.add_trace(go.Scatter(
+            create_reference_line(
+                x=ref_value['closest_date'],
+                name=ref_value['closest_date'].strftime("%Y-%m-%d"), 
+                meta=dict(reference_date=ref_key)
+                )
+            ))
+
+    ref_date_fig.update_layout(
+        updatemenus=[dict(buttons=create_buttons(), x=-0.12)])
+    # hide traces on initialization, by default all traces are shown
+    ref_date_fig.update_traces(visible=False)
+    ref_date_fig.update_traces(
+        visible=True,
+        selector=dict(meta={'reference_date': list(ref_dict.keys())[0]})
+        )
+    ref_date_fig.show()
+##### dynamic indexing chart
+
+    # create copy of initial dataframe
+    df = prepared_df.copy()
+    def create_traces_for_date(date, df):
+        """Indexes dataframe to given date and returns list of traces."""
+        trace_list = []
+        calculated_df, _ = create_indexed_columns(date, df)
+        for trace in calculated_df.columns:
+            datadict = dict(
+                name=trace[1],
+                type="scatter",
+                x=calculated_df.index,
+                y=calculated_df[trace],
+                yaxis="y"
+            )
+            trace_list.append(datadict)
+        reference_line = create_reference_line(
+            x=date, name=date.strftime('%Y-%m-%d'))
+        return trace_list + [reference_line]
+    
+    #create slider
+    def make_initial_sliders_dict():
+        """Generates a dictionary that describes the initial slider."""
+        sliders_dict = dict(
+            yanchor='top',
+            xanchor='left',
+            currentvalue=dict(
+                font=dict(size=16),
+                prefix='Current date: ',
+                visible=True,
+                xanchor='right'
+            ),
+            pad=dict(b=10, t=50),
+            len=1,
+            x=0,
+            y=0,
+            steps=[],
+        )
+        return sliders_dict
+
+    #slider steps
+    def create_slider_step(frame_name, redraw):
+        """Generates a list of slider steps."""
+        slider_step = dict(
+            args=[[frame_name, frame_name], dict(
+                frame=dict(duration=0, redraw=redraw),
+                mode='immmediate',
+                transition=dict(duration=0))
+            ],
+            label=frame_name,
+            method='animate'
+        )
+        return slider_step
+
+    # create slider step and frame for each step
+    def make_steps_and_frames(df, redraw=False):
+        """Generates a list of steps and a list of frames for given df."""
+
+        slider_step_list, frame_list = [], []
+        for date in df.index:
+            datestring = date.strftime('%Y-%m-%d')
+            frame = dict(
+                data=create_traces_for_date(date, df),
+                name=datestring)
+            frame_list.append(frame)
+            step = create_slider_step(datestring, redraw)
+            slider_step_list.append(step)
+
+        return slider_step_list, frame_list
+
+    #make dynamic index plot
+    def make_dynamic_index_chart(df, redraw=False):
+        """Creates the entire dynamic index chart."""
+
+        slider_step_list, frame_list = make_steps_and_frames(df, redraw)
+        
+        sliders_dict = make_initial_sliders_dict()
+        sliders_dict['steps'] = slider_step_list
+
+        new_fig = go.Figure(data=frame_list[0]['data'], frames=frame_list)
+        new_fig.update_layout(sliders=[sliders_dict])
+        style_plot(new_fig)
+        return new_fig
+
+    new_fig = make_dynamic_index_chart(df)
+    new_fig.show()
+
+##### Index chart with variable index in JupyterLab
+
+    from IPython.display import display
+    from ipywidgets import widgets as wg
+    dfs = df.copy()
+
+    #chart needs to be a FigureWidget object rather than a Figure object to be compatiable with jupyter widgets
+    #create initial chart
+    ref_date_fig = go.FigureWidget()
+    style_plot(ref_date_fig)
+
+    starting_date = dfs.index[0]
+    inter_df, _ = create_indexed_columns(starting_date, dfs)
+    for col in inter_df.loc[[starting_date]].columns:
+        ref_date_fig.add_scatter(
+            x=inter_df.index, 
+            y=inter_df[col], 
+            name=col[1])
+
+    ref_date_fig.add_trace(go.Scatter(
+        create_reference_line(
+            starting_date, starting_date.strftime("%Y-%m-%d"),
+            meta="reference line")))
+
+    def update_chart(new_date):
+        """Indexes dataframe to given date and updates the index chart figure."""
+        tmp_df, closest_date = create_indexed_columns(new_date, dfs)
+        with ref_date_fig.batch_update():
+            closest_date_str = str(closest_date)
+            # update all except last trace, because last trace is the reference line
+            for d, col in zip(ref_date_fig.data[:-1], tmp_df[closest_date_str].columns):
+                d.y = tmp_df[closest_date_str, col]
+            # change position of the reference line
+            ref_date_fig.data[-1]['x'] = [closest_date, closest_date]
+            ref_date_fig.layout.title = f"Closest date: {closest_date_str[:10]}"
+
+    #date picker and slider
+    ref_date_picker = wg.DatePicker(value=starting_date, description='Index to:')
+    def picker_response(change):
+        """Updates chart on DatePicker widget change."""
+        
+        new_date = change['new'].isoformat()
+        update_chart(new_date)
+    ref_date_picker.observe(picker_response, names='value')
+    # only works in JupyterLab !
+    display(wg.VBox([
+        wg.HBox([ref_date_picker]),
+        ref_date_fig])
+        )
+
+    #use slider
+    pd.to_datetime(dfs.index)
+    ref_slider = wg.SelectionSlider(
+        options=[d.strftime("%Y-%m-%d") for d in list(dfs.index)],
+        description='Index to:',
+        continuous_update=False
+    )
+
+
+    def slider_response(change):
+        """Updates chart on slider change."""
+
+        new_date = change['new']
+        update_chart(new_date)
+
+
+    ref_slider.observe(slider_response, names='value')
+
+    # only works in JupyterLab !
+    display(wg.VBox([
+        wg.HBox([ref_slider]),
+        ref_date_fig])
+        )
+
+
+
+#### Scatter geo data on map
 
     import plotly.graph_objects as go
     from plotly.subplots import make_subplots
@@ -73,7 +418,6 @@ Plotly allows you to make interactive figures in just a few lines of code using 
                 [    None, None, None,               {"type": "bar", "colspan":3}, None, None],
             ]
     )
-
 
     message = df_final["Country_Region"] + " " + df_final["Province_State"] + "<br>"
     message += "Confirmed: " + df_final["Confirmed"].astype(str) + "<br>"
