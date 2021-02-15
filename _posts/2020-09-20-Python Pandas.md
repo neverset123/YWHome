@@ -406,9 +406,13 @@ grouping together values of continuous variables into n number of bins. qcut div
         data[['Item_MRP', 'Item_MRP_Bin_qcut']].head()
 
         bins = [0, 70, 140, 210, 280]
+        #or to pass in interval index
+        bins = pd.IntervalIndex.from_tuples([(0, 70), (70, 140), (140, 210), (210, 280)])
         groups = ['Low', 'Med', 'High', 'Exp']
         data['Item_MRP_Bin_cut'] = pd.cut(data['Item_MRP'], bins=bins, labels=groups)
         data[['Item_MRP', 'Item_MRP_Bin_cut']].head()
+        #count how many value fall into each bin
+        data['Item_MRP_Bin_cut'].value_counts().sort_index()
 
 ### apply() for Text Extraction
 apply a function to every variable of dataframe

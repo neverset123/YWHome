@@ -24,12 +24,23 @@ data source in sheet file
 https://docs.google.com/spreadsheets/d/1wZhPLMCHKJvwOkP4juclhjFgqIY8fQFMemwKL2c64vk/edit#gid=0
 
 3. Kaggle
+good place to work with data scientist worldwide and learn from them
+
+'''
+https://www.kaggle.com/datasets
+
+'''
 
 4. Data.world
 https://data.world/
 
 5. Google Dataset Search
+searching dataset with specific date, data format and usage.
+
+'''
 https://datasetsearch.research.google.com/
+
+'''
 
 6. OpenDaL
 search engine for data
@@ -59,6 +70,48 @@ https://waymo.com/open
 
 12. MS COCO dataset
 https://cocodataset.org/#home
+
+13. Earth Data from NASA
+it contains large collection of geo-related datasets about the earth, climate and water bodies
+
+'''
+https://earthdata.nasa.gov/
+
+'''
+
+14. dataset in Azure and AWS
+https://registry.opendata.aws/
+https://azure.microsoft.com/en-us/services/open-datasets/catalog/?q=
+
+15. FBI Crime Data Explorer
+the biggest data collection around criminal, and noncriminal, law enforcement data
+
+'''
+https://crime-data-explorer.fr.cloud.gov/downloads-and-docs
+
+''''
+16. Data World
+dataset search engine similar to google dataset search.
+'''
+https://data.world/
+
+'''
+17. CERN Open Data Portal
+http://opendata.cern.ch/
+18. Lionbridge AI Datasets
+provides services around data collection, annotation, and validation.
+
+'''
+https://lionbridge.ai/datasets/
+
+'''
+19. UCI Machine Learning
+
+'''
+https://archive.ics.uci.edu/ml/index.php
+
+'''
+
 
 ###  kaggle API
 The Kaggle API allows Kaggle datasets to be downloaded programmatically/through the command line interface.
