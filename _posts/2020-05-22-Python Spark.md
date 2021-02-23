@@ -209,7 +209,16 @@ filter with condition
 * distinct
 remove duplicates
 
+    #drop duplicates considering all columns
     rdd.distinct().collect()
+    #drop duplicates considering only a subset of the columns
+    #the returned DataFrame will contain only the subset of the columns that was used to eliminate the duplicates
+    rdd.select(['id', 'name']).distinct().collect()
+
+* dropDuplicates
+drop duplicates over all or a subset of columns, and keep all the columns in the returned dataframe
+
+    df.dropDuplicates(['id', 'name']).show()
 
 * randomSplit
 slice data with portion for test and train purposes

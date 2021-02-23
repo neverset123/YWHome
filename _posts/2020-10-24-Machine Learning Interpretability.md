@@ -104,6 +104,28 @@ explanation of the overall structure of the model
 
     #create a SHAP dependence plot to show the effect of a single feature across the whole dataset  
     shap.dependence_plot("RM", shap_values, X)
+##### visualization of network
+1. Networkx
+non interactive visualization of Graph
+
+    import networkx as nx
+    G = nx.from_pandas_edgelist(df, source='Source', target='Target',edge_attr='weight')
+
+the network can be visualized with following functions.
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20210223010521.png)
+
+2. PyVis
+interactive visualization of network Graph
+
+    from pyvis.network import Network
+    net=Network(notebook=True)
+    net.from_nx(G)
+    net.show("test.html")
+
+3. visdcc in dash
+
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20210223011132.png)
+
 
 ### Saabas. 
 An individualized heuristic feature attribution method.
