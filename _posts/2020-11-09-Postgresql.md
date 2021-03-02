@@ -94,8 +94,10 @@ The Hash index is smaller than the B-Tree index.
     END;
     $$;
 
-
-
+## dynamic hash table
+the structure of a hash table is as follows:
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20210226004822.png)
+When the hash table needs to be expanded, it is added one bucket at a time, but the memory space is applied with many buckets as a segment at one time. This avoids the performance degradation caused by frequent application space. After extending a bucket, we only need to traverse the elements in the corresponding one old bucket, and then move the elements to be moved to the new bucket.
 
 
 ## usage tips

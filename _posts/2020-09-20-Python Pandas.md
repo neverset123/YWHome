@@ -315,6 +315,47 @@ it replace not only whole string, but also part of the string if any
                                 .groupby('name')['duration']
                                 .transform('cumsum'))
 
+## flatten json
+
+        import json
+        #load data using Python JSON module
+        with open('data/simple.json','r') as f:
+                data = json.loads(f.read())
+        import requests
+        URL = 'http://raw.githubusercontent.com/BindiChen/machine-learning/master/data-analysis/027-pandas-convert-json/data/simple.json'
+        data = json.loads(requests.get(URL).text)
+        #flatten dict or list of dict or nested dict to pandas dataframe
+        df = pd.json_normalize(a_dict)
+
+### Flattening JSON with a nested list
+
+        #flatten dict
+        pd.json_normalize(
+                json_obj, 
+                #record_path is the list path
+                record_path =['students'],
+                #meta is data that needs to be included in the flattened results
+                meta=['school', ['info', 'contacts', 'tel']],
+        )
+
+        #flatten dict list
+        pd.json_normalize(
+                json_list, 
+                record_path =['students'], 
+                meta=['class', 'room', ['info', 'teachers', 'math']],
+                #set the argument errors to 'ignore' so that missing keys will be filled with NaN
+                #errors='ignore',
+                #custom Separator using the sep argument
+                #sep='->'
+                #add prefix
+                #meta_prefix='meta-',
+                #record_prefix='student-'
+        )
+
+### 
+
+
+
 ## indexing
 ### loc
 dataframe.loc[specified rows in list: specified columns in list]

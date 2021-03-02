@@ -29,7 +29,10 @@ using the plot_importance() method gives an attractively simple bar-chart repres
 ## Common importance evaluation methods
 
 ### SHAP (SHapley Additive exPlanations)
-A new individualized method that is both consistent and accurate. it shows no only importance of a feature but also show positiveness or negtiveness
+A new individualized method that is both consistent and accurate. it shows not only importance of a feature but also show positiveness or negtiveness.
+below is an example to show SHAP value of room feature.
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20210302224136.png)
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20210302224221.png)
 The shap Python package makes SHAP easier. We first call shap.TreeExplainer(model).shap_values(X) to explain every prediction, then call shap.summary_plot(shap_values, X) to plot these explanations
 
 ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20201024232814.png)
@@ -45,6 +48,7 @@ works for any model
 Linear model with independent and uncorrelated features
 
 5. tree
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20210302225711.png)
 
     import shap
     shap.initjs()
