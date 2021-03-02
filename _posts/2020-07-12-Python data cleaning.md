@@ -11,7 +11,7 @@ tags:
     - pandas
 ---
 
-## data cleaning cases
+## data wrangling
 ### missing value
 
     # a list with all missing value formats
