@@ -113,8 +113,6 @@ Create a unified management, flexible cloud-native production deployment to depl
     pgo create cluster mynewcluster
     pgo test mynewcluster
 
-
-
 ### monitoring postgres on kubernetes
 
     #deploy monitoring pod
@@ -123,3 +121,62 @@ Create a unified management, flexible cloud-native production deployment to depl
     pgo create cluster hippo --metrics --replica-count=1
     pgo create cluster rhino --metrics --replica-count=1
     pgo create cluster zebra --metrics
+
+### Postgres Notify for Real Time Dashboards
+with the NOTIFY and LISTEN commands we can implement something akin to the Observer pattern in SQL engine. The Observer pattern allows one class of object to “listen” for incoming events and another class to send events to those listeners. 
+#### Oberver pattern
+observers can be created to watch for changes and immediately update the state and UI of an app.
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20210306003853.png)
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20210306004520.png)
+
+    #create production item work in progress
+    create table production_item_wip (  
+        id serial primary key,  
+        insert_time timestamp default NOW(),  
+        production_item_id int references production_item(id),  
+        production_stage_id int references production_stage(id),  
+        employee_id int references employee(id)  
+    ); 
+
+    #create NOTIFY syntax
+    create
+    or replace function fn_production_stage_modified() returns trigger as $psql$
+    begin
+        perform pg_notify(
+            'order_progress_event',
+            'Time to refresh those screens!'
+        );return new;
+    end;$psql$ language plpgsql;
+
+    #create trigger 
+    create trigger production_stage before
+    insert
+        on production_item_wip for each row execute procedure fn_production_stage_modified();
+
+#### LISTEN pattern
+Listening pattern is like this: LISTEN order_progress_event;
+
+    #create view showing how many products have progressed through each production stage today
+    create view view_daily_production_stats as
+    select
+        count(1) as stage_count,
+        ps.name as stage_namefrom production_item_wip piw
+        join production_stage ps on ps.id = piw.production_stage_idwhere date(piw.insert_time) = date(now())
+    group by
+        ps.id
+    
+    #callback function
+    var clients = [];
+    function eventCallback(event) {
+        query('select * from view_daily_production_stats', (data) => {
+            clients.map(c => {
+            c.send(data);
+            });
+        });
+    }
+    client.connect(function(err, client) {
+        var query = client.query("LISTEN order_progress_event");
+        client.on("notification", eventCallback);
+    });
+    ;
+

@@ -418,6 +418,24 @@ automate when / how your application should restart
 rancher labs is a highly optimized iniature version of Kubernetes for the edge. it doesn’t compromise the API conformance and functionality.    
 it is a self-sufficient, encapsulated entity that runs almost all the components of a Kubernetes cluster, including the API server, scheduler, and controller
 ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20201115235002.png)
+#### k3d
+a program that run k3s in docker. there is also a vs code plugin available: https://github.com/inercia/vscode-k3d
+
+##### Installation
+https://k3d.io/#installation
+
+##### usage
+
+    #create a cluster
+    k3d cluster create  
+    k3d cluster create mycluster --api-port 127.0.0.1:6445 --servers 3 --agents 2 --volume '/home/me/mycode:/code@agent[*]' --port '8080:80@loadbalancer'
+    k3d cluster create --config /home/me/myk3dcluster.yaml
+    #check nodes
+    kubectl get nodes
+    #check creations
+    k3d cluster|node|registry list
+
+
 ### k0s
 K0s packages a single binary for both amd64 and arm64 architectures. It does not require any host OS dependencies besides the kernel. the "zero" in k0s distribution as the company's aspiration to provide a Kubernetes distribution with zero friction, zero dependencies, zero overhead, zero cost, and zero downtime
 
