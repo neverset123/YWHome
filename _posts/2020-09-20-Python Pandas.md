@@ -567,3 +567,47 @@ The pipe function takes functions as inputs. These functions need to take a data
 
 ### parallelisation
 If your function is I/O bound, meaning that it is spending a lot of time waiting for data (e.g. making api requests over the internet), then multithreading (or thread pool) will be the better and faster option
+
+### Modin
+pandas is only fit for data processing on one cpu, for big data is better to use modin, which is based on dask or ray as backend.
+
+        #install
+        pip install modin[dask]
+        #usage: change import pandas as pd to import modin.pandas as pd
+        #other parts are just same as pandas
+
+### use dict in pandas
+1) specify data type of column
+
+        import numpy as np
+        import pandas as pd
+        cols =['Price','Landsize','Distance','Type','Regionname']
+        melb = pd.read_csv(
+                "/content/melb_data.csv",
+                usecols = cols,
+                dtype = {'Price':'int'},
+                na_values = {'Landsize':9999, 'Regionname':'?'}
+        )
+
+2) agg data with more options
+
+        melb.groupby('Type').agg(
+                {
+                'Distance':'mean',
+                'Price':lambda x: sum(x) / 1_000_000
+                }
+        )
+        melb.groupby('Type').agg(
+                {'Distance':'mean','Price':'mean'}
+                ).round(
+                {'Distance':2, 'Price':1}
+        )
+
+3) replace values in a dataframe
+
+        melb.replace(
+                {
+                'Type':{'h':'house'},
+                'Regionname':{'Northern Metropolitan':'Northern'}
+                }
+        ).head()
