@@ -12,7 +12,7 @@ tags:
 
 
 ## Makefiles for python
-automatte some steps
+automate some steps
 
     #to avoid using local clean-pyc file
     .PHONY: clean-pyc clean-build

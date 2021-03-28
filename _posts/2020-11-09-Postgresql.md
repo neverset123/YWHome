@@ -102,7 +102,7 @@ When the hash table needs to be expanded, it is added one bucket at a time, but 
 
 ## usage tips
 ### postgresql cluster
-Create a unified management, flexible cloud-native production deployment to deploy a personalized database as a service (DBaaS).
+Create a unified management, flexible cloud-native production deployment to deploy a personalized database as a service (DBaaS) on k8s. (https://github.com/CrunchyData/postgres-operator)
 
     #config postgresql operator
     wget <https://raw.githubusercontent.com/CrunchyData/postgres-operator/master/examples/quickstart.sh>
@@ -112,6 +112,52 @@ Create a unified management, flexible cloud-native production deployment to depl
     #create postgresql cluster
     pgo create cluster mynewcluster
     pgo test mynewcluster
+
+#### Postgresql operator
+introduction and usage of the postgresql operator is here: https://operatorhub.io/operator/postgres-operator. a graphical user interface called postgres-operator-ui is available. different PostgreSQL roles  can be defined wtih Teams API. some customized postgresql operator is also available, such as Stolon, Crunchy Data, Zalando, KubeDB, StackGres and https://github.com/flant/postgres-operator (comparision: https://blog.flant.com/comparing-kubernetes-operators-for-postgresql/)
+to deploy the postgresql operator following deployment manifest can be used:
+
+    apiVersion: acid.zalan.do/v1
+    kind: postgresql
+    metadata:
+    name: staging-db
+    spec:
+    numberOfInstances: 3
+    patroni:
+    synchronous_mode: true
+    postgresql:
+    version: "12"
+    resources:
+    limits:
+        cpu: 100m
+        memory: 1Gi
+    requests:
+        cpu: 100m
+        memory: 1Gi
+    sidecars:
+    - env:
+    - name: DATA_SOURCE_URI
+        value: 127.0.0.1:5432
+    - name: DATA_SOURCE_PASS
+        valueFrom:
+        secretKeyRef:
+            key: password
+            name: postgres.staging-db.credentials
+    - name: DATA_SOURCE_USER
+        value: postgres
+    image: wrouesnel/postgres_exporter
+    name: prometheus-exporter
+    resources:
+        limits:
+        cpu: 500m
+        memory: 100Mi
+        requests:
+        cpu: 100m
+        memory: 100Mi
+    teamId: staging
+    volume:
+    size: 2Gi
+
 
 ### monitoring postgres on kubernetes
 
