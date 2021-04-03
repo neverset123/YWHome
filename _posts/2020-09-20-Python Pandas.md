@@ -611,3 +611,22 @@ pandas is only fit for data processing on one cpu, for big data is better to use
                 'Regionname':{'Northern Metropolitan':'Northern'}
                 }
         ).head()
+
+### reduce pandas dataframe memory
+When there are mixed data types per column, they’re often stored as objects. by converting object datatype to categorical datatype, the memory size will be reduced. What the categorical data type does is assign each unique value a unique id to lookup. That ID is stored instead of the string. The individual strings are stored in a lookup.
+
+        #check datatype
+        df.dtypes
+        #check memory usage
+        df.memory_usage(deep=True)
+        #convert datatype to categorical datatype
+        df_small = df.copy()
+        for col in ['Source', 'Target']:
+                df_small[col] = df_small[col].astype('category')
+        
+        reduction = df_small.memory_usage(
+                deep=True).sum() / df.memory_usage(deep=True).sum()
+
+        f'{reduction:0.2f}'
+
+
