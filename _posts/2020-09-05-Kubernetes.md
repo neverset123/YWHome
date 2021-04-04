@@ -446,6 +446,10 @@ K0s packages a single binary for both amd64 and arm64 architectures. It does not
     $ k0s worker <TOKEN>$ #Or quickly try it out in a Docker container anywhere
     $ docker run -d --hostname controller --privileged -v /var/lib/k0s -p 6443:6443 k0sproject/k0s
 
+### Engine Yard Kontainers and Hitachi Kubernetes Service (HKS)
+
+
+
 ## tools for kubernetes 
 ### Pinniped
 cluster identity plugin for kubernetes
@@ -459,6 +463,10 @@ kbld looks for images within your config file, builds the images via Docker and 
 CLI tool that calculates changes between your configuration and the live cluster state; and only applies the changes you approve
 ### kontena lens
 smart dashboard for kubernetes
+### monitoring
+kube-prometheus(https://github.com/prometheus-operator/kube-prometheus) provides Grafana dashboard to monitor cluster health, z.B. Kubernetes API Servers and etcd.
+we can use Prometheus to collect time-series metrics and Grafana for graphs, dashboards, and alerts.
+
 ### logging tools
 scalable tools that can collect data from all the services and provide the engineers with a unified view of performance, errors, logs, and availability of components.
 #### EFK Stack
