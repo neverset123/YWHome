@@ -43,6 +43,60 @@ $ anacron -T -t ~/.local/etc/anacrontab \
 anacron -fn -t /home/tux/.local/etc/anacrontab \
 -S /home/tux/.var/spool/anacron
 
+## tips
+### use cron with docker
+1. Using the Host’s Crontab
 
+    #start a docker container to execuate task.sh every 5 mins
+    */5 * * * * docker run --rm example_app_image:latest /example-scheduled-task.sh
 
+2. Using Cron Within Your Containers
+
+    #create a file named crontab
+    */5 * * * * /usr/bin/sh /example-scheduled-task.sh
+    #create a docker image with this cron file
+    RUN apt-get update && apt-get install -y cron
+    COPY example-crontab /etc/cron.d/example-crontab
+    RUN chmod 0644 /etc/cron.d/example-crontab &&\
+        crontab /etc/cron.d/example-crontab
+
+3. Separating Cron From Application’s Services
+with a docker-compose file it is possible to start two docker containers: one for cron, one for application service.
+
+    version: "3"
+    
+    services:
+    app:
+        image: demo-image:latest
+        volumes:
+        - data:/app-data
+    cron:
+        image: demo-image:latest
+        entrypoint: /bin/bash
+        command: ["cron", "-f"]
+        volumes:
+        - data:/app-data
+    
+    volumes:
+    data:
+
+4. run cron jobs on kubernetes
+
+    apiVersion: batch/v1beta1
+    kind: CronJob
+    metadata:
+    name: my-cron
+    namespace: my-namespace
+    spec:
+    schedule: "*/5 * * * *"
+    concurrencyPolicy: Forbid
+    jobTemplate:
+        spec:
+        template:
+            spec:
+            containers:
+                - name: my-container
+                image: my-image:latest
+                command: ["/bin/bash", "/my-cron-script.sh"]
+            restartPolicy: OnFailure
 
