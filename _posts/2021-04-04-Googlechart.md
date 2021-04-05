@@ -43,6 +43,7 @@ tags:
         return render_template('weather.html', tempdata=tempdata)
 
 ### template html to display data       
+to further intergrate this html with plotly interactive html you can insert this html to plotly html with iframe, e.g. 	<iframe width=420 height=330 frameborder=0 scrolling=false src="googlechart.html"></iframe>
 
     <!DOCTYPE html>
     <html>
