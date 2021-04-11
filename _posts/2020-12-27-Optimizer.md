@@ -40,3 +40,7 @@ The temperature is set at some initial positive value and progressively approach
 At each time step, the algorithm randomly chooses a solution close to the current one, measures its quality, and moves to it depending on the current temperature (probability of accepting better or worse solutions). 
 Ideally, by the time the temperature reaches zero, the algorithm has converged on a global minima solution. 
 * performs especially well in scenarios where an approximate solution is required in a short period of time,
+
+## tips
+### single objective optimization
+you can find all single objective optimization function in python here: https://github.com/AxelThevenot/Python_Benchmark_Test_Optimization_Function_Single_Objective
