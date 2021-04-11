@@ -107,6 +107,78 @@ Different measures can be useful in different scenarios such as web-ranking (pag
         
     fig.savefig('images/eurovision2018_map.png')
 
+#### hypergraph
+##### star expansion
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20210411172723.png)
+a new graph having as node set both the nodes and the edges of the original hypergraph is created, and the edges are given by the incidence relations in the original hypergraph (if a node n was part of an edge e in the hypergraph, there should be an edge between n and e in the new graph).
+##### decompose hypergraph into many graphs
+decompose the edges of a hypergraph by how many nodes they contain into 2-body interactions, 3-body interactions, and so on.
+
+```from collections import defaultdict
+
+def decompose_edges_by_len(hypergraph):
+    decomposed_edges = defaultdict(list)
+    for edge in hypergraph['edges']:
+        decomposed_edges[len(edge)].append(edge)
+    decomposition = {
+        'nodes': hypergraph['nodes'],
+        'edges': decomposed_edges
+    }
+    return decomposition
+
+import networkx as nx
+from networkx import NetworkXException
+import matplotlib.pyplot as plt
+
+def plot_hypergraph_components(hypergraph):
+    decomposed_graph = decompose_edges_by_len(hypergraph)
+    decomposed_edges = decomposed_graph['edges']
+    nodes = decomposed_graph['nodes']
+
+    n_edge_lengths = len(decomposed_edges)
+    
+    # Setup multiplot style
+    fig, axs = plt.subplots(1, n_edge_lengths, figsize=(5*n_edge_lengths, 5))
+    if n_edge_lengths == 1:
+        axs = [axs]  # Ugly hack
+    for ax in axs:
+        ax.axis('off')
+    fig.patch.set_facecolor('#003049')
+
+    # For each edge order, make a star expansion (if != 2) and plot it
+    for i, edge_order in enumerate(sorted(decomposed_edges)):
+        edges = decomposed_edges[edge_order]
+        g = nx.DiGraph()
+        g.add_nodes_from(nodes)
+        if edge_order == 2:
+            g.add_edges_from(edges)
+        else:
+            for edge in edges:
+                g.add_node(tuple(edge))
+                for node in edge:
+                    g.add_edge(node,tuple(edge))
+
+        # I like planar layout, but it cannot be used in general
+        try:
+            pos = nx.planar_layout(g)
+        except NetworkXException:
+            pos = nx.spring_layout(g)
+
+        # Plot true nodes in orange, star-expansion edges in red
+        extra_nodes = set(g.nodes) - set(nodes)
+        nx.draw_networkx_nodes(g, pos, node_size=300, nodelist=nodes, 
+                               ax=axs[i], node_color='#f77f00')
+        nx.draw_networkx_nodes(g, pos, node_size=150, nodelist=extra_nodes, 
+                               ax=axs[i], node_color='#d62828')
+
+        nx.draw_networkx_edges(g, pos, ax=axs[i], edge_color='#eae2b7',
+                               connectionstyle='arc3,rad=0.05', arrowstyle='-')
+
+        # Draw labels only for true nodes
+        labels = {node: str(node) for node in nodes}
+        nx.draw_networkx_labels(g, pos, labels, ax=axs[i])```
+
+
 ## information flow
 there are two basic models available to describe information flow process
 1. Linear Threshold: the influence accumulates from multiple neighbors of the node, which becomes activated only if the cumulative influence passed a certain threshold

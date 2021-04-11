@@ -607,6 +607,13 @@ array slicing is one shallow copy of original array
         elif input_value > 2:
             return fibonacci(input_value-1)+fibonacci(input_value-2)
 
+## load local env
+create .env file in local path and save local env viriables in this file, e.g. GG_API_KEY=**INSERT API TOKEN**. 
+To load these env variable in python environments:
+
+    from  dotenv import load_dotenv
+    load_dotenv()
+
 ## new features in python 3.8.5
 
 ### Assignment operator ( := )
