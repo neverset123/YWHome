@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      casual effect analysis
+title:      causal effect analysis
 subtitle:   
 date:       2020-12-22
 author:     neverset
