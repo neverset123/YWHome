@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      python data cleanings
+title:      python data cleaning
 subtitle:   
 date:       2020-07-12
 author:     neverset
