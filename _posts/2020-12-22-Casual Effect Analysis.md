@@ -40,7 +40,7 @@ by simulating control group and computing the difference we can analyze the caus
 AutoRegressive: Each new state space point receives a value that is a linear combination of the previous components.    
 Dynamic Regression: Adds a component that is a linear combination of covariates that further help explain the observed data. The dynamic part is implemented through the addition of a Gaussian random walk.    
 LocalLevel: Represents essentially a random walk. This component will be used as default by tfcausalimpact later on as it works as an exchange between how well our covariates explain the data or how much the random walk dominates the state space which means the observed data behaves like random fluctuation over time.  
-Seasonal: Models patterns that repeat over time such as weekly or daily seasons.
+Seasonal: Models patterns that repeat over time such as weekly or daily seasons.    
 LocalLinearTrend: Similar to local level but it adds another slope component which models a constantly increasing (or decreasing) pattern from data.    
 SemiLocalLinearTrend: Similar to local linear trend but the slope model follows an auto regressive component of first order.    
 SmoothSeasonal: Also models seasonal effects, this time specified in terms of multiples of a base frequency.    
