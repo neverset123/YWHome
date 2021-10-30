@@ -39,6 +39,38 @@ filter(function that checks for a condition, sequence of elements we want to app
     even = list(filter(lambda x: x%2==0, numbers))
     print(even)
 
+## pipe
+### filter with where
+
+```
+from pipe import where
+arr = [1,2,3,4,5]
+list(arr | where(lambda x. x%2==0))
+```
+
+### apply func to iterable
+```
+from pipe import select
+arr = [1,2,3,4]
+list(arr | select(lambda x: x*2))
+#or combine where and select
+list(arr
+        | where(lambda x: x%2==0)
+        | select(lambda x: x*2))
+```
+### unfold iterable
+```
+from pipe import traverse, select
+fruits = [
+    {"name":"apple", "price":[2,5]},
+    {"name":orange", "price":4},
+    {"name":"grape", "price":5}
+]
+lsit(fruites
+        | select(lambda fruit:fruit["price"])
+        | traverse)
+```
+
 ## reduce function
 reduce(function, iterable[, initializer])
 
