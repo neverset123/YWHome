@@ -629,4 +629,7 @@ When there are mixed data types per column, they’re often stored as objects. b
 
         f'{reduction:0.2f}'
 
+### run pandas in spark
 
+        from pyspark.pandas import read_csv
+        pdf = read_csv("data.csv")
