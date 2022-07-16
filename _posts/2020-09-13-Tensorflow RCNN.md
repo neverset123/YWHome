@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      tensorflow RCNN
+title:      RCNN
 subtitle:   
 date:       2020-09-13
 author:     neverset
