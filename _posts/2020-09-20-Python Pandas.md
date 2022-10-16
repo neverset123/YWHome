@@ -352,9 +352,6 @@ it replace not only whole string, but also part of the string if any
                 #record_prefix='student-'
         )
 
-### 
-
-
 
 ## indexing
 ### loc
@@ -633,3 +630,40 @@ When there are mixed data types per column, they’re often stored as objects. b
 
         from pyspark.pandas import read_csv
         pdf = read_csv("data.csv")
+
+
+## parallel computing 
+### pandarallel
+```
+df.apply(func)
+
+df.parallel_apply(func)
+
+df.applymap(func)
+
+df.parallel_applymap(func)
+
+df.groupby(args).apply(func)
+
+df.groupby(args).parallel_apply(func)
+
+df.groupby(args1).col_name.rolling(args2).apply(func)
+
+df.groupby(args1).col_name.rolling(args2).parallel_apply(func)
+
+df.groupby(args1).col_name.expanding(args2).apply(func)
+
+df.groupby(args1).col_name.expanding(args2).parallel_apply(func)
+
+series.map(func)
+
+series.parallel_map(func)
+
+series.apply(func)
+
+series.parallel_apply(func)
+
+series.rolling(args).apply(func)
+
+series.rolling(args).parallel_apply(func)
+```
