@@ -56,7 +56,7 @@ insert column at defined location
         #return dataframe contains the mean values for each city-cat pair
         df.pivot_table(index='cat', columns='city', aggfunc='mean')
 
-### join
+### merge
 
         #merge dataframe according to defined id
         pd.merge(df1, df2, on='id')
@@ -64,6 +64,14 @@ insert column at defined location
         pd.merge(df1, df2, left_on='id', right_on='number')
         #select join method: innner join，left join，right join or outer join
         pd.merge(df1, df2, left_on='id', right_on='number', how='left')
+
+### join
+join operation is more efficient than merge
+
+        df1.set_index("df1_col1", inplace = True)
+        df2.set_index("df2_col1", inplace = True)
+        x = df1.join(df2)
+
 ### concat
 
         #concatenate in column
