@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      push message
+title:      pytorch lightning
 subtitle:   
 date:       2022-10-24
 author:     neverset
