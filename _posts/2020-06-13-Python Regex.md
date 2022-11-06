@@ -71,7 +71,7 @@ NOT operation,search pattern except the ones that listed
             print('last three letters are ing')
 
 * search
-returns the matched object, apply group() method on the object to get teh matched string
+returns the matched object, apply group() method on the object to get the matched string
     match_obj=prog.search(w)
     start=match_obj.span()[0]
     end=match_obj.span()[1]
