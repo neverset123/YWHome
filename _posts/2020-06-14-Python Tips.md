@@ -10,6 +10,13 @@ tags:
     - python
 ---
 
+## Assignment Expresions
+allow return value in assignment 
+
+    `
+    any((ret := n) % 7 == 0 for n in nums)
+    `
+
 ## lambda function
 
     add = lambda a,b,c : a + b + c
