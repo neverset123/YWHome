@@ -635,13 +635,16 @@ When there are mixed data types per column, they’re often stored as objects. b
         f'{reduction:0.2f}'
 
 ### run pandas in spark
+supported with spark 3.2 or above
 
-        from pyspark.pandas import read_csv
-        pdf = read_csv("data.csv")
-
+```
+from pyspark.pandas import read_csv
+pdf = read_csv("data.csv")
+```
 
 ## parallel computing 
 ### pandarallel
+only works on driver node, so ont feasible for databricks
 ```
 df.apply(func)
 
