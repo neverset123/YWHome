@@ -108,6 +108,9 @@ explanation of the overall structure of the model
 
     #create a SHAP dependence plot to show the effect of a single feature across the whole dataset  
     shap.dependence_plot("RM", shap_values, X)
+5. permutation importance
+https://github.com/Qiuyan918/Permutation_Importance_Experiment
+
 ##### visualization of network
 1. Networkx
 non interactive visualization of Graph
