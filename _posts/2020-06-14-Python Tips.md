@@ -297,6 +297,9 @@ this feature is for python 3.7+
     class DataClassCard:
         rank: str
         suit: str
+    
+    queen_of_hearts = DataClassCard('Q', 'Hearts')
+    queen_of_hearts.rank
 
 ## parallel computing
 ### processpoolexecutor
@@ -488,16 +491,6 @@ else will run if no break occurs
         break
     else:
     print('We never broke out')
-
-## dataclass
-
-    @dataclass
-    class DataClassCard:
-        rank: str
-        suit: str
-    
-    queen_of_hearts = DataClassCard('Q', 'Hearts')
-    queen_of_hearts.rank
 
 ## Queue Module
 there are three types of Queue: FIFO, LIFO, and Priority Queue.
