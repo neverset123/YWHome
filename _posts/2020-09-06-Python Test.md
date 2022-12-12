@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      python tips
+title:      python Test
 subtitle:   
 date:       2020-09-06
 author:     neverset
