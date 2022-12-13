@@ -614,7 +614,7 @@ Queue is designed for multi-threading with following characteristics:
 
 ## numpy
 ### broadcasting
-if numpy operate on two array of different size, teh smaller array becomes broadcast across teh larger array if the dimension of smaller array is 1. otherwise exception is thrown
+if numpy operate on two array of different size, the smaller array becomes broadcast across teh larger array if the dimension of smaller array is 1. otherwise exception is thrown
 ### slicing
 array slicing is one shallow copy of original array
 
