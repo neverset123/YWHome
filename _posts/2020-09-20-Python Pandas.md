@@ -234,6 +234,17 @@ it replace not only whole string, but also part of the string if any
         cities = ['New York', 'Rome', 'Madrid', 'Istanbul', 'Rome']
         pd.Series(cities).str.get_dummies()
 
+### style api
+show dataframe in colored style
+```
+dataframe.style.highlight_null(props='color:white;background-color:black')
+dataframe.style.highlight_max(props='color:white;background-color:green')
+dataframe.style.highlight_max(props='color:white;background-color:green', axis=1)
+dataframe.style.highlight_between(left=100, right=200, props='color:black;
+dataframe.style.bar(color='lightblue',height=70,width=70)
+```
+
+
 ## sql
 ### create dummy data
 
