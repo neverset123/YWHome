@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      distance algorithem
+title:      hierarchical clustering
 subtitle:   
 date:       2022-12-18
 author:     neverset
