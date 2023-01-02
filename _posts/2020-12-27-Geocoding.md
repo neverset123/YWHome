@@ -7,90 +7,142 @@ author:     neverset
 header-img: img/post-bg-kuaidi.jpg
 catalog: true
 tags:
-    - python
+    - visualization
 ---
 
-## Simple map geo data on map
+## map geo data on map
 ### get geo data
-#### GeoPy
-
-    from geopy.geocoders import Nominatim
-    #openstreet map
-    geolocator = Nominatim(user_agent="example app")
-    #google map
-    geolocator = GoogleV3(api_key=AUTH_KEY)
-    geolocator.geocode("Tuscany, Italy").raw
-    geolocator.geocode("Tuscany, Italy").point
-    geolocator.geocode("1 Apple Park Way, Cupertino, CA")
-    geolocator.reverse('37.3337572, -122.0113815')
+GeoPy
+```
+from geopy.geocoders import Nominatim
+#openstreet map
+geolocator = Nominatim(user_agent="example app")
+#google map
+geolocator = GoogleV3(api_key=AUTH_KEY)
+geolocator.geocode("Tuscany, Italy").raw
+geolocator.geocode("Tuscany, Italy").point
+geolocator.geocode("1 Apple Park Way, Cupertino, CA")
+geolocator.reverse('37.3337572, -122.0113815')
+```
 
 ### map Geopoint to map
-#### folium
+1. folium
 folium is a python library to visualize data on an interactive leaflet map
 
-    #pip install folium
-    # import the library and its Marker clusterization service
-    import folium
-    from folium.plugins import MarkerCluster
-    # Create a map object and center it to the avarage coordinates to m
-    m = folium.Map(location=df[["lat", "lon"]].mean().to_list(), zoom_start=2)
-    # if the points are too close to each other, cluster them, create a cluster overlay with MarkerCluster, add to m
-    marker_cluster = MarkerCluster().add_to(m)
-    # draw the markers and assign popup and hover texts
-    # add the markers the the cluster layers so that they are automatically clustered
-    for i,r in df.iterrows():
-        location = (r["lat"], r["lon"])
-        folium.Marker(location=location,
-                        popup = r['Name'],
-                        tooltip=r['Name'])\
-        .add_to(marker_cluster)
-    # display the map
-    m
-    #save to html
-    m.save("folium_map.html")
+```
+#pip install folium
+#import the library and its Marker clusterization service
+import folium
+from folium.plugins import MarkerCluster
+#Create a map object and center it to the avarage coordinates to m
+m = folium.Map(location=df[["lat", "lon"]].mean().to_list(), zoom_start=2)
+#create a feature group for data points
+incidents = folium.map.FeatureGroup()
+#Loop through the 200 crimes and add each to the incidents feature group
+for lat, lng, in zip(cdata.Y, data.X):
+    incidents.add_child(
+        folium.CircleMarker(
+            [lat, lng],
+            radius=7, # define how big you want the circle markers to be
+            color='yellow',
+            fill=True,
+            fill_color='red',
+            fill_opacity=0.4
+        )
+    )
+#add incidents to map
+m.add_child(incidents)
 
-##### Stamen Toner Maps
-high contrast Black & White maps
+#if the points are too close to each other, cluster them, create a cluster overlay with MarkerCluster, add to m
+marker_cluster = MarkerCluster().add_to(m)
+#draw the markers and assign popup and hover texts
+#add the markers the the cluster layers so that they are automatically clustered
+for i,r in df.iterrows():
+    location = (r["lat"], r["lon"])
+    folium.Marker(location=location,
+                    popup = r['Name'],
+                    tooltip=r['Name'])\
+    .add_to(marker_cluster)
+# read geojson to show boundary of different cities
+url = 'https://cocl.us/sanfran_geojson'
+san_geo = f'{url}'
+folium.GeoJson(
+    san_geo,
+    style_function=lambda feature: {
+        'fillColor': '#ffff00',
+        'color': 'black',
+        'weight': 2,
+        'dashArray': '5, 5'
+    }
+).add_to(m)
+#create choropleth map (colored map represent statistics)
+folium.Choropleth(
+    geo_data=san_geo,
+    data=disdata,
+    columns=['Neighborhood','Count'],
+    key_on='feature.properties.DISTRICT',
+    #fill_color='red',
+    fill_color='YlOrRd',
+    fill_opacity=0.7,
+    line_opacity=0.2,
+    highlight=True,
+    legend_name='Crime Counts in San Francisco'
+).add_to(m)
 
-    #add attribute tiles='Stamen Toner' to folium.map() to create stamen toner map
-    india_map = folium.Map(location=[20.5937, 78.9629 ], zoom_start=4,              tiles='Stamen Toner')
+#create heatmap
+from folium.plugins import HeatMap
+heatdata = data[['Y','X']].values.tolist()
+HeatMap(heatdata).add_to(m)
 
-##### Stamen Terrain Maps
-show hill shading and natural vegetation colors
+#display the map
+m
+#save to html
+m.save("folium_map.html")
+```
+the default map is like openstreetmap, you can get high contrast Black & White maps with Stamen Toner Maps
 
-    #add attribute tiles='Stamen Terrain' to folium.map() to create stamen terrain map
-    india_map = folium.Map(location=[20.5937, 78.9629 ], zoom_start=4, tiles='Stamen Terrain')
+```
+#add attribute tiles='Stamen Toner' to folium.map() to create stamen toner map
+india_map = folium.Map(location=[20.5937, 78.9629 ], zoom_start=4,              tiles='Stamen Toner')
+```
+you can also get hill shading and natural vegetation colors with Stamen Terrain Maps
 
-#### plotly
+```
+#add attribute tiles='Stamen Terrain' to folium.map() to create stamen terrain map
+india_map = folium.Map(location=[20.5937, 78.9629 ], zoom_start=4, tiles='Stamen Terrain')
+```
 
-    # import the plotly express
-    import plotly.express as px
-    # set up the chart from the df dataFrame
-    fig = px.scatter_geo(df, 
-                        # longitude is taken from the df["lon"] columns and latitude from df["lat"]
-                        lon="lon", 
-                        lat="lat", 
-                        # choose the map chart's projection
-                        projection="natural earth",
-                        # columns which is in bold in the pop up
-                        hover_name = "Name",
-                        # format of the popup not to display these columns' data
-                        hover_data = {"Name":False,
-                                    "lon": False,
-                                    "lat": False
-                                        }
-                        )
-    #set size and color
-    fig.update_traces(marker=dict(size=25, color="red"))
-    #set view location and country
-    fig.update_geos(fitbounds="locations", showcountries = True)
-    fig.update_layout(title = "Your customers")
-    fig.show()
-    fig.write_html("plotly_map.html", include_plotlyjs=True)
+3. plotly
 
+```
+#import the plotly express
+import plotly.express as px
+#set up the chart from the df dataFrame
+fig = px.scatter_geo(df, 
+                    # longitude is taken from the df["lon"] columns and latitude from df["lat"]
+                    lon="lon", 
+                    lat="lat", 
+                    # choose the map chart's projection
+                    projection="natural earth",
+                    # columns which is in bold in the pop up
+                    hover_name = "Name",
+                    # format of the popup not to display these columns' data
+                    hover_data = {"Name":False,
+                                "lon": False,
+                                "lat": False
+                                    }
+                    )
+#set size and color
+fig.update_traces(marker=dict(size=25, color="red"))
+#set view location and country
+fig.update_geos(fitbounds="locations", showcountries = True)
+fig.update_layout(title = "Your customers")
+fig.show()
+fig.write_html("plotly_map.html", include_plotlyjs=True)
+```
 ## view bus traffic on map
 ### get traffic schedule data
-
+```
 import requests, json, schedule, urllib.request, time
 import numpy as np
 import pandas as pd
@@ -191,10 +243,10 @@ feature_collection = FeatureCollection(features)
 
 with open('smalltest.geojson', 'w') as f:
    dump(feature_collection, f)
-
+```
 ### process data 
-
-# Speed calculation
+```
+#Speed calculation
 df = pd.read_json("smalltest.geojson")
 
 for j in range(len(df['features'])):
@@ -235,6 +287,6 @@ feature_collection = FeatureCollection(features)
 
 with open('smalltest-w-speed.geojson', 'w') as f:
    dump(feature_collection, f)
-
+```
 ### visualize data 
 the geo data can be visualized with https://kepler.gl/demo or https://studio.unfolded.ai/home
