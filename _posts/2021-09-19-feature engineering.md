@@ -10,6 +10,8 @@ tags:
     - feature engineering
 ---
 
+## data transformation
+
 ### 数据转换成图像
 
 ### 元数据泄露
@@ -26,6 +28,67 @@ tags:
 ### 转换目标变量
 对高度偏斜的数据，如果我们把目标变量转成log(1+目标)格式，那么它的分布就接近高斯分布了
 
+## feature engine
+Feature-engine is one feature enginerring package in python3
+### Installation
+pip install feature-engine
+### data cleaning
+1) filling missing data
+```
+edian_imputer = MeanMedianImputer(
+    imputation_method='median',
+    variables=[‘A2’, ‘A3’, ‘A8’, ‘A11’, ‘A15’]
+    )
 
+median_imputer.fit(X_train)
+X_train = median_imputer.transform(X_train)
+X_test = median_imputer.transform(X_test)
+```
+2) convert categorical to numerical
+```
+encoder = ce.CountFrequencyEncoder(
+        encoding_method='frequency',
+        variables=['cabin', 'pclass', 'embarked']
+        )
 
-
+encoder.fit(X_train)
+train_t = encoder.transform(X_train)
+test_t = encoder.transform(X_test)
+print(encoder.encoder_dict_)
+```
+3) Discretization
+```
+disc = dsc.DecisionTreeDiscretiser(
+    cv=3,
+    scoring='neg_mean_squared_error',
+    variables=['LotArea', 'GrLivArea'],
+    regression=True
+    )
+ 
+disc.fit(X_train, y_train)
+train_t = disc.transform(X_train)
+test_t = disc.transform(X_test)
+```
+4) transformation
+```
+tf = vt.BoxCoxTransformer(
+    variables = ['LotArea', 'GrLivArea']
+    )
+ 
+tf.fit(X_train)
+train_t = tf.transform(X_train)
+test_t = tf.transform(X_test)
+```
+5) Outlier handling
+```
+capper = outr.Winsorizer(
+  distribution='gaussian',
+  tail='right',
+  fold=3,
+  variables=['age', 'fare']
+  )
+ 
+capper.fit(X_train)
+train_t = capper.transform(X_train)
+test_t = capper.transform(X_test)
+```
