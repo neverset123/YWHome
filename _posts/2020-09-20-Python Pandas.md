@@ -14,6 +14,14 @@ tags:
 dataframe consists of series.
 Series is a one-dimensional data structure, which consists of indexes and values.
 Dataframe is a two-dimensional structure that has columns in addition to indexes and values.
+### query
+```
+df.query('(age > 25) & (height > 165) & (gender == "female")')
+```
+```
+df.query('(age > @min_age) & (height > @min_height) & (gender == @g)')
+```
+
 ### add row and colume name
 
         import numpy as np
