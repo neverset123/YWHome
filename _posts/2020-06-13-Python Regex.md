@@ -128,3 +128,45 @@ ASCII [a] - Match to ASCII-only characters, rather than the full Unicode charact
 
     for t in text:
         print(re.search(r"hello)?(?(1) world| bye)!", t)
+
+## third party lib
+### Pampy
+1) HEAD和TAIL
+```
+from pampy import match, HEAD, TAIL, _
+x = [-1, -2, -3, 0, 1, 2, 3]
+print(match(x, [-1, TAIL], lambda t: [-1, tuple(t)]))
+# => [-1, (-2, -3, 0, 1, 2, 3)]
+```
+2) match dict
+```
+from pampy import match, HEAD, TAIL, _
+
+my_dict = {
+    'global_setting': [1, 3, 3],
+    'user_setting': {
+        'face': ['beautiful', 'ugly'],
+        'mind': ['smart', 'stupid']
+    }
+}
+
+result = match(my_dict, { _: {'face': _}}, lambda key, son_value: (key, son_value))
+
+print(result)
+
+# => ('user_setting', ['beautiful', 'ugly'])
+```
+3) match regex
+```
+import re
+
+from pampy import match, HEAD, TAIL, _
+
+def what_is(pet):
+    return match(
+        pet, re.compile('(\w+)，(\w)\w+鳕鱼$'), lambda mygod, you: you + "像鳕鱼"
+    )
+
+print(what_is('我的天，你长得真像鳕鱼'))
+# => '你像鳕鱼'
+```
