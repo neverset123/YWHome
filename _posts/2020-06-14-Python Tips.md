@@ -627,7 +627,7 @@ array slicing is one shallow copy of original array
     np.linspace(start, stop, num, endpoint)
 ### size and type
 
-    array= np.arrange(0,10)
+    array= np.arange(0,10)
     array.size
     array.dtype
     array.shape
