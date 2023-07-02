@@ -25,6 +25,8 @@ the original input will be encoded into a new vector，this vector will be decod
 * training cost is high
 
 ## Variational Autoencoder
+![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20230701234740.png)
+core idea is to assume k standard distributions for k samples
 ![](https://raw.githubusercontent.com/neverset123/cloudimg/master/Img20200425184415.png)
 in variational autoencoder the original input is not encoded to one vector rather two vectors-mean and standard variation, so that with these two parameter new hidden vector can be created to be decoded into augmented data
 
