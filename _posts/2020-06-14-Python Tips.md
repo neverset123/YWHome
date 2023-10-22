@@ -9,44 +9,51 @@ catalog: true
 tags:
     - python
 ---
-
 ## Assignment Expresions
-allow return value in assignment 
 
-    `
-    any((ret := n) % 7 == 0 for n in nums)
-    `
+allow return value in assignment
+```
+any((ret := n) % 7 == 0 for n in nums)
+```
 
 ## lambda function
-
-    add = lambda a,b,c : a + b + c
-    print( add(5,4,6) )
+```
+add = lambda a,b,c : a + b + c
+print( add(5,4,6) )
+```
 
 ## map function
-map(function you want to apply, sequence of elements we want to apply it to)
 
-    def interest(amount):
-        rate = 5
-        year = 3    
-        return amount * rate * year / 100amount = [10000, 12000, 15000]
-    interest_list = list( map(interest,amount) )
-    print( interest_list )
+map(function you want to apply, sequence of elements we want to apply it to)
+```
+def interest(amount):
+    rate = 5
+    year = 3
+return amount * rate * year / 100
+
+amount = [10000, 12000, 15000]
+interest_list = list( map(interest,amount) )
+print( interest_list )
+```
 
 ## filter function
-filter(function that checks for a condition, sequence of elements we want to apply it to)
 
-    def eligibility(age):
-        if(age>=24):
-            return True
-    list_of_age = [10, 24, 27, 33, 30, 18, 17, 21, 26, 25]
-    age = filter(eligibility, list_of_age)
-    print(list(age))
-    #combine filter with lambda
-    numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    even = list(filter(lambda x: x%2==0, numbers))
-    print(even)
+filter(function that checks for a condition, sequence of elements we want to apply it to)
+```
+def eligibility(age):
+    if(age>=24):
+        return True
+list_of_age = [10, 24, 27, 33, 30, 18, 17, 21, 26, 25]
+age = filter(eligibility, list_of_age)
+print(list(age))
+#combine filter with lambda
+numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+even = list(filter(lambda x: x%2==0, numbers))
+print(even)
+```
 
 ## pipe
+
 ### filter with where
 
 ```
@@ -56,6 +63,7 @@ list(arr | where(lambda x. x%2==0))
 ```
 
 ### apply func to iterable
+
 ```
 from pipe import select
 arr = [1,2,3,4]
@@ -65,71 +73,82 @@ list(arr
         | where(lambda x: x%2==0)
         | select(lambda x: x*2))
 ```
+
 ### unfold iterable
+
 ```
 from pipe import traverse, select
 fruits = [
     {"name":"apple", "price":[2,5]},
-    {"name":orange", "price":4},
+    {"name":"orange", "price":4},
     {"name":"grape", "price":5}
 ]
-lsit(fruites
+list(fruits
         | select(lambda fruit:fruit["price"])
         | traverse)
 ```
 
 ## reduce function
-reduce(function, iterable[, initializer])
 
-    from functools import reduce
-    def add(a,b):
-        return a+b
-    list = [1, 2, 3, 4, 5]
-    sum = reduce(add, list)
-    print(list(sum))
+reduce(function, iterable[, initializer])
+```
+from functools import reduce
+def add(a,b):
+    return a+b
+list = [1, 2, 3, 4, 5]
+sum = reduce(add, list)
+print(list(sum))
+```
 
 ## destructuring
+```
+#a=[1,2], b=[3,4]
+[a, b] = [[1,2],[3,4]]
+# a=('x',1),  b=('y', 2)
+myDict={'x':1, 'y':2}
+a,b=myDict.items()
+#enumerate
+myList = ["a", "b", "c"]
+for i, element in enumerate(myList):
+    print(i, element)
+#asterisk
+def sum(a, b, c):
+    return a + b + c
+x = (1, 2, 3)
+print(result(*x))
+#*_ omit an unknown number of values
+#first is 'H', last is 'o'
+first, *_, last = "Hello"
+```
 
-    #a=[1,2], b=[3,4]
-    [a, b] = [[1,2],[3,4]]
-    # a=('x',1),  b=('y', 2)
-    myDict={'x':1, 'y':2}
-    a,b=myDict.items()
-    #enumerate
-    myList = ["a", "b", "c"]
-    for i, element in enumerate(myList):
-        print(i, element)
-    #asterisk
-    def sum(a, b, c):
-        return a + b + c
-    x = (1, 2, 3)
-    print(result(*x))
-    #*_ omit an unknown number of values
-    #first is 'H', last is 'o'
-    first, *_, last = "Hello"
 
 ## Get Method for Dictionaries
-with get method instead of direct indexing it is possible to get an replaced value rather than error if key does not existss
 
-    dictionary.get('three', False)
+with get method instead of direct indexing it is possible to get an replaced value rather than error if key does not existss
+```
+dictionary.get('three', False)
+```
 
 ## Tree Datatypes
+create nested dict
+```
+class Tree(dict):
+    def__missing__(self, key):
+        value = self[key] = type(self)()
+        return value
 
-    class Tree(dict):
-        def __missing__(self, key):
-            value = self[key] = type(self)()
-            return value
-
-    #example 
-    tree = Tree()
-    tree['carnivora']['canis']['c.lupus'] = 'c.l.familiaris'
-    tree['carnivora']['felis'] = 'f.catus'
-    print(tree)
+#example
+tree = Tree()
+tree['carnivora']['canis']['c.lupus'] = 'c.l.familiaris'
+tree['carnivora']['felis'] = 'f.catus'
+print(tree)
+```
 
 ## list indexing
+
 list indexing can be used in following way:
 
-    list[start:end:step]
+    list[start🔚step]
 
 a named slices is more advanced for this kind of indexing
 
@@ -149,6 +168,7 @@ a named slices is more advanced for this kind of indexing
     print(f"Happy {day}, {name}. Welcome to Python!")
 
 ## list comprehension
+
 new_list = [expression for item in iterable (if conditional)]
 
 ## create N-length lists
@@ -159,27 +179,33 @@ new_list = [expression for item in iterable (if conditional)]
     four_lists = [[] for __ in range(4)]
 
 ## delete element of lists
+
 In short, don’t use for loops when you’re deleting items from a list, rather use list comprehension
 
     foos = [value for value in a if value != 'bar']
 
 ## Unpack arguments with *, **, and _
+
 * A variable beginning with * can hold as any number of elements
-    #1st example
-    long_list = [x for x in range(100)]
-    a, b, *c, d, e, f = long_list
-    #2nd example
-    def printfunction(*args):
-        print(args)
+```
+#1st example
+long_list = [x for x in range(100)]
+a, b, *c, d, e, f = long_list
+#2nd example
+def printfunction(*args):
+print(args)
+```
 
 * ** operator can unpack dictionaries to a function
-
-    def myfriendsfunction(name, age, profession):
+```
+def myfriendsfunction(name, age, profession):
 ...     print("Name: ", name)
 ...     print("Age: ", age)
 ...     print("Profession: ", profession)
-    friendanne = {"name": "Anne", "age": 26, "profession": "Senior Developer"}
-    myfriendsfunction(**friendanne)
+friendanne = {"name": "Anne", "age": 26, "profession": "Senior Developer"}
+myfriendsfunction(**friendanne)
+```
+
 
 ## dir() return all attributes and methods of an object
 
@@ -199,6 +225,7 @@ In short, don’t use for loops when you’re deleting items from a list, rather
         return f"Happy {day}, {name}. Welcome to Python!"
 
 ## Ternary Expression
+
  define variables with particular values based on the conditions
 
     reward = "1000 dollars" if score > 90 else "500 dollars"
@@ -221,7 +248,7 @@ In short, don’t use for loops when you’re deleting items from a list, rather
 ## sorting
 
     #sort list
-    sorted(numbers, reverse=True))
+    sorted(numbers, reverse=True)
     sorted(words, reverse=True)
     #sort list of tuples
     grades = [('John', 95), ('Aaron', 99), ('Zack', 97), ('Don', 92), ('Jennifer', 100), ('Abby', 94), ('Zoe', 99), ('Dee', 93)]
@@ -233,6 +260,7 @@ In short, don’t use for loops when you’re deleting items from a list, rather
     sorted(grades, key=lambda x: (x[0][0], -x[1]))
 
 ## defaultdict
+
 defaultdict can avoid key not exist error when putting list or tuple in dict
 
     from collections import defaultdict
@@ -248,6 +276,7 @@ defaultdict can avoid key not exist error when putting list or tuple in dict
     found = all(thing == other_thing for thing in things)
 
 ## replace list() with []/ replace dict() with {}
+
 time performance is better
 
 ## Replace if statement with if expression
@@ -260,11 +289,13 @@ time performance is better
     for hat_colour, hats in hats_by_colour.items():
         if hat_colour in self.favourite_colours:
             think_about_wearing(hats)
+
 ## Simplify sequence comparison
+
 check whether a list or sequence has elements before we try and do something with it
 
     if len(list_of_hats) > 0:
-    #can be shortened as 
+    #can be shortened as
     if list_of_hats:
 
 ## Replace multiple comparisons of same variable with in operator
@@ -277,18 +308,8 @@ check whether a list or sequence has elements before we try and do something wit
         if payment.currency in ['USD', 'EUR']:
             process_standard_payment(payment)
 
-## Replace manual loop counter with call to enumerate
-
-    i = 0
-    for currency in currencies:
-        print(i, currency)
-        i += 1
-    # can be shortened as
-    for i, currency in enumerate(currencies):
-        print(i, currency)
-
-
 ## data class
+
 this feature is for python 3.7+
 
     from dataclasses import dataclass
@@ -297,12 +318,14 @@ this feature is for python 3.7+
     class DataClassCard:
         rank: str
         suit: str
-    
+
     queen_of_hearts = DataClassCard('Q', 'Hearts')
     queen_of_hearts.rank
 
 ## parallel computing
+
 ### processpoolexecutor
+
 using concurrent.futures to process tasks with more processors
 
     with concurrent.futures.ProcessPoolExecutor() as executor:
@@ -326,14 +349,14 @@ using concurrent.futures to process tasks with more processors
 
 ### celery
 
-
-
 ## Interning
+
 Interning is re-using the objects on-demand instead of creating the new objects.
 is — this is used to compare the memory location of two python objects.
 id — this returns memory location in base-10.
 
 ## joblib
+
 ### caching results
 
     from joblib import Memory
@@ -421,51 +444,55 @@ id — this returns memory location in base-10.
     #example data
     import pandas as pd
     from plydata import define, query, if_else, ply
-     
-     
+
     df = pd.DataFrame({
         'x': [0, 1, 2, 3],
         'y': ['zero', 'one', 'two', 'three']})
 
 ### define
+
 define(data, *args,**kwargs)
 
     #df won't be changed(no insert)
     define(df, z='x')
-    #it equals to 
+    #it equals to
     df >> define(z='x')
     #for multi operations
-    (df 
-     >> define(m='2*x') 
-     >> define(n='m*m') 
+    (df
+     >> define(m='2*x')
+     >> define(n='m*m')
      >> define(q='m+n')
     )
 
 ### if_else
+
 if_else(predicate, true_value, false_value)
 
     define(df, z=if_else('x>1', 1, 0))
     df >> define(z=if_else('x>1', 1, 0))
 
 ### query
+
 query(data, expr)
 
     df >> query('z==1')
 
 ### ply
+
 ply is pipe operator, equal to >>
 
-    (df 
-     >> define(z=if_else('x>1', 1, 0)) 
+    (df
+     >> define(z=if_else('x>1', 1, 0))
      >> query('z==1')
     )
-    #is equal to 
+    #is equal to
     ply(df,
         define(z=if_else('x > 1', 1, 0)),
         query('z == 1')
     )
 
 ## async & Await
+
 feature for python >=3.5
 
     async def ping_server(ip):
@@ -475,8 +502,11 @@ feature for python >=3.5
         return await ping_server('192.168.1.1')
 
 ## divmod
+
  performs a modulus division % on two numbers, then returns both the quotient and remainder
+
 ## casefold
+
 casefold provides standardize, more aggressively, a wider range of characters to lower case.
 in most cases it is same as lower, but in some cases not
 
@@ -484,6 +514,7 @@ in most cases it is same as lower, but in some cases not
     "ς".lower() # returns "ς"
 
 ## For/Else Statements
+
 else will run if no break occurs
 
     for x in range(3):
@@ -493,138 +524,149 @@ else will run if no break occurs
     print('We never broke out')
 
 ## Queue Module
+
 there are three types of Queue: FIFO, LIFO, and Priority Queue.
+
 1) FIFO
 
-    import queue
+   import queue
 
-    # queue.Queue()
-    q = queue.Queue()
-    for i in range(5):
-        q.put(i)
-    while not q.empty():
-        print(q.get())
-    # result: 0,1,2,3,4
+   # queue.Queue()
 
-    # queue.SimpleQueue()
-    simple_q = queue.SimpleQueue()
-    for i in range(5):
-        simple_q.put(i)
-    while not simple_q.empty():
-        print(simple_q.get())
-    # result: 0,1,2,3,4
+   q = queue.Queue()
+   for i in range(5):
+   q.put(i)
+   while not q.empty():
+   print(q.get())
 
-    q = queue.Queue(maxsize=3)
-    try:
-        for i in range(5):
-            q.put(i, block=False)
-    except queue.Full:
-        print("Queue is Full with 3 items.")
-    try:
-        for i in range(5):
-            print(f"element {q.get(block=False)}")
-    except queue.Empty:
-        print("Queue is already empty")
+   # result: 0,1,2,3,4
 
+   # queue.SimpleQueue()
+
+   simple_q = queue.SimpleQueue()
+   for i in range(5):
+   simple_q.put(i)
+   while not simple_q.empty():
+   print(simple_q.get())
+
+   # result: 0,1,2,3,4
+
+   q = queue.Queue(maxsize=3)
+   try:
+   for i in range(5):
+   q.put(i, block=False)
+   except queue.Full:
+   print("Queue is Full with 3 items.")
+   try:
+   for i in range(5):
+   print(f"element {q.get(block=False)}")
+   except queue.Empty:
+   print("Queue is already empty")
 2) LIFO
-LIFO is also named as stack.
+   LIFO is also named as stack.
 
-    import queue
+   import queue
 
-    q = queue.LifoQueue()
-    for i in range(5):
-        q.put(i)
+   q = queue.LifoQueue()
+   for i in range(5):
+   q.put(i)
 
-    while not q.empty():
-        print(q.get())
-    # result: 4,3,2,1,0
+   while not q.empty():
+   print(q.get())
 
-    q = queue.LifoQueue(maxsize=3)
-    try:
-        for i in range(5):
-            q.put(i, block=False)
-    except queue.Full:
-        print("Queue is Full with 3 items")
-    try:
-        for i in range(5):
-            print(f"element {q.get(block=False)}")
-    except queue.Empty:
-        print("Queue is already empty")
+   # result: 4,3,2,1,0
 
+   q = queue.LifoQueue(maxsize=3)
+   try:
+   for i in range(5):
+   q.put(i, block=False)
+   except queue.Full:
+   print("Queue is Full with 3 items")
+   try:
+   for i in range(5):
+   print(f"element {q.get(block=False)}")
+   except queue.Empty:
+   print("Queue is already empty")
 3) Priority Queue
-priority queue uses min heap queue algorithm. priority queue not only work with numbers but also complex data types like tuple or customized classes as long as the objects are comparable. dataclass with config order=True can make complex data struct comparable
+   priority queue uses min heap queue algorithm. priority queue not only work with numbers but also complex data types like tuple or customized classes as long as the objects are comparable. dataclass with config order=True can make complex data struct comparable
 
+   import queue
+   q = queue.PriorityQueue()
 
-    import queue
-    q = queue.PriorityQueue()
+   for i in [4,1,3,2,0]:
+   q.put(i)
+   while not q.empty():
+   print(q.get())
 
-    for i in [4,1,3,2,0]:
-        q.put(i)
-    while not q.empty():
-        print(q.get())
+   #complex struct
+   from dataclasses import dataclass
+   from typing import Any
 
-    #complex struct
-    from dataclasses import dataclass
-    from typing import Any
+   @dataclass(order=True)
+   class Item:
+   key: int
+   value: Any
 
-    @dataclass(order=True)
-    class Item:
-        key: int
-        value: Any
+   q = queue.PriorityQueue()
 
-    q = queue.PriorityQueue()
-
-    for i in [Item(3,"leiden"),Item(1,"amsterdam"),Item(2,"rotterdam"),Item(1,"utrecht")]:
-        q.put(i)
-    while not q.empty():
-        print(q.get())
+   for i in [Item(3,"leiden"),Item(1,"amsterdam"),Item(2,"rotterdam"),Item(1,"utrecht")]:
+   q.put(i)
+   while not q.empty():
+   print(q.get())
 
 ### user case
+
 Queue is designed for multi-threading with following characteristics:
+
 * thread-safe characteristic
 * avoid potential memory explosion
 * reduce busy waiting
 
+  import queue
+  import threading
+  import random
+  import requests
 
-    import queue
-    import threading
-    import random
-    import requests
+  def download(queue):
+  id = queue.get()
+  result = requests.get(f"https://jsonplaceholder.typicode.com/photos/{id}")
+  url = result.json()["thumbnailUrl"]
+  save_image(id, url)
+  print(f"Save image {id}")
+  queue.task_done() # this is new
 
-    def download(queue):
-        id = queue.get()
-        result = requests.get(f"https://jsonplaceholder.typicode.com/photos/{id}")
-        url = result.json()["thumbnailUrl"]
-        save_image(id, url)
-        print(f"Save image {id}")
-        queue.task_done() # this is new 
-        
-    NUM_THREADS = 10
-    q = queue.Queue()
+  NUM_THREADS = 10
+  q = queue.Queue()
 
-    for i in range(NUM_THREADS):
-        worker = threading.Thread(target=download,args=(q,))
-        worker.start()
+  for i in range(NUM_THREADS):
+  worker = threading.Thread(target=download,args=(q,))
+  worker.start()
 
-    for i in range(NUM_THREADS):
-        id = random.randint(1,100)
-        q.put(id)
+  for i in range(NUM_THREADS):
+  id = random.randint(1,100)
+  q.put(id)
 
-    q.join()
+  q.join()
 
 ## numpy
+
 ### broadcasting
+
 if numpy operate on two array of different size, the smaller array becomes broadcast across teh larger array if the dimension of smaller array is 1. otherwise exception is thrown
+
 ### slicing
+
 array slicing is one shallow copy of original array
 
     originalArray= np.arange(0,10)
     #subArray is only a reference to original array
     subArray=originalArray[5:]
+
 ### linspace
 
     #endpoint is boolean whether to include the stop num or not
     np.linspace(start, stop, num, endpoint)
+
 ### size and type
 
     array= np.arange(0,10)
@@ -646,7 +688,8 @@ array slicing is one shallow copy of original array
             return fibonacci(input_value-1)+fibonacci(input_value-2)
 
 ## load local env
-create .env file in local path and save local env viriables in this file, e.g. GG_API_KEY=**INSERT API TOKEN**. 
+
+create .env file in local path and save local env viriables in this file, e.g. GG_API_KEY=**INSERT API TOKEN**.
 To load these env variable in python environments:
 
     from  dotenv import load_dotenv
@@ -655,6 +698,7 @@ To load these env variable in python environments:
 ## new features in python 3.8.5
 
 ### Assignment operator ( := )
+
 A new syntax := that assigns values to variables as part of a larger expression
 
     if (n := len(a)) > 10:
