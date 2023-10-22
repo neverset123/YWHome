@@ -9,6 +9,15 @@ catalog: true
 tags:
     - python
 ---
+## error handling
+```
+import traceback
+try:
+    something
+except:
+    traceback.print_exc()
+```
+
 ## Assignment Expresions
 
 allow return value in assignment
