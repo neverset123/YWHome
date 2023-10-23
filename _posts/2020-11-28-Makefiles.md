@@ -10,6 +10,26 @@ tags:
     - python
 ---
 
+## makefile basics
+* compiler available: gcc(win, linux), clang(mac).
+* define dependencies for make target 
+```target: dependency
+```
+## cmake basics
+* set variable
+```
+set(EXECUTABLE_NAME Executable)
+```
+* multi CMakeLists.txt
+```
+add_subdirectory(src)
+```
+* include lib
+```
+add_include_directory(include)
+```
+
+
 
 ## Makefiles for python
 automate some steps
