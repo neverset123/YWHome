@@ -7,7 +7,7 @@ description: "Mir ist egal, ob ich im Himmel oder in der Hölle lande.Ich habe a
 keyword: ""
 url: "http://neverset123.github.io"          # your host, for absolute URL
 baseurl: "/YWHome"      # for example, '/blog' if your blog hosted on 'host/blog'
-github_repo: "https://github.com/neverset123/neverset123.github.io.git" # you code repository
+github_repo: "https://github.com/neverset123/YWHome.github.io.git" # you code repository
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
