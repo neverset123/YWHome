@@ -8,10 +8,9 @@ header-img: img/post-bg-kuaidi.jpg
 catalog: true
 tags:
     - python
-    -tensorflow
+    - tensorflow
 ---
-
-the random functioin exist not only in numpy but also tensorflow    
+ 
 # numpy
 
 ## np.random.seed() & np.random.RandomState()
