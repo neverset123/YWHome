@@ -18,12 +18,12 @@ sidebar-about-description: "Ziel ist der Himmel"
 
 # SNS settings
 #RSS: false
-# weibo_username:     qiubaiying
-#zhihu_username:     qiubaiying
-#github_username:    qiubaiying
+# weibo_username:     yw
+#zhihu_username:     yw
+#github_username:    yw
 #facebook_username:  baiying.qiu.7
 #jianshu_username:   e71990ada2fd
-#twitter_username:   qiubaiying
+#twitter_username:   yw
 
 
 
@@ -57,7 +57,7 @@ kramdown:
 
 # 评论系统
 # Disqus（https://disqus.com/）
-# disqus_username: qiubaiying
+# disqus_username: yw
 
 # Gitalk
 gitalk:
