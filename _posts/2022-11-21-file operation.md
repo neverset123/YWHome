@@ -82,4 +82,14 @@ def CSV_2_UTF8(src, dst):
 CSV_2_UTF8(src, dst)
 ```
 
+## lazylines 
+used for lazy reading large files without need of load all data into memory
+
+```
+import lazylines
+
+with lazylines.open('large_file.txt') as lines:
+    for line in lines:
+        print(line.strip())
+```
 
