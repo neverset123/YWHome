@@ -13,4 +13,5 @@ tags:
 ## usage
 1. count(start[, step]) 
 2. cycle(p) 
-3. repeat(elem [,n]) 
+3. repeat(elem [,n])
+4. chain(*iterables): chain up multi iterables into one iterable(list, tuple, set, generator(
