@@ -60,7 +60,7 @@ for line in fileinput.input(glob.glob("*.csv")):
 
 ## codecs
 it makes encoding/decoding automatically, if the source format is unknown
-````
+```
 import codecs
 
 src="......\\xxxx.csv"
