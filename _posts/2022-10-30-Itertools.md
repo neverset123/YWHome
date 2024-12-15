@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      itetools
+title:      itertools
 subtitle:   
 date:       2022-10-30
 author:     neverset
