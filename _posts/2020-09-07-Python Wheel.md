@@ -13,7 +13,7 @@ tags:
 a wheel name can be broken down like this:
 {dist}-{version}(-{build})?-{python}-{abi}-{platform}.whl
 
-wheel installation is much faster than source code installation
+wheel installation is much faster than source code installation(python -m pip install -e .)
 
 you can try to download from pypi the binary(whl) or source code zip to check the installation speed
     #python -m pip download --only-binary :all: --dest . --no-cache six
