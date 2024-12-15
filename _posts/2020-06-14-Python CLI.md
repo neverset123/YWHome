@@ -10,8 +10,6 @@ tags:
     - python
 ---
 
-two modules are introduced here
-
 ## click
 decorator for python functions
 
@@ -33,6 +31,10 @@ decorator for python functions
     @click.option('--user', prompt=True,
               default=lambda: os.environ.get('USER', ''))
     @click.password_option()
+
+## radicli
+used for complex cli script
+
 ## argparse
 arguments for python script
 
