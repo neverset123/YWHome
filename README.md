@@ -1,5 +1,4 @@
-博客的搭建教程修改自 [《利用 GitHub Pages 快速搭建个人博客》](http://www.jianshu.com/p/e68fba58f75c) 或 [wiki](https://github.com/yw/yw.github.io/wiki/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B)
-
+[YWHome](https://neverset123.github.io/YWHome/)
 
 ## 使用
 ### 环境
@@ -99,19 +98,3 @@ iframe在不同的设备中，将会自动的调整大小。保留内边距是�
 > 上传的图片最好先压缩，这里推荐 imageOptim 图片压缩软件，让你的博客起飞。
 
 但是需要注意的是本模板的标题是**白色**的，所以背景色要设置为**灰色**或者**黑色**，总之深色系就对了。当然你还可以自定义修改字体颜色，总之，用github pages就是可以完全的个性定制自己的博客。
-
-### SEO Title
-
-我的博客标题是 ***YW Blog”** 但是我想要在搜索的时候显示 **“YW Blog”** ，这个就需要 SEO Title 来定义了。
-
-其实这个 SEO Title 就是定义了<head><title>标题</title></head>这个里面的东西和多说分享的标题，你可以自行修改的。
-
-## 致谢
-
-1. 这个模板是从这里 [Hux](https://github.com/Huxpro/huxpro.github.io) fork 的, 感谢这个作者。 
-2. 感谢 Jekyll、Github Pages 和 Bootstrap!
-
-## License
-
-遵循 MIT 许可证。有关详细,请参阅 [LICENSE](https://github.com/neverset123/YWHome/blob/master/LICENSE)。
-
