@@ -1,100 +1,113 @@
-[YWHome](https://neverset123.github.io/YWHome/)
+# YW Blog
 
-## 使用
-### 环境
+A personal technical blog built with Jekyll, covering software engineering, machine learning, and data engineering.
 
-如果你安装了 [jekyll](http://jekyllcn.com/)，那你只需要在命令行输入`jekyll serve` 或 `jekyll s`就能在本地浏览器中输入`http://127.0.0.1:4000/`预览主题，对主题的修改也能实时展示（需要强刷浏览器）。
+**Live site:** http://neverset123.github.io/YWHome
 
-### 开始
-
-你可以通用修改 `_config.yml`文件来轻松的开始搭建自己的博客:
-
-```
-# Site settings
-title: YW Blog                    # 你的博客网站标题
-SEOTitle: YW Blog		# SEO 标题
-description: "Hey"	   	   # 随便说点，描述一下
-
-# SNS settings      
-github_username: neverset123     # 你的github账号
-
-# Build settings
-# paginate: 7              # 一页你准备放几篇文章
-```
-
-Jekyll官方网站还有很多的参数可以调，比如设置文章的链接形式...网址在这里：[Jekyll - Official Site](http://jekyllrb.com/) 中文版的在这里：[Jekyll中文](http://jekyllcn.com/).
-
-### 撰写博文
-
-要发表的文章一般以 **Markdown** 的格式放在这里`_posts/`，你只要看看这篇模板里的文章你就立刻明白该如何设置。
-
-### 侧边栏
-
-看右边:
-
-设置是在 `_config.yml`文件里面的`Sidebar settings`那块。
-
-```
-# Sidebar settings
-sidebar: true  #添加侧边栏
-sidebar-about-description: "简单的描述一下你自己"
-sidebar-avatar: /img/avatar-by.jpg     #你的大头贴，请使用绝对地址.注意：名字区分大小写！后缀名也是
-```
-
-侧边栏是响应式布局的，当屏幕尺寸小于992px的时候，侧边栏就会移动到底部。具体请见bootstrap栅格系统 <http://v3.bootcss.com/css/>
-
-### Featured Tags
-
-看到这个网站 [Medium](http://medium.com) 的推荐标签非常的炫酷，所以我将他加了进来。
-这个模块现在是独立的，可以呈现在所有页面，包括主页和发表的每一篇文章标题的头上。
-
-```
-# Featured Tags
-featured-tags: true  
-featured-condition-size: 1     # A tag will be featured if the size of it is more than this condition value
-```
-
-唯一需要注意的是`featured-condition-size`: 如果一个标签的 SIZE，也就是使用该标签的文章数大于上面设定的条件值，这个标签就会在首页上被推荐。
- 
-内部有一个条件模板 `{% if tag[1].size > {{site.featured-condition-size}} %}` 是用来做筛选过滤的.
-
-### Keynote Layout
-
-HTML5幻灯片的排版：
-
-![](https://camo.githubusercontent.com/f30347a118171820b46befdf77e7b7c53a5641a9/687474703a2f2f6875616e677875616e2e6d652f696d672f626c6f672d6b65796e6f74652e6a7067)
-
-这部分是用于占用html格式的幻灯片的，一般用到的是 Reveal.js, Impress.js, Slides, Prezi 等等.我认为一个现代化的博客怎么能少了放html幻灯的功能呢~
-
-其主要原理是添加一个 `iframe`，在里面加入外部链接。你可以直接写到头文件里面去，详情请见下面的yaml头文件的写法。
-
-```
 ---
-layout:     keynote
-iframe:     "http://huangxuan.me/js-module-7day/"
+
+## Content
+
+~191 articles published from 2020–2023, organized by date under `_posts/`. Main topics:
+
+- **Machine Learning & Deep Learning** — TensorFlow, CNNs, transformers, NLP, computer vision, reinforcement learning
+- **Data Engineering** — Spark, Kafka, Hadoop, Hive, Elasticsearch, ClickHouse, Airflow
+- **Python** — Pandas, NumPy, decorators, testing, CLI, data visualization
+- **Infrastructure & DevOps** — Docker, Kubernetes, CI/CD, AWS, Azure, CUDA
+- **Web Development** — React, JavaScript, TypeScript, web scraping
+
 ---
+
+## Local Development
+
+**Prerequisites:** Ruby, Bundler, Node.js
+
+```bash
+# Install dependencies
+bundle install
+npm install
+
+# Serve locally (http://localhost:4000)
+jekyll serve
+
+# Or with Grunt (compiles LESS, minifies assets)
+grunt
 ```
 
-iframe在不同的设备中，将会自动的调整大小。保留内边距是为了让手机用户可以向下滑动，以及添加更多的内容。
+---
 
+## Writing a Post
 
-### Comment
+Create a file in `_posts/` with the naming format `YYYY-MM-DD-title.md`:
 
-博客不仅支持 [Disqus](http://disqus.com) 评论系统,还加入了 [Gitalk](https://gitalk.github.io/) 评论系统，[支持 Markdwon 语法](https://guides.github.com/features/mastering-markdown/)，cool~
+```yaml
+---
+layout:     post
+title:      "Post Title"
+subtitle:   "Optional subtitle"
+date:       YYYY-MM-DD
+author:     "YW"
+header-img: "img/post-bg-rwd.jpg"
+tags:
+    - tag1
+    - tag2
+---
 
+Content here...
+```
 
-### Customization
+---
 
-如果你喜欢折腾，你可以去自定义这个模板的 Code。
+## Project Structure
 
-**如果你可以理解 `_include/` 和 `_layouts/`文件夹下的代码（这里是整个界面布局的地方），你就可以使用 Jekyll 使用的模版引擎 [Liquid](https://github.com/Shopify/liquid/wiki)的语法直接修改/添加代码，来进行更有创意的自定义界面啦！**
+```
+YWHome/
+├── _posts/         # Blog articles (Markdown)
+├── _layouts/       # Jekyll page templates
+├── _includes/      # Reusable HTML fragments (nav, head, footer)
+├── css/            # Bootstrap + custom theme stylesheets
+├── less/           # LESS source files for CSS
+├── js/             # Bootstrap, jQuery, custom scripts
+├── fonts/          # Bootstrap Glyphicons
+├── img/            # Images and post backgrounds
+├── pwa/            # Progressive Web App manifest and icons
+├── _config.yml     # Jekyll site configuration
+├── index.html      # Homepage
+├── about.html      # About page
+├── tags.html       # Tags index page
+└── feed.xml        # RSS feed
+```
 
-### Header Image
+---
 
-博客每页的标题底图是可以自己选的，看看几篇示例post你就知道如何设置了。
-  
-标题底图的选取完全是看个人的审美了。每一篇文章可以有不同的底图，你想放什么就放什么，最后宽度要够，大小不要太大，否则加载慢啊。
+## Configuration
 
-> 上传的图片最好先压缩，这里推荐 imageOptim 图片压缩软件，让你的博客起飞。
+Key settings in `_config.yml`:
 
-但是需要注意的是本模板的标题是**白色**的，所以背景色要设置为**灰色**或者**黑色**，总之深色系就对了。当然你还可以自定义修改字体颜色，总之，用github pages就是可以完全的个性定制自己的博客。
+| Field | Description |
+|-------|-------------|
+| `title` | Site title |
+| `SEOTitle` | SEO-optimized title |
+| `description` | Site description |
+| `url` | Base URL |
+| `disqus_username` | Disqus comment system ID |
+| `gitalk.*` | GitHub-based comment system config |
+| `ga_track_id` | Google Analytics tracking ID |
+| `featured-tags` | Enable tag cloud on sidebar |
+
+---
+
+## Tech Stack
+
+- **[Jekyll](https://jekyllrb.com/)** — static site generator
+- **[Bootstrap 3](https://getbootstrap.com/docs/3.4/)** — responsive layout
+- **[jQuery](https://jquery.com/)** — interactivity
+- **[Grunt](https://gruntjs.com/)** — LESS compilation and asset minification
+- **[Gitalk](https://github.com/gitalk/gitalk)** — GitHub-based comments
+- **PWA** — service worker + web app manifest
+
+---
+
+## License
+
+MIT
